@@ -107,7 +107,7 @@
            </palette>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>3</number>
           </property>
           <widget class="QWidget" name="tab">
            <attribute name="title">
@@ -755,12 +755,12 @@ Sesion</string>
                  </item>
                  <item>
                   <property name="text">
-                   <string>Jefe Academico</string>
+                   <string>JEFE_ACADEMICO</string>
                   </property>
                  </item>
                  <item>
                   <property name="text">
-                   <string>Coordinador de carrera</string>
+                   <string>COORDINADOR_DE_CARRERA</string>
                   </property>
                  </item>
                  <item>
@@ -770,7 +770,7 @@ Sesion</string>
                  </item>
                  <item>
                   <property name="text">
-                   <string>Consultor</string>
+                   <string>CONSULTOR</string>
                   </property>
                  </item>
                 </widget>
@@ -1077,12 +1077,12 @@ Sesion</string>
                     </item>
                     <item>
                      <property name="text">
-                      <string>Directores</string>
+                      <string>DIRECTORES</string>
                      </property>
                     </item>
                     <item>
                      <property name="text">
-                      <string>Decanos</string>
+                      <string>DECANOS</string>
                      </property>
                     </item>
                    </widget>

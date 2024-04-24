@@ -24,16 +24,28 @@ void Usuario::setTipo(const std::string &newTipo) {
     tipo = newTipo;
 }
 
+const string &Usuario::getContrasena() const
+{
+    return contrasena;
+}
+
+void Usuario::setContrasena( string &newContrasena)
+{
+    contrasena = newContrasena;
+}
+
 Usuario::Usuario() {
     this->name = "";
     this->cuenta = "";
     this->tipo = "";
+    this->contrasena="";
 }
 
-Usuario::Usuario(std::string name, std::string cuenta, std::string tipo) {
+Usuario::Usuario(std::string name, std::string cuenta, std::string tipo, std::string contrasena) {
     this->name = name;
     this->cuenta = cuenta;
     this->tipo = tipo;
+    this->contrasena = contrasena;
 }
 
 Usuario::~Usuario() {}

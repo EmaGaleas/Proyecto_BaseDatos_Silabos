@@ -133,7 +133,15 @@ void MainWindow::on_btn_sesion_clicked()
     if(ui->le_nameE->text().isEmpty() || ui->le_claveE->text().isEmpty() || ui->le_cuentaE->text().isEmpty()){
         QMessageBox::warning(this,"Datos no congruetes","Favor no deje campos sin completar");
     }else{
-        if(ui->le_claveE->text().toStdString()==claveDocente){
+
+        if(listaUsuarios.buscarUsuario(ui->le_cuentaE->text().toStdString(),ui->le_nameE->text().toStdString(),ui->le_claveE->text().toStdString(),"DOCENTE",listaUsuarios)){
+
+            bool c=listaUsuarios.cambiarPassword_Username(ui->le_cuentaE->text().toStdString(),"STRAYKIDS",ui->le_nameE->text().toStdString(),listaUsuarios);
+
+            if(c){
+                QMessageBox::warning(this,"Datos no congruetes","ezito ");
+
+            }
             ui->frameE->setVisible(true);
             ui->frameE2->setEnabled(false);
             loginDocente=true;
@@ -141,7 +149,7 @@ void MainWindow::on_btn_sesion_clicked()
             ui->tab_4->setEnabled(false);
             ui->tab_5->setEnabled(false);
         }else{
-            QMessageBox::warning(this,"Datos no congruetes","Clave incorrecta");
+            QMessageBox::warning(this,"Datos no congruetes","Usuario, cuenta o contraseña incorrectas");
         }
 
     }
@@ -190,7 +198,9 @@ void MainWindow::on_btn_silaboE_clicked()
         string numCuenta=ui->le_cuentaE->text().toStdString();
         string codigoClase=ui->le_codigoE->text().toStdString();
 
-        Usuario nuevo(name, numCuenta, codigoClase);
+
+        //ya no debe crear un nuevo usuario, ahora solo debe buscar que exisita en la lista y el setter de la nueva contrasena
+        Usuario nuevo(name, numCuenta, codigoClase,"poner contrasena ingresada");
         listaUsuarios.InsertarFin(nuevo);
         listaUsuarios.guardarUsuarios(listaUsuarios);
 
@@ -256,25 +266,22 @@ void MainWindow::on_Rbtn_sesion_clicked()
         QMessageBox::warning(this,"Datos no congruetes","Favor no deje campos sin completar");
     }else{
         //this->arbolSilabo->extraer();
-        if((ui->Rcb_usuario->currentIndex()==1 && ui->Rle_clave->text().toStdString()==claveJefe)        ||
-                (ui->Rcb_usuario->currentIndex()==2 && ui->Rle_clave->text().toStdString()==claveCoordinador) ||
-                (ui->Rcb_usuario->currentIndex()==3 && ui->Rle_clave->text().toStdString()==claveIEDD)        ||
-                (ui->Rcb_usuario->currentIndex()==4 && ui->Rle_clave->text().toStdString()==claveConsultor)   ){
-
-            ui->frameR->setVisible(true);
-            ui->frameR1->setEnabled(false);
-            loginRevision=true;
-            ui->tab_2->setEnabled(false);
-            ui->tab_4->setEnabled(false);
-            ui->tab_5->setEnabled(false);
-            pruebitaBotonesTab();
-
-        }else{
+        string quienSoy = ui->Rcb_usuario->currentText().toStdString();
+         if(listaUsuarios.buscarUsuario("11111111",ui->Rle_name->text().toStdString(),ui->Rle_clave->text().toStdString(),quienSoy,listaUsuarios)){
+                ui->frameR->setVisible(true);
+                ui->frameR1->setEnabled(false);
+                loginRevision=true;
+                ui->tab_2->setEnabled(false);
+                ui->tab_4->setEnabled(false);
+                ui->tab_5->setEnabled(false);
+                pruebitaBotonesTab();
+         }else{
             QMessageBox::warning(this,"Datos no congruetes","Clave incorrecta");
         }
 
     }
 }
+
 
 void MainWindow::limpiarRevision()
 {
@@ -526,8 +533,11 @@ void MainWindow::on_Bbtn_sesion_clicked() {
     if (ui->Ble_name->text().isEmpty() || ui->Ble_clave->text().isEmpty() || ui->Bcb_usuario->currentIndex() == 0) {
         QMessageBox::warning(this, "Datos no congruetes", "Favor no deje campos sin completar");
     } else {
-        if ((ui->Bcb_usuario->currentIndex() == 1 && ui->Ble_clave->text().toStdString() == claveDirector) ||
-            (ui->Bcb_usuario->currentIndex() == 2 && ui->Ble_clave->text().toStdString() == claveDecano)) {
+        string quienSoy = ui->Bcb_usuario->currentText().toStdString();
+
+        if (((ui->Bcb_usuario->currentIndex() == 1 && ui->Ble_clave->text().toStdString() == claveDirector) ||
+            (ui->Bcb_usuario->currentIndex() == 2 && ui->Ble_clave->text().toStdString() == claveDecano) )
+             && (listaUsuarios.buscarUsuario("11111111",ui->Ble_name->text().toStdString(),ui->Ble_clave->text().toStdString(),quienSoy,listaUsuarios))){
 
             ui->frameB->setVisible(true);
             ui->frameB1->setEnabled(false);

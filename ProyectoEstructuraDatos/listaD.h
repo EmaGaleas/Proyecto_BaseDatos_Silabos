@@ -22,15 +22,21 @@ private:
 public:
     listaD();
     ~listaD();
-    void InsertarFin(const tipo &);
 
+    void InsertarFin(const tipo &);
     bool Vacia()const;
+
 
     bool GuardarEnArchivo(string Nombre)const;
     bool ImportarArchivo(string Nombre);
     void guardarExcelUsuarios(std::ofstream &file, listaD<Usuario> &listaUsuarios);
     void guardarUsuarios(listaD<Usuario> &listaUsuarios);
     void cargarUsuarios();
+
+
+    bool buscarUsuario(string const numCuenta, string name, string contra,const std::string quienSoy, listaD<Usuario> &listaUsuarios);
+    bool cambiarPassword_Username(string const numCuenta, string nuevaContra,string nuevoUsername, listaD<Usuario> &listaUsuarios);
+
 
 };
 
@@ -97,7 +103,8 @@ void listaD<tipo>::guardarExcelUsuarios(std::ofstream &file, listaD<Usuario> &li
         Usuario usuario = tmp->getDato();
         file << usuario.getName() << "\t"
              << usuario.getCuenta() << "\t"
-             << usuario.getTipo() << "\n";
+             << usuario.getTipo() << "\t"
+            << usuario.getContrasena()<<"\n";
         tmp = tmp->SigPtr;
     }
 }
@@ -110,7 +117,7 @@ void listaD<tipo>::guardarUsuarios(listaD<Usuario> &listaUsuarios)
     file.close();
     std::ofstream File("usuarios.xls");
     if (File.is_open()) {
-        File << "Nombre\tCuenta\tClase Ingresada\n";
+        File << "Nombre\tCuenta\tCargo\tContrasena\n";
         guardarExcelUsuarios(File, listaUsuarios);
         File.close();
         cout << "XLS exportado\n";
@@ -128,9 +135,9 @@ void listaD<tipo>::cargarUsuarios()
         string header;
         std::getline(file, header);
 
-        string nombre, cuenta, code;
-        while (file >> nombre >> cuenta >> code) {
-            Usuario nuevo(nombre, cuenta, code);
+        string nombre, cuenta, code, contrasena;
+        while (file >> nombre >> cuenta >> code >> contrasena) {
+            Usuario nuevo(nombre, cuenta, code, contrasena);
             InsertarFin(nuevo);
         }
         file.close();
@@ -138,11 +145,49 @@ void listaD<tipo>::cargarUsuarios()
     } else {
         cerr << "Error al abrir el archivo\n";
     }
+}
 
-//    if (std::remove("usuarios.xls") != 0 ) {
-//        std::cerr << "Error al eliminar el archivo.\n";
-//    } else {
-//        cout << "Archivo eliminado exitosamente.\n";
-//    }
+template<typename tipo>
+bool listaD<tipo>::buscarUsuario(const std::string numCuenta, std::string name,std::string contra,const std::string quienSoy, listaD<Usuario> &listaUsuarios)
+{
+    if (!Vacia()) {
+        nodoD<tipo> *ptrAct = listaUsuarios.PrimPtr;
+        while (ptrAct != 0) {
+            Usuario usuario = ptrAct->getDato();
+            if(usuario.getCuenta() == numCuenta && usuario.getName()==name && usuario.getContrasena()==contra && usuario.getTipo()==quienSoy){
+                return true;
+            }else{
+                ptrAct = ptrAct->SigPtr;
+            }
+        }
+        return false;
+    }
+    return false;
+
+}
+
+template<typename tipo>
+bool listaD<tipo>::cambiarPassword_Username(const std::string numCuenta, std::string nuevaContra, std::string nuevoUsername,listaD<Usuario> &listaUsuarios)
+{
+    if (!Vacia()) {
+        nodoD<tipo> *ptrAct = listaUsuarios.PrimPtr;
+        while (ptrAct != 0) {
+            Usuario usuario = ptrAct->getDato();
+            if(usuario.getCuenta() == numCuenta){
+                usuario.setContrasena(nuevaContra);
+                usuario.setName(nuevoUsername);
+
+                ptrAct->setDato(usuario);
+                QString mensaje = "neue contra: " + QString::fromStdString(ptrAct->getDato().getContrasena()) + " " + QString::fromStdString(nuevaContra);
+                            QMessageBox::information(nullptr, "   ", mensaje);
+                return true;
+            }else{
+                ptrAct = ptrAct->SigPtr;
+            }
+        }
+        return false;
+    }
+    return false;
+
 }
 #endif // LISTAD_H
