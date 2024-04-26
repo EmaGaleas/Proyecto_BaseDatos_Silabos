@@ -844,7 +844,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -883,8 +883,8 @@ public:
         btn_silaboE->setText(QApplication::translate("MainWindow", "Ingresar", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "ENTREGA", nullptr));
         Rcb_usuario->setItemText(0, QApplication::translate("MainWindow", "...", nullptr));
-        Rcb_usuario->setItemText(1, QApplication::translate("MainWindow", "JEFE ACADEMICO", nullptr));
-        Rcb_usuario->setItemText(2, QApplication::translate("MainWindow", "COORDINADOR DE CARRERA", nullptr));
+        Rcb_usuario->setItemText(1, QApplication::translate("MainWindow", "JEFE_ACADEMICO", nullptr));
+        Rcb_usuario->setItemText(2, QApplication::translate("MainWindow", "COORDINADOR_DE_CARRERA", nullptr));
         Rcb_usuario->setItemText(3, QApplication::translate("MainWindow", "IEDD", nullptr));
         Rcb_usuario->setItemText(4, QApplication::translate("MainWindow", "CONSULTOR", nullptr));
 

@@ -224,6 +224,7 @@ Makefile: ../ProyectoEstructuraDatos/ProyectoSilabos_EstructuraDeDatosI.pro C:/q
 		C:/qqqq/uiiii/5.12.12/mingw73_64/mkspecs/features/qt_config.prf \
 		C:/qqqq/uiiii/5.12.12/mingw73_64/mkspecs/win32-g++/qmake.conf \
 		C:/qqqq/uiiii/5.12.12/mingw73_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		C:/qqqq/uiiii/5.12.12/mingw73_64/mkspecs/features/exclusive_builds.prf \
 		C:/qqqq/uiiii/5.12.12/mingw73_64/mkspecs/features/toolchain.prf \
 		C:/qqqq/uiiii/5.12.12/mingw73_64/mkspecs/features/default_pre.prf \
@@ -413,6 +414,7 @@ C:/qqqq/uiiii/5.12.12/mingw73_64/mkspecs/features/qt_functions.prf:
 C:/qqqq/uiiii/5.12.12/mingw73_64/mkspecs/features/qt_config.prf:
 C:/qqqq/uiiii/5.12.12/mingw73_64/mkspecs/win32-g++/qmake.conf:
 C:/qqqq/uiiii/5.12.12/mingw73_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 C:/qqqq/uiiii/5.12.12/mingw73_64/mkspecs/features/exclusive_builds.prf:
 C:/qqqq/uiiii/5.12.12/mingw73_64/mkspecs/features/toolchain.prf:
 C:/qqqq/uiiii/5.12.12/mingw73_64/mkspecs/features/default_pre.prf:

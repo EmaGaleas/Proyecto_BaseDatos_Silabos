@@ -84,7 +84,7 @@ private:
     int cantSilabos=0;
     int id=0;
 
-    string claveDocente="teacher123", claveJefe="boss123",claveCoordinador="coordinator123",claveIEDD="what123",claveConsultor="advisor123",claveDecano="dean123",claveDirector="director123";
+  //  string claveDocente="teacher123", claveJefe="boss123",claveCoordinador="coordinator123",claveIEDD="what123",claveConsultor="advisor123",claveDecano="dean123",claveDirector="director123";
 
     void mostrarDocente(Arbol *nodo,int fila,string numCuenta);
 

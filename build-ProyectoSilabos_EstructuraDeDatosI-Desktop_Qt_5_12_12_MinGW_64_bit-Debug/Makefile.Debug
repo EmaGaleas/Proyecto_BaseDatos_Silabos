@@ -113,6 +113,7 @@ debug/qrc_imagenes.cpp: ../ProyectoEstructuraDatos/imagenes.qrc \
 		../ProyectoEstructuraDatos/2.png \
 		../ProyectoEstructuraDatos/principal\ proyecto.png \
 		../ProyectoEstructuraDatos/1.png \
+		../ProyectoEstructuraDatos/menu2.0.png \
 		../ProyectoEstructuraDatos/3.png
 	C:\qqqq\uiiii\5.12.12\mingw73_64\bin\rcc.exe -name imagenes ..\ProyectoEstructuraDatos\imagenes.qrc -o debug\qrc_imagenes.cpp
 
@@ -573,10 +574,51 @@ debug/mainwindow.o: ../ProyectoEstructuraDatos/mainwindow.cpp ../ProyectoEstruct
 		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/qtabbar.h \
 		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/qrubberband.h \
 		ui_mainwindow.h \
-		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtGui/QImage \
-		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtGui/QPixmap \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtCore/QVariant \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/QApplication \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/qapplication.h \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtCore/qcoreapplication.h \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtCore/qeventloop.h \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/qdesktopwidget.h \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtGui/qguiapplication.h \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtGui/qinputmethod.h \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/QComboBox \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/qcombobox.h \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/QFrame \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/QGridLayout \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/qgridlayout.h \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/qlayout.h \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/qlayoutitem.h \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/qboxlayout.h \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/QHeaderView \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/qheaderview.h \
 		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/QLabel \
 		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/qlabel.h \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/QLineEdit \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/qlineedit.h \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtGui/qtextcursor.h \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtGui/qtextformat.h \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtGui/qpen.h \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtGui/qtextoption.h \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/QMenuBar \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/qmenubar.h \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/qmenu.h \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/qaction.h \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/qactiongroup.h \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/QPushButton \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/qpushbutton.h \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/qabstractbutton.h \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/QRadioButton \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/qradiobutton.h \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/QScrollArea \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/qscrollarea.h \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/QStatusBar \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/qstatusbar.h \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/QTabWidget \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/QTableWidget \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtWidgets/QWidget \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtGui/QImage \
+		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtGui/QPixmap \
 		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtGui/QDesktopServices \
 		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtGui/qdesktopservices.h \
 		C:/qqqq/uiiii/5.12.12/mingw73_64/include/QtCore/qstandardpaths.h \

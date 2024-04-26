@@ -65,8 +65,12 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_btn_entregarM_clicked(){  ui->tabWidget->setCurrentIndex(1); }
-void MainWindow::on_btn_revision_clicked(){   ui->tabWidget->setCurrentIndex(2); }
+void MainWindow::on_btn_entregarM_clicked(){  ui->tabWidget->setCurrentIndex(1);
+                                              QImage menu(":/prefix/menu2.0.png");
+                                              ui->lbl_pngMenu->setPixmap(QPixmap::fromImage(menu)); }
+void MainWindow::on_btn_revision_clicked(){   ui->tabWidget->setCurrentIndex(2);
+                                              QImage menu(":/prefix/principal proyecto.png");
+                                              ui->lbl_pngMenu->setPixmap(QPixmap::fromImage(menu));}
 void MainWindow::on_btn_dashboardM_clicked(){ ui->tabWidget->setCurrentIndex(3); }
 
 //cambio de tabs
@@ -136,7 +140,7 @@ void MainWindow::on_btn_sesion_clicked()
 
         if(listaUsuarios.buscarUsuario(ui->le_cuentaE->text().toStdString(),ui->le_nameE->text().toStdString(),ui->le_claveE->text().toStdString(),"DOCENTE",listaUsuarios)){
 
-            bool c=listaUsuarios.cambiarPassword_Username(ui->le_cuentaE->text().toStdString(),"STRAYKIDS",ui->le_nameE->text().toStdString(),listaUsuarios);
+            bool c=listaUsuarios.cambiarPassword_Username(ui->le_cuentaE->text().toStdString(),"UNITEC2024",ui->le_nameE->text().toStdString(),listaUsuarios);
 
             if(c){
                 QMessageBox::warning(this,"Datos no congruetes","ezito ");
@@ -535,9 +539,7 @@ void MainWindow::on_Bbtn_sesion_clicked() {
     } else {
         string quienSoy = ui->Bcb_usuario->currentText().toStdString();
 
-        if (((ui->Bcb_usuario->currentIndex() == 1 && ui->Ble_clave->text().toStdString() == claveDirector) ||
-            (ui->Bcb_usuario->currentIndex() == 2 && ui->Ble_clave->text().toStdString() == claveDecano) )
-             && (listaUsuarios.buscarUsuario("11111111",ui->Ble_name->text().toStdString(),ui->Ble_clave->text().toStdString(),quienSoy,listaUsuarios))){
+        if (listaUsuarios.buscarUsuario("11111111",ui->Ble_name->text().toStdString(),ui->Ble_clave->text().toStdString(),quienSoy,listaUsuarios)){
 
             ui->frameB->setVisible(true);
             ui->frameB1->setEnabled(false);
@@ -643,7 +645,7 @@ void MainWindow::on_Dbtn_sesion_clicked()
 {
     if(ui->Dle_clave->text().isEmpty() || ui->Dle_cuenta->text().isEmpty() || ui->Dle_name->text().isEmpty()){
         QMessageBox::warning(this,"Datos incompletos","Favor, no deje campos vacios");
-    }else if(ui->Dle_clave->text().toStdString() != claveDocente){
+    }else if(true){
         QMessageBox::warning(this,"Datos incongruentes","Clave incorrecta");
     }else{
         string name=obtenerNombre(ui->Dle_cuenta->text().toStdString());
