@@ -49,39 +49,23 @@ public:
     QWidget *tab_2;
     QGridLayout *gridLayout_4;
     QLabel *lbl_pngE;
-    QFrame *frameE2;
-    QGridLayout *gridLayout_7;
-    QPushButton *btn_sesion;
-    QLabel *lbl_nameE;
-    QLineEdit *le_nameE;
-    QLabel *lbl_cuentaE;
-    QLineEdit *le_claveE;
-    QLabel *lbl_contraE;
-    QLineEdit *le_cuentaE;
     QFrame *frameE;
     QGridLayout *gridLayout_8;
-    QComboBox *cb_carreraE;
-    QPushButton *btn_closeE;
-    QLineEdit *le_codigoE;
-    QLabel *lbl_facultadE;
-    QComboBox *cb_facultadE;
     QLabel *lbl_codigoE;
     QPushButton *btn_archivoE;
-    QLabel *lbl_carreraE;
-    QLineEdit *le_pathE;
     QLabel *lbl_codigoE_2;
+    QLabel *lbl_facultadE;
+    QLabel *lbl_carreraE;
+    QComboBox *cb_carreraE;
+    QLineEdit *le_codigoE;
+    QComboBox *cb_facultadE;
+    QLineEdit *le_pathE;
+    QFrame *frameE2;
+    QGridLayout *gridLayout_7;
+    QPushButton *btn_closeE;
     QPushButton *btn_silaboE;
     QWidget *tab_3;
     QGridLayout *gridLayout_5;
-    QFrame *frameR1;
-    QGridLayout *gridLayout_9;
-    QLineEdit *Rle_clave;
-    QComboBox *Rcb_usuario;
-    QLineEdit *Rle_name;
-    QPushButton *Rbtn_sesion;
-    QLabel *Rlbl_contra;
-    QLabel *Rlbl_usuario;
-    QLabel *Rlbl_name;
     QLabel *lbl_pngR;
     QFrame *frameR;
     QGridLayout *gridLayout_10;
@@ -105,15 +89,6 @@ public:
     QLabel *lbl_pngD;
     QFrame *frameB1;
     QGridLayout *gridLayout_13;
-    QFrame *frameBB1;
-    QGridLayout *gridLayout_14;
-    QLabel *Blbl_name;
-    QLineEdit *Ble_name;
-    QLabel *Blbl_usuario;
-    QComboBox *Bcb_usuario;
-    QLabel *Blbl_contra;
-    QLineEdit *Ble_clave;
-    QPushButton *Bbtn_sesion;
     QFrame *frameB;
     QGridLayout *gridLayout_15;
     QRadioButton *Bbtn_aceptados;
@@ -123,15 +98,6 @@ public:
     QWidget *tab_5;
     QGridLayout *gridLayout_18;
     QLabel *Dlbl_png;
-    QFrame *Dframe1;
-    QGridLayout *gridLayout_16;
-    QLineEdit *Dle_cuenta;
-    QLabel *Dlbl_contraE;
-    QLineEdit *Dle_clave;
-    QLabel *Dlbl_cuenta;
-    QPushButton *Dbtn_sesion;
-    QLineEdit *Dle_name;
-    QLabel *Dlbl_name;
     QPushButton *Dbtn_salir;
     QFrame *Dframe2;
     QGridLayout *gridLayout_17;
@@ -257,71 +223,6 @@ public:
 
         gridLayout_4->addWidget(lbl_pngE, 0, 0, 1, 1);
 
-        frameE2 = new QFrame(tab_2);
-        frameE2->setObjectName(QString::fromUtf8("frameE2"));
-        frameE2->setFrameShape(QFrame::StyledPanel);
-        frameE2->setFrameShadow(QFrame::Raised);
-        gridLayout_7 = new QGridLayout(frameE2);
-        gridLayout_7->setObjectName(QString::fromUtf8("gridLayout_7"));
-        btn_sesion = new QPushButton(frameE2);
-        btn_sesion->setObjectName(QString::fromUtf8("btn_sesion"));
-        QPalette palette7;
-        palette7.setBrush(QPalette::Active, QPalette::Button, brush);
-        palette7.setBrush(QPalette::Inactive, QPalette::Button, brush);
-        palette7.setBrush(QPalette::Disabled, QPalette::Button, brush);
-        btn_sesion->setPalette(palette7);
-        QFont font1;
-        font1.setFamily(QString::fromUtf8("Sans Serif Collection"));
-        font1.setPointSize(11);
-        font1.setBold(false);
-        font1.setWeight(50);
-        btn_sesion->setFont(font1);
-
-        gridLayout_7->addWidget(btn_sesion, 3, 1, 1, 1);
-
-        lbl_nameE = new QLabel(frameE2);
-        lbl_nameE->setObjectName(QString::fromUtf8("lbl_nameE"));
-        QFont font2;
-        font2.setPointSize(12);
-        lbl_nameE->setFont(font2);
-
-        gridLayout_7->addWidget(lbl_nameE, 0, 0, 1, 1);
-
-        le_nameE = new QLineEdit(frameE2);
-        le_nameE->setObjectName(QString::fromUtf8("le_nameE"));
-        QFont font3;
-        font3.setPointSize(11);
-        le_nameE->setFont(font3);
-
-        gridLayout_7->addWidget(le_nameE, 0, 1, 1, 1);
-
-        lbl_cuentaE = new QLabel(frameE2);
-        lbl_cuentaE->setObjectName(QString::fromUtf8("lbl_cuentaE"));
-        lbl_cuentaE->setFont(font2);
-
-        gridLayout_7->addWidget(lbl_cuentaE, 1, 0, 1, 1);
-
-        le_claveE = new QLineEdit(frameE2);
-        le_claveE->setObjectName(QString::fromUtf8("le_claveE"));
-        le_claveE->setFont(font3);
-
-        gridLayout_7->addWidget(le_claveE, 2, 1, 1, 1);
-
-        lbl_contraE = new QLabel(frameE2);
-        lbl_contraE->setObjectName(QString::fromUtf8("lbl_contraE"));
-        lbl_contraE->setFont(font2);
-
-        gridLayout_7->addWidget(lbl_contraE, 2, 0, 1, 1);
-
-        le_cuentaE = new QLineEdit(frameE2);
-        le_cuentaE->setObjectName(QString::fromUtf8("le_cuentaE"));
-        le_cuentaE->setFont(font3);
-
-        gridLayout_7->addWidget(le_cuentaE, 1, 1, 1, 1);
-
-
-        gridLayout_4->addWidget(frameE2, 1, 0, 1, 1);
-
         frameE = new QFrame(tab_2);
         frameE->setObjectName(QString::fromUtf8("frameE"));
         frameE->setEnabled(true);
@@ -329,47 +230,11 @@ public:
         frameE->setFrameShadow(QFrame::Raised);
         gridLayout_8 = new QGridLayout(frameE);
         gridLayout_8->setObjectName(QString::fromUtf8("gridLayout_8"));
-        cb_carreraE = new QComboBox(frameE);
-        cb_carreraE->addItem(QString());
-        cb_carreraE->setObjectName(QString::fromUtf8("cb_carreraE"));
-        cb_carreraE->setFont(font3);
-
-        gridLayout_8->addWidget(cb_carreraE, 1, 2, 1, 1);
-
-        btn_closeE = new QPushButton(frameE);
-        btn_closeE->setObjectName(QString::fromUtf8("btn_closeE"));
-        QFont font4;
-        font4.setFamily(QString::fromUtf8("Sans Serif Collection"));
-        font4.setPointSize(7);
-        btn_closeE->setFont(font4);
-
-        gridLayout_8->addWidget(btn_closeE, 2, 3, 1, 1);
-
-        le_codigoE = new QLineEdit(frameE);
-        le_codigoE->setObjectName(QString::fromUtf8("le_codigoE"));
-        le_codigoE->setFont(font3);
-
-        gridLayout_8->addWidget(le_codigoE, 2, 2, 1, 1);
-
-        lbl_facultadE = new QLabel(frameE);
-        lbl_facultadE->setObjectName(QString::fromUtf8("lbl_facultadE"));
-        lbl_facultadE->setFont(font2);
-
-        gridLayout_8->addWidget(lbl_facultadE, 0, 0, 1, 1);
-
-        cb_facultadE = new QComboBox(frameE);
-        cb_facultadE->addItem(QString());
-        cb_facultadE->addItem(QString());
-        cb_facultadE->addItem(QString());
-        cb_facultadE->addItem(QString());
-        cb_facultadE->setObjectName(QString::fromUtf8("cb_facultadE"));
-        cb_facultadE->setFont(font3);
-
-        gridLayout_8->addWidget(cb_facultadE, 0, 2, 1, 1);
-
         lbl_codigoE = new QLabel(frameE);
         lbl_codigoE->setObjectName(QString::fromUtf8("lbl_codigoE"));
-        lbl_codigoE->setFont(font2);
+        QFont font1;
+        font1.setPointSize(12);
+        lbl_codigoE->setFont(font1);
 
         gridLayout_8->addWidget(lbl_codigoE, 2, 0, 1, 1);
 
@@ -378,11 +243,48 @@ public:
 
         gridLayout_8->addWidget(btn_archivoE, 4, 2, 1, 1);
 
+        lbl_codigoE_2 = new QLabel(frameE);
+        lbl_codigoE_2->setObjectName(QString::fromUtf8("lbl_codigoE_2"));
+        lbl_codigoE_2->setFont(font1);
+
+        gridLayout_8->addWidget(lbl_codigoE_2, 4, 0, 1, 1);
+
+        lbl_facultadE = new QLabel(frameE);
+        lbl_facultadE->setObjectName(QString::fromUtf8("lbl_facultadE"));
+        lbl_facultadE->setFont(font1);
+
+        gridLayout_8->addWidget(lbl_facultadE, 0, 0, 1, 1);
+
         lbl_carreraE = new QLabel(frameE);
         lbl_carreraE->setObjectName(QString::fromUtf8("lbl_carreraE"));
-        lbl_carreraE->setFont(font2);
+        lbl_carreraE->setFont(font1);
 
         gridLayout_8->addWidget(lbl_carreraE, 1, 0, 1, 1);
+
+        cb_carreraE = new QComboBox(frameE);
+        cb_carreraE->addItem(QString());
+        cb_carreraE->setObjectName(QString::fromUtf8("cb_carreraE"));
+        QFont font2;
+        font2.setPointSize(11);
+        cb_carreraE->setFont(font2);
+
+        gridLayout_8->addWidget(cb_carreraE, 1, 2, 1, 1);
+
+        le_codigoE = new QLineEdit(frameE);
+        le_codigoE->setObjectName(QString::fromUtf8("le_codigoE"));
+        le_codigoE->setFont(font2);
+
+        gridLayout_8->addWidget(le_codigoE, 2, 2, 1, 1);
+
+        cb_facultadE = new QComboBox(frameE);
+        cb_facultadE->addItem(QString());
+        cb_facultadE->addItem(QString());
+        cb_facultadE->addItem(QString());
+        cb_facultadE->addItem(QString());
+        cb_facultadE->setObjectName(QString::fromUtf8("cb_facultadE"));
+        cb_facultadE->setFont(font2);
+
+        gridLayout_8->addWidget(cb_facultadE, 0, 2, 1, 1);
 
         le_pathE = new QLineEdit(frameE);
         le_pathE->setObjectName(QString::fromUtf8("le_pathE"));
@@ -390,97 +292,48 @@ public:
 
         gridLayout_8->addWidget(le_pathE, 6, 2, 1, 1);
 
-        lbl_codigoE_2 = new QLabel(frameE);
-        lbl_codigoE_2->setObjectName(QString::fromUtf8("lbl_codigoE_2"));
-        lbl_codigoE_2->setFont(font2);
+        frameE2 = new QFrame(frameE);
+        frameE2->setObjectName(QString::fromUtf8("frameE2"));
+        frameE2->setFrameShape(QFrame::StyledPanel);
+        frameE2->setFrameShadow(QFrame::Raised);
+        gridLayout_7 = new QGridLayout(frameE2);
+        gridLayout_7->setObjectName(QString::fromUtf8("gridLayout_7"));
+        btn_closeE = new QPushButton(frameE2);
+        btn_closeE->setObjectName(QString::fromUtf8("btn_closeE"));
+        QFont font3;
+        font3.setFamily(QString::fromUtf8("Sans Serif Collection"));
+        font3.setPointSize(7);
+        btn_closeE->setFont(font3);
 
-        gridLayout_8->addWidget(lbl_codigoE_2, 4, 0, 1, 1);
+        gridLayout_7->addWidget(btn_closeE, 1, 0, 1, 1);
 
-        btn_silaboE = new QPushButton(frameE);
+        btn_silaboE = new QPushButton(frameE2);
         btn_silaboE->setObjectName(QString::fromUtf8("btn_silaboE"));
-        QPalette palette8;
-        palette8.setBrush(QPalette::Active, QPalette::Button, brush);
-        palette8.setBrush(QPalette::Inactive, QPalette::Button, brush);
-        palette8.setBrush(QPalette::Disabled, QPalette::Button, brush);
-        btn_silaboE->setPalette(palette8);
-        btn_silaboE->setFont(font1);
+        QPalette palette7;
+        palette7.setBrush(QPalette::Active, QPalette::Button, brush);
+        palette7.setBrush(QPalette::Inactive, QPalette::Button, brush);
+        palette7.setBrush(QPalette::Disabled, QPalette::Button, brush);
+        btn_silaboE->setPalette(palette7);
+        QFont font4;
+        font4.setFamily(QString::fromUtf8("Sans Serif Collection"));
+        font4.setPointSize(11);
+        font4.setBold(false);
+        font4.setWeight(50);
+        btn_silaboE->setFont(font4);
 
-        gridLayout_8->addWidget(btn_silaboE, 6, 3, 1, 1);
+        gridLayout_7->addWidget(btn_silaboE, 1, 1, 1, 1);
 
 
-        gridLayout_4->addWidget(frameE, 2, 0, 1, 1);
+        gridLayout_8->addWidget(frameE2, 7, 2, 1, 1);
+
+
+        gridLayout_4->addWidget(frameE, 1, 0, 2, 1);
 
         tabWidget->addTab(tab_2, QString());
         tab_3 = new QWidget();
         tab_3->setObjectName(QString::fromUtf8("tab_3"));
         gridLayout_5 = new QGridLayout(tab_3);
         gridLayout_5->setObjectName(QString::fromUtf8("gridLayout_5"));
-        frameR1 = new QFrame(tab_3);
-        frameR1->setObjectName(QString::fromUtf8("frameR1"));
-        frameR1->setFrameShape(QFrame::StyledPanel);
-        frameR1->setFrameShadow(QFrame::Raised);
-        gridLayout_9 = new QGridLayout(frameR1);
-        gridLayout_9->setObjectName(QString::fromUtf8("gridLayout_9"));
-        Rle_clave = new QLineEdit(frameR1);
-        Rle_clave->setObjectName(QString::fromUtf8("Rle_clave"));
-        Rle_clave->setFont(font3);
-
-        gridLayout_9->addWidget(Rle_clave, 2, 1, 1, 1);
-
-        Rcb_usuario = new QComboBox(frameR1);
-        Rcb_usuario->addItem(QString());
-        Rcb_usuario->addItem(QString());
-        Rcb_usuario->addItem(QString());
-        Rcb_usuario->addItem(QString());
-        Rcb_usuario->addItem(QString());
-        Rcb_usuario->setObjectName(QString::fromUtf8("Rcb_usuario"));
-        Rcb_usuario->setFont(font3);
-
-        gridLayout_9->addWidget(Rcb_usuario, 1, 1, 1, 1);
-
-        Rle_name = new QLineEdit(frameR1);
-        Rle_name->setObjectName(QString::fromUtf8("Rle_name"));
-        Rle_name->setFont(font3);
-
-        gridLayout_9->addWidget(Rle_name, 0, 1, 1, 1);
-
-        Rbtn_sesion = new QPushButton(frameR1);
-        Rbtn_sesion->setObjectName(QString::fromUtf8("Rbtn_sesion"));
-        QFont font5;
-        font5.setFamily(QString::fromUtf8("Sans Serif Collection"));
-        font5.setPointSize(11);
-        Rbtn_sesion->setFont(font5);
-
-        gridLayout_9->addWidget(Rbtn_sesion, 3, 1, 1, 1);
-
-        Rlbl_contra = new QLabel(frameR1);
-        Rlbl_contra->setObjectName(QString::fromUtf8("Rlbl_contra"));
-        Rlbl_contra->setFont(font2);
-
-        gridLayout_9->addWidget(Rlbl_contra, 2, 0, 1, 1);
-
-        Rlbl_usuario = new QLabel(frameR1);
-        Rlbl_usuario->setObjectName(QString::fromUtf8("Rlbl_usuario"));
-        Rlbl_usuario->setFont(font2);
-
-        gridLayout_9->addWidget(Rlbl_usuario, 1, 0, 1, 1);
-
-        Rlbl_name = new QLabel(frameR1);
-        Rlbl_name->setObjectName(QString::fromUtf8("Rlbl_name"));
-        Rlbl_name->setFont(font2);
-
-        gridLayout_9->addWidget(Rlbl_name, 0, 0, 1, 1);
-
-        Rbtn_sesion->raise();
-        Rle_clave->raise();
-        Rcb_usuario->raise();
-        Rlbl_name->raise();
-        Rle_name->raise();
-        Rlbl_contra->raise();
-        Rlbl_usuario->raise();
-
-        gridLayout_5->addWidget(frameR1, 1, 0, 1, 1);
-
         lbl_pngR = new QLabel(tab_3);
         lbl_pngR->setObjectName(QString::fromUtf8("lbl_pngR"));
         lbl_pngR->setScaledContents(true);
@@ -515,7 +368,7 @@ public:
         gridLayout_11->setObjectName(QString::fromUtf8("gridLayout_11"));
         Rlbl_seleccion = new QLabel(frame_2);
         Rlbl_seleccion->setObjectName(QString::fromUtf8("Rlbl_seleccion"));
-        Rlbl_seleccion->setFont(font2);
+        Rlbl_seleccion->setFont(font1);
 
         gridLayout_11->addWidget(Rlbl_seleccion, 0, 0, 1, 1);
 
@@ -527,7 +380,7 @@ public:
 
         Rlbl_estadoA = new QLabel(frame_2);
         Rlbl_estadoA->setObjectName(QString::fromUtf8("Rlbl_estadoA"));
-        Rlbl_estadoA->setFont(font2);
+        Rlbl_estadoA->setFont(font1);
 
         gridLayout_11->addWidget(Rlbl_estadoA, 1, 0, 1, 1);
 
@@ -539,20 +392,20 @@ public:
 
         Rlbl_name_4 = new QLabel(frame_2);
         Rlbl_name_4->setObjectName(QString::fromUtf8("Rlbl_name_4"));
-        Rlbl_name_4->setFont(font2);
+        Rlbl_name_4->setFont(font1);
 
         gridLayout_11->addWidget(Rlbl_name_4, 2, 0, 1, 1);
 
         Rcb_cambiarE = new QComboBox(frame_2);
         Rcb_cambiarE->addItem(QString());
         Rcb_cambiarE->setObjectName(QString::fromUtf8("Rcb_cambiarE"));
-        Rcb_cambiarE->setFont(font3);
+        Rcb_cambiarE->setFont(font2);
 
         gridLayout_11->addWidget(Rcb_cambiarE, 2, 1, 1, 1);
 
         Rlbl_comentario = new QLabel(frame_2);
         Rlbl_comentario->setObjectName(QString::fromUtf8("Rlbl_comentario"));
-        Rlbl_comentario->setFont(font2);
+        Rlbl_comentario->setFont(font1);
 
         gridLayout_11->addWidget(Rlbl_comentario, 3, 0, 1, 1);
 
@@ -564,6 +417,9 @@ public:
 
         Rbtn_cambiar = new QPushButton(frame_2);
         Rbtn_cambiar->setObjectName(QString::fromUtf8("Rbtn_cambiar"));
+        QFont font5;
+        font5.setFamily(QString::fromUtf8("Sans Serif Collection"));
+        font5.setPointSize(11);
         Rbtn_cambiar->setFont(font5);
 
         gridLayout_11->addWidget(Rbtn_cambiar, 4, 1, 1, 1);
@@ -577,7 +433,7 @@ public:
         gridLayout_10->addWidget(frame_2, 0, 1, 1, 1);
 
 
-        gridLayout_5->addWidget(frameR, 2, 0, 1, 1);
+        gridLayout_5->addWidget(frameR, 1, 0, 1, 1);
 
         tabWidget->addTab(tab_3, QString());
         tab_4 = new QWidget();
@@ -596,60 +452,6 @@ public:
         frameB1->setFrameShadow(QFrame::Raised);
         gridLayout_13 = new QGridLayout(frameB1);
         gridLayout_13->setObjectName(QString::fromUtf8("gridLayout_13"));
-        frameBB1 = new QFrame(frameB1);
-        frameBB1->setObjectName(QString::fromUtf8("frameBB1"));
-        frameBB1->setFrameShape(QFrame::StyledPanel);
-        frameBB1->setFrameShadow(QFrame::Raised);
-        gridLayout_14 = new QGridLayout(frameBB1);
-        gridLayout_14->setObjectName(QString::fromUtf8("gridLayout_14"));
-        Blbl_name = new QLabel(frameBB1);
-        Blbl_name->setObjectName(QString::fromUtf8("Blbl_name"));
-        Blbl_name->setFont(font2);
-
-        gridLayout_14->addWidget(Blbl_name, 0, 0, 1, 1);
-
-        Ble_name = new QLineEdit(frameBB1);
-        Ble_name->setObjectName(QString::fromUtf8("Ble_name"));
-        Ble_name->setFont(font3);
-
-        gridLayout_14->addWidget(Ble_name, 0, 1, 1, 1);
-
-        Blbl_usuario = new QLabel(frameBB1);
-        Blbl_usuario->setObjectName(QString::fromUtf8("Blbl_usuario"));
-        Blbl_usuario->setFont(font2);
-
-        gridLayout_14->addWidget(Blbl_usuario, 1, 0, 1, 1);
-
-        Bcb_usuario = new QComboBox(frameBB1);
-        Bcb_usuario->addItem(QString());
-        Bcb_usuario->addItem(QString());
-        Bcb_usuario->addItem(QString());
-        Bcb_usuario->setObjectName(QString::fromUtf8("Bcb_usuario"));
-        Bcb_usuario->setFont(font3);
-
-        gridLayout_14->addWidget(Bcb_usuario, 1, 1, 1, 1);
-
-        Blbl_contra = new QLabel(frameBB1);
-        Blbl_contra->setObjectName(QString::fromUtf8("Blbl_contra"));
-        Blbl_contra->setFont(font2);
-
-        gridLayout_14->addWidget(Blbl_contra, 2, 0, 1, 1);
-
-        Ble_clave = new QLineEdit(frameBB1);
-        Ble_clave->setObjectName(QString::fromUtf8("Ble_clave"));
-        Ble_clave->setFont(font3);
-
-        gridLayout_14->addWidget(Ble_clave, 2, 1, 1, 1);
-
-        Bbtn_sesion = new QPushButton(frameBB1);
-        Bbtn_sesion->setObjectName(QString::fromUtf8("Bbtn_sesion"));
-        Bbtn_sesion->setFont(font5);
-
-        gridLayout_14->addWidget(Bbtn_sesion, 3, 1, 1, 1);
-
-
-        gridLayout_13->addWidget(frameBB1, 0, 0, 1, 1);
-
 
         gridLayout_6->addWidget(frameB1, 1, 0, 1, 1);
 
@@ -693,66 +495,10 @@ public:
 
         gridLayout_18->addWidget(Dlbl_png, 0, 0, 1, 1);
 
-        Dframe1 = new QFrame(tab_5);
-        Dframe1->setObjectName(QString::fromUtf8("Dframe1"));
-        Dframe1->setFrameShape(QFrame::StyledPanel);
-        Dframe1->setFrameShadow(QFrame::Raised);
-        gridLayout_16 = new QGridLayout(Dframe1);
-        gridLayout_16->setObjectName(QString::fromUtf8("gridLayout_16"));
-        Dle_cuenta = new QLineEdit(Dframe1);
-        Dle_cuenta->setObjectName(QString::fromUtf8("Dle_cuenta"));
-        Dle_cuenta->setFont(font3);
-
-        gridLayout_16->addWidget(Dle_cuenta, 1, 1, 1, 1);
-
-        Dlbl_contraE = new QLabel(Dframe1);
-        Dlbl_contraE->setObjectName(QString::fromUtf8("Dlbl_contraE"));
-        Dlbl_contraE->setFont(font2);
-
-        gridLayout_16->addWidget(Dlbl_contraE, 2, 0, 1, 1);
-
-        Dle_clave = new QLineEdit(Dframe1);
-        Dle_clave->setObjectName(QString::fromUtf8("Dle_clave"));
-        Dle_clave->setFont(font3);
-
-        gridLayout_16->addWidget(Dle_clave, 2, 1, 1, 1);
-
-        Dlbl_cuenta = new QLabel(Dframe1);
-        Dlbl_cuenta->setObjectName(QString::fromUtf8("Dlbl_cuenta"));
-        Dlbl_cuenta->setFont(font2);
-
-        gridLayout_16->addWidget(Dlbl_cuenta, 1, 0, 1, 1);
-
-        Dbtn_sesion = new QPushButton(Dframe1);
-        Dbtn_sesion->setObjectName(QString::fromUtf8("Dbtn_sesion"));
-        QPalette palette9;
-        palette9.setBrush(QPalette::Active, QPalette::Button, brush);
-        palette9.setBrush(QPalette::Inactive, QPalette::Button, brush);
-        palette9.setBrush(QPalette::Disabled, QPalette::Button, brush);
-        Dbtn_sesion->setPalette(palette9);
-        Dbtn_sesion->setFont(font1);
-
-        gridLayout_16->addWidget(Dbtn_sesion, 3, 1, 1, 1);
-
-        Dle_name = new QLineEdit(Dframe1);
-        Dle_name->setObjectName(QString::fromUtf8("Dle_name"));
-        Dle_name->setFont(font3);
-
-        gridLayout_16->addWidget(Dle_name, 0, 1, 1, 1);
-
-        Dlbl_name = new QLabel(Dframe1);
-        Dlbl_name->setObjectName(QString::fromUtf8("Dlbl_name"));
-        Dlbl_name->setFont(font2);
-
-        gridLayout_16->addWidget(Dlbl_name, 0, 0, 1, 1);
-
-        Dbtn_salir = new QPushButton(Dframe1);
+        Dbtn_salir = new QPushButton(tab_5);
         Dbtn_salir->setObjectName(QString::fromUtf8("Dbtn_salir"));
 
-        gridLayout_16->addWidget(Dbtn_salir, 3, 0, 1, 1);
-
-
-        gridLayout_18->addWidget(Dframe1, 1, 0, 1, 1);
+        gridLayout_18->addWidget(Dbtn_salir, 2, 0, 1, 1);
 
         Dframe2 = new QFrame(tab_5);
         Dframe2->setObjectName(QString::fromUtf8("Dframe2"));
@@ -767,58 +513,58 @@ public:
 
         Dlabel2 = new QLabel(Dframe2);
         Dlabel2->setObjectName(QString::fromUtf8("Dlabel2"));
-        QPalette palette10;
+        QPalette palette8;
         QBrush brush3(QColor(6, 36, 88, 255));
         brush3.setStyle(Qt::SolidPattern);
-        palette10.setBrush(QPalette::Active, QPalette::WindowText, brush3);
-        palette10.setBrush(QPalette::Active, QPalette::Text, brush3);
+        palette8.setBrush(QPalette::Active, QPalette::WindowText, brush3);
+        palette8.setBrush(QPalette::Active, QPalette::Text, brush3);
         QBrush brush4(QColor(6, 36, 88, 128));
         brush4.setStyle(Qt::SolidPattern);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
-        palette10.setBrush(QPalette::Active, QPalette::PlaceholderText, brush4);
+        palette8.setBrush(QPalette::Active, QPalette::PlaceholderText, brush4);
 #endif
-        palette10.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
-        palette10.setBrush(QPalette::Inactive, QPalette::Text, brush3);
+        palette8.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
+        palette8.setBrush(QPalette::Inactive, QPalette::Text, brush3);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
-        palette10.setBrush(QPalette::Inactive, QPalette::PlaceholderText, brush4);
+        palette8.setBrush(QPalette::Inactive, QPalette::PlaceholderText, brush4);
 #endif
         QBrush brush5(QColor(120, 120, 120, 255));
         brush5.setStyle(Qt::SolidPattern);
-        palette10.setBrush(QPalette::Disabled, QPalette::WindowText, brush5);
-        palette10.setBrush(QPalette::Disabled, QPalette::Text, brush5);
+        palette8.setBrush(QPalette::Disabled, QPalette::WindowText, brush5);
+        palette8.setBrush(QPalette::Disabled, QPalette::Text, brush5);
         QBrush brush6(QColor(0, 0, 0, 128));
         brush6.setStyle(Qt::SolidPattern);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
-        palette10.setBrush(QPalette::Disabled, QPalette::PlaceholderText, brush6);
+        palette8.setBrush(QPalette::Disabled, QPalette::PlaceholderText, brush6);
 #endif
-        Dlabel2->setPalette(palette10);
+        Dlabel2->setPalette(palette8);
 
         gridLayout_17->addWidget(Dlabel2, 0, 0, 1, 1);
 
         Dlabel = new QLabel(Dframe2);
         Dlabel->setObjectName(QString::fromUtf8("Dlabel"));
-        QPalette palette11;
-        palette11.setBrush(QPalette::Active, QPalette::WindowText, brush3);
-        palette11.setBrush(QPalette::Active, QPalette::Text, brush3);
+        QPalette palette9;
+        palette9.setBrush(QPalette::Active, QPalette::WindowText, brush3);
+        palette9.setBrush(QPalette::Active, QPalette::Text, brush3);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
-        palette11.setBrush(QPalette::Active, QPalette::PlaceholderText, brush4);
+        palette9.setBrush(QPalette::Active, QPalette::PlaceholderText, brush4);
 #endif
-        palette11.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
-        palette11.setBrush(QPalette::Inactive, QPalette::Text, brush3);
+        palette9.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
+        palette9.setBrush(QPalette::Inactive, QPalette::Text, brush3);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
-        palette11.setBrush(QPalette::Inactive, QPalette::PlaceholderText, brush4);
+        palette9.setBrush(QPalette::Inactive, QPalette::PlaceholderText, brush4);
 #endif
-        palette11.setBrush(QPalette::Disabled, QPalette::WindowText, brush5);
-        palette11.setBrush(QPalette::Disabled, QPalette::Text, brush5);
+        palette9.setBrush(QPalette::Disabled, QPalette::WindowText, brush5);
+        palette9.setBrush(QPalette::Disabled, QPalette::Text, brush5);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
-        palette11.setBrush(QPalette::Disabled, QPalette::PlaceholderText, brush6);
+        palette9.setBrush(QPalette::Disabled, QPalette::PlaceholderText, brush6);
 #endif
-        Dlabel->setPalette(palette11);
+        Dlabel->setPalette(palette9);
 
         gridLayout_17->addWidget(Dlabel, 0, 2, 1, 1);
 
 
-        gridLayout_18->addWidget(Dframe2, 2, 0, 1, 1);
+        gridLayout_18->addWidget(Dframe2, 1, 0, 1, 1);
 
         tabWidget->addTab(tab_5, QString());
 
@@ -861,37 +607,23 @@ public:
         lbl_b1M->setText(QString());
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "MENU", nullptr));
         lbl_pngE->setText(QString());
-        btn_sesion->setText(QApplication::translate("MainWindow", "Iniciar Sesion", nullptr));
-        lbl_nameE->setText(QApplication::translate("MainWindow", "Nombre Completo:", nullptr));
-        lbl_cuentaE->setText(QApplication::translate("MainWindow", "Numero de cuenta:", nullptr));
-        lbl_contraE->setText(QApplication::translate("MainWindow", "Clave:", nullptr));
+        lbl_codigoE->setText(QApplication::translate("MainWindow", "Codigo de clase:", nullptr));
+        btn_archivoE->setText(QApplication::translate("MainWindow", "BUSCAR", nullptr));
+        lbl_codigoE_2->setText(QApplication::translate("MainWindow", "Archivo:", nullptr));
+        lbl_facultadE->setText(QApplication::translate("MainWindow", "Facultad:", nullptr));
+        lbl_carreraE->setText(QApplication::translate("MainWindow", "Carrera:", nullptr));
         cb_carreraE->setItemText(0, QApplication::translate("MainWindow", "...", nullptr));
 
-        btn_closeE->setText(QApplication::translate("MainWindow", "Cerrar\n"
-"Sesion", nullptr));
-        lbl_facultadE->setText(QApplication::translate("MainWindow", "Facultad:", nullptr));
         cb_facultadE->setItemText(0, QApplication::translate("MainWindow", "...", nullptr));
         cb_facultadE->setItemText(1, QApplication::translate("MainWindow", "FI", nullptr));
         cb_facultadE->setItemText(2, QApplication::translate("MainWindow", "FCAS", nullptr));
         cb_facultadE->setItemText(3, QApplication::translate("MainWindow", "FA&D", nullptr));
 
-        lbl_codigoE->setText(QApplication::translate("MainWindow", "Codigo de clase:", nullptr));
-        btn_archivoE->setText(QApplication::translate("MainWindow", "BUSCAR", nullptr));
-        lbl_carreraE->setText(QApplication::translate("MainWindow", "Carrera:", nullptr));
         le_pathE->setText(QString());
-        lbl_codigoE_2->setText(QApplication::translate("MainWindow", "Archivo:", nullptr));
+        btn_closeE->setText(QApplication::translate("MainWindow", "Cerrar\n"
+"Sesion", nullptr));
         btn_silaboE->setText(QApplication::translate("MainWindow", "Ingresar", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "ENTREGA", nullptr));
-        Rcb_usuario->setItemText(0, QApplication::translate("MainWindow", "...", nullptr));
-        Rcb_usuario->setItemText(1, QApplication::translate("MainWindow", "JEFE_ACADEMICO", nullptr));
-        Rcb_usuario->setItemText(2, QApplication::translate("MainWindow", "COORDINADOR_DE_CARRERA", nullptr));
-        Rcb_usuario->setItemText(3, QApplication::translate("MainWindow", "IEDD", nullptr));
-        Rcb_usuario->setItemText(4, QApplication::translate("MainWindow", "CONSULTOR", nullptr));
-
-        Rbtn_sesion->setText(QApplication::translate("MainWindow", "Iniciar Sesion", nullptr));
-        Rlbl_contra->setText(QApplication::translate("MainWindow", "Clave:", nullptr));
-        Rlbl_usuario->setText(QApplication::translate("MainWindow", "Tipo de usuario:", nullptr));
-        Rlbl_name->setText(QApplication::translate("MainWindow", "Nombre Completo:", nullptr));
         lbl_pngR->setText(QString());
         Rlbl_seleccion->setText(QApplication::translate("MainWindow", "Seleccion:", nullptr));
         Rlbl_estadoA->setText(QApplication::translate("MainWindow", "Estado Actual:", nullptr));
@@ -903,23 +635,11 @@ public:
         Rbtn_cerrar->setText(QApplication::translate("MainWindow", "Cerrar Sesion", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainWindow", "REVISION", nullptr));
         lbl_pngD->setText(QString());
-        Blbl_name->setText(QApplication::translate("MainWindow", "Nombre Completo:", nullptr));
-        Blbl_usuario->setText(QApplication::translate("MainWindow", "Tipo de usuario:", nullptr));
-        Bcb_usuario->setItemText(0, QApplication::translate("MainWindow", "...", nullptr));
-        Bcb_usuario->setItemText(1, QApplication::translate("MainWindow", "DIRECTORES", nullptr));
-        Bcb_usuario->setItemText(2, QApplication::translate("MainWindow", "DECANOS", nullptr));
-
-        Blbl_contra->setText(QApplication::translate("MainWindow", "Clave:", nullptr));
-        Bbtn_sesion->setText(QApplication::translate("MainWindow", "Iniciar Sesion", nullptr));
         Bbtn_aceptados->setText(QApplication::translate("MainWindow", "Aceptados", nullptr));
         Bbtn_proceso->setText(QApplication::translate("MainWindow", "En proceso", nullptr));
         Bbtn_cerrar->setText(QApplication::translate("MainWindow", "Cerrar Sesion", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("MainWindow", "BOARD", nullptr));
         Dlbl_png->setText(QString());
-        Dlbl_contraE->setText(QApplication::translate("MainWindow", "Clave:", nullptr));
-        Dlbl_cuenta->setText(QApplication::translate("MainWindow", "Numero de cuenta:", nullptr));
-        Dbtn_sesion->setText(QApplication::translate("MainWindow", "REVISAR", nullptr));
-        Dlbl_name->setText(QApplication::translate("MainWindow", "Nombre registrado:", nullptr));
         Dbtn_salir->setText(QApplication::translate("MainWindow", "SALIR", nullptr));
         Dlabel2->setText(QApplication::translate("MainWindow", "..................................................................................", nullptr));
         Dlabel->setText(QApplication::translate("MainWindow", "...................................................................................", nullptr));

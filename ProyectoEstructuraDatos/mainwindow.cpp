@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
 
     ui->setupUi(this);
+  //  ui->tabWidget->tabBar()->hide(); EL PODEROSO HIDE TAB
 
     //imagenes y label color
     QImage menu(":/prefix/principal proyecto.png");
@@ -55,6 +56,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     listaUsuarios.cargarUsuarios();
     this->arbolSilabo->extraerArbol();
+
+    //cosas para sustituir donde diga Rcb_usario
+    //index 1 y 2 son jefe_academico y coordinador de carrera
+        //index 3 IEDD
+        //INDEX 4 CONSULTOR
 
 }
 
@@ -131,33 +137,33 @@ void MainWindow::on_tabWidget_currentChanged(int index)
     }
 }
 
-//logica tab2 de entrega silabo
-void MainWindow::on_btn_sesion_clicked()
-{
-    if(ui->le_nameE->text().isEmpty() || ui->le_claveE->text().isEmpty() || ui->le_cuentaE->text().isEmpty()){
-        QMessageBox::warning(this,"Datos no congruetes","Favor no deje campos sin completar");
-    }else{
+////logica tab2 de entrega silabo
+//void MainWindow::on_btn_sesion_clicked()
+//{
+//    if(ui->le_nameE->text().isEmpty() || ui->le_claveE->text().isEmpty() || ui->le_cuentaE->text().isEmpty()){
+//        QMessageBox::warning(this,"Datos no congruetes","Favor no deje campos sin completar");
+//    }else{
 
-        if(listaUsuarios.buscarUsuario(ui->le_cuentaE->text().toStdString(),ui->le_nameE->text().toStdString(),ui->le_claveE->text().toStdString(),"DOCENTE",listaUsuarios)){
+//        if(listaUsuarios.buscarUsuario(ui->le_cuentaE->text().toStdString(),ui->le_nameE->text().toStdString(),ui->le_claveE->text().toStdString(),"DOCENTE",listaUsuarios)){
 
-            bool c=listaUsuarios.cambiarPassword_Username(ui->le_cuentaE->text().toStdString(),"UNITEC2024",ui->le_nameE->text().toStdString(),listaUsuarios);
+//            bool c=listaUsuarios.cambiarPassword_Username(ui->le_cuentaE->text().toStdString(),"UNITEC2024",ui->le_nameE->text().toStdString(),listaUsuarios);
 
-            if(c){
-                QMessageBox::warning(this,"Datos no congruetes","ezito ");
+//            if(c){
+//                QMessageBox::warning(this,"Datos no congruetes","ezito ");
 
-            }
-            ui->frameE->setVisible(true);
-            ui->frameE2->setEnabled(false);
-            loginDocente=true;
-            ui->tab_3->setEnabled(false);
-            ui->tab_4->setEnabled(false);
-            ui->tab_5->setEnabled(false);
-        }else{
-            QMessageBox::warning(this,"Datos no congruetes","Usuario, cuenta o contraseña incorrectas");
-        }
+//            }
+//            ui->frameE->setVisible(true);
+//            ui->frameE2->setEnabled(false);
+//            loginDocente=true;
+//            ui->tab_3->setEnabled(false);
+//            ui->tab_4->setEnabled(false);
+//            ui->tab_5->setEnabled(false);
+//        }else{
+//            QMessageBox::warning(this,"Datos no congruetes","Usuario, cuenta o contraseña incorrectas");
+//        }
 
-    }
-}
+//    }
+//}
 
 void MainWindow::on_btn_closeE_clicked()
 {
@@ -180,9 +186,9 @@ void MainWindow::limpiarEntrega()
         ui->cb_facultadE->setCurrentIndex(0);
         ui->cb_carreraE->setCurrentIndex(0);
     }else{
-        ui->le_nameE->clear();
-        ui->le_cuentaE->clear();
-        ui->le_claveE->clear();
+//        ui->le_nameE->clear();
+//        ui->le_cuentaE->clear();
+//        ui->le_claveE->clear();
         ui->cb_facultadE->setCurrentIndex(0);
         ui->cb_carreraE->setCurrentIndex(0);
         ui->frameE2->setEnabled(true);
@@ -198,22 +204,22 @@ void MainWindow::on_btn_silaboE_clicked()
         QMessageBox::information(this,"Enviado","Datos han sido enviados");
         cantSilabos=this->arbolSilabo->getCantidadArbol()+1; //id seria cantidad en arbol mas uno
         //datos usuario
-        string name=ui->le_nameE->text().toStdString();
-        string numCuenta=ui->le_cuentaE->text().toStdString();
+//        string name=ui->le_nameE->text().toStdString();
+//        string numCuenta=ui->le_cuentaE->text().toStdString();
         string codigoClase=ui->le_codigoE->text().toStdString();
 
 
         //ya no debe crear un nuevo usuario, ahora solo debe buscar que exisita en la lista y el setter de la nueva contrasena
-        Usuario nuevo(name, numCuenta, codigoClase,"poner contrasena ingresada");
-        listaUsuarios.InsertarFin(nuevo);
-        listaUsuarios.guardarUsuarios(listaUsuarios);
+//        Usuario nuevo("nameLogin", "numCuentaLogin", codigoClase,"poner contrasena ingresada");
+//        listaUsuarios.InsertarFin(nuevo);
+//        listaUsuarios.guardarUsuarios(listaUsuarios);
 
         string facultad=ui->cb_facultadE->currentText().toStdString();
         string carrera=ui->cb_carreraE->currentText().toStdString();
         QString path=ui->le_pathE->text();
 
         // Silabo(string facultad, std::vector<Ingenieria> carreras, string nombre, string codigoClase, QString ruta, Estado estado, string observacion, int id, int numRevisiones)
-        Silabo* silaboEjemplo = new Silabo(facultad,carrera,numCuenta,codigoClase,path,"Prerevision","...",cantSilabos,0);
+        Silabo* silaboEjemplo = new Silabo(facultad,carrera,"numCuentaLogin",codigoClase,path,"Prerevision","...",cantSilabos,0);
 
         this->arbolSilabo->add(silaboEjemplo);
         this->arbolSilabo->guardar();
@@ -246,45 +252,45 @@ void MainWindow::on_cb_facultadE_currentIndexChanged(int i)
 
 //logica tab3 de revision
 
-void MainWindow::on_Rcb_usuario_currentIndexChanged(int i)
-{
-    QStringList items;
-    ui->Rcb_cambiarE->clear();
-    if(i==1 || i==2){//jefe o coordinador
-        items<<"..."<<"Cargar silabo (Enviar a IEDD)"<<"Rechazar";
-        ui->Rcb_cambiarE->addItems(items);
-    }else if(i==3){//en iedd
-        items<<"..."<<"Listo para revision 1"<<"Devolver a Academia";
-        ui->Rcb_cambiarE->addItems(items);
-    }else if(i==4){//consultor
-        items<<"...";
-        ui->Rcb_cambiarE->addItems(items);
+//void MainWindow::on_Rcb_usuario_currentIndexChanged(int i)
+//{
+//    QStringList items;
+//    ui->Rcb_cambiarE->clear();
+//    if(i==1 || i==2){//jefe o coordinador
+//        items<<"..."<<"Cargar silabo (Enviar a IEDD)"<<"Rechazar";
+//        ui->Rcb_cambiarE->addItems(items);
+//    }else if(i==3){//en iedd
+//        items<<"..."<<"Listo para revision 1"<<"Devolver a Academia";
+//        ui->Rcb_cambiarE->addItems(items);
+//    }else if(i==4){//consultor
+//        items<<"...";
+//        ui->Rcb_cambiarE->addItems(items);
 
-    }
+//    }
 
-}
+//}
 
-void MainWindow::on_Rbtn_sesion_clicked()
-{
-    if(ui->Rle_name->text().isEmpty() || ui->Rle_clave->text().isEmpty() || ui->Rcb_usuario->currentIndex()==0){
-        QMessageBox::warning(this,"Datos no congruetes","Favor no deje campos sin completar");
-    }else{
-        //this->arbolSilabo->extraer();
-        string quienSoy = ui->Rcb_usuario->currentText().toStdString();
-         if(listaUsuarios.buscarUsuario("11111111",ui->Rle_name->text().toStdString(),ui->Rle_clave->text().toStdString(),quienSoy,listaUsuarios)){
-                ui->frameR->setVisible(true);
-                ui->frameR1->setEnabled(false);
-                loginRevision=true;
-                ui->tab_2->setEnabled(false);
-                ui->tab_4->setEnabled(false);
-                ui->tab_5->setEnabled(false);
-                pruebitaBotonesTab();
-         }else{
-            QMessageBox::warning(this,"Datos no congruetes","Clave incorrecta");
-        }
+//void MainWindow::on_Rbtn_sesion_clicked()
+//{
+//    if(ui->Rle_name->text().isEmpty() || ui->Rle_clave->text().isEmpty() || ui->Rcb_usuario->currentIndex()==0){
+//        QMessageBox::warning(this,"Datos no congruetes","Favor no deje campos sin completar");
+//    }else{
+//        //this->arbolSilabo->extraer();
+//        string quienSoy = ui->Rcb_usuario->currentText().toStdString();
+//         if(listaUsuarios.buscarUsuario("11111111",ui->Rle_name->text().toStdString(),ui->Rle_clave->text().toStdString(),quienSoy,listaUsuarios)){
+//                ui->frameR->setVisible(true);
+//                ui->frameR1->setEnabled(false);
+//                loginRevision=true;
+//                ui->tab_2->setEnabled(false);
+//                ui->tab_4->setEnabled(false);
+//                ui->tab_5->setEnabled(false);
+//                pruebitaBotonesTab();
+//         }else{
+//            QMessageBox::warning(this,"Datos no congruetes","Clave incorrecta");
+//        }
 
-    }
-}
+//    }
+//}
 
 
 void MainWindow::limpiarRevision()
@@ -299,12 +305,12 @@ void MainWindow::limpiarRevision()
         ui->Rcb_cambiarE->clear();
         items<<"...";
         ui->Rcb_cambiarE->addItems(items);
-        ui->Rle_name->clear();
-        ui->Rle_clave->clear();
-        ui->Rcb_usuario->setCurrentIndex(0);
+//        ui->Rle_name->clear();
+//        ui->Rle_clave->clear();
+//        ui->Rcb_usuario->setCurrentIndex(0);
         ui->Rcb_cambiarE->setCurrentIndex(0);
         ui->frameR->setVisible(false);
-        ui->frameR1->setEnabled(true);
+//        ui->frameR1->setEnabled(true);
     }
 }
 
@@ -387,7 +393,7 @@ void MainWindow::modificarDatosSilabo(Arbol *nodo,int id, QString pathNuevo)
                 ui->DRTW_revision->setColumnCount(10);//tab 2 tw_doble
                 ui->DRTW_revision->setHorizontalHeaderLabels(QStringList() <<"VER DOCX"<<"ORDEN DE INGRESO"<<"INGRESADO POR"<<"# CUENTA"<<"FACULTAD"<<"CARRERA"<<"CODIGO CLASE"<<"OBSERVACION"<<"PATH"<<"RELOAD");
 
-                mostrarDocente(arbolSilabo,0, ui->Dle_cuenta->text().toStdString());
+              //  mostrarDocente(arbolSilabo,0, ui->Dle_cuenta->text().toStdString()); aqui poner en dlecuenta el nombre de docente login
             }
         }
 
@@ -397,9 +403,9 @@ void MainWindow::modificarDatosSilabo(Arbol *nodo,int id, QString pathNuevo)
         string nuevoEstado=ui->Rcb_cambiarE->currentText().toStdString();
         int nuevoNumRevisiones=silabo->getNumRevisiones();
 
-        if(ui->Rcb_usuario->currentIndex()==3 && nuevoEstado=="Listo para revision 1"){
-            nuevoNumRevisiones++;
-        }
+//        if(ui->Rcb_usuario->currentIndex()==3 && nuevoEstado=="Listo para revision 1"){si es IEDD
+//            nuevoNumRevisiones++;
+//        }
         if(nuevoNumRevisiones>2){
             QMessageBox::warning(this,"RECHAZADO","El silabo "+QString::fromStdString(silabo->getCodigoClase()+"\nHa excedido el numero de revisiones\nNuevo estado: RECHAZADO"));
             silabo->setEstado("Rechazar");
@@ -456,18 +462,20 @@ void MainWindow::recorrerArbolParaTabla(Arbol *nodo, int &fila,nodoD<Usuario> *a
     recorrerArbolParaTabla(nodo->getArbolIzq(), fila,actD);
     Silabo *silabo = nodo->getRaiz();
 
-
+//index 1 y 2 son jefe_academico y coordinador de carrera
+    //index 3 IEDD
+    //INDEX 4 CONSULTOR
 
     if(actD != nullptr){
-        if((ui->Rcb_usuario->currentIndex()==1 || ui->Rcb_usuario->currentIndex()==2)&& (silabo->getEstado()=="Prerevision" || silabo->getEstado()=="Devolver a Academia")){
-            mostrar=true;
-        }else if(ui->Rcb_usuario->currentIndex()==3 && (silabo->getEstado()=="Cargar silabo (Enviar a IEDD)" || silabo->getEstado()=="Correcion Mayor" || silabo->getEstado()=="Correcion Menor" || silabo->getEstado()=="Aprobado con condicion")){
-            mostrar=true;
-        }else if(ui->Rcb_usuario->currentIndex()==4 && (silabo->getEstado()=="Listo para revision 1" || silabo->getEstado()=="Aprobado" || silabo->getEstado()=="Aprobado con condicion" )){
-            mostrar=true;
-        }else{
-            mostrar=false;
-        }
+//        if((ui->Rcb_usuario->currentIndex()==1 || ui->Rcb_usuario->currentIndex()==2)&& (silabo->getEstado()=="Prerevision" || silabo->getEstado()=="Devolver a Academia")){
+//            mostrar=true;
+//        }else if(ui->Rcb_usuario->currentIndex()==3 && (silabo->getEstado()=="Cargar silabo (Enviar a IEDD)" || silabo->getEstado()=="Correcion Mayor" || silabo->getEstado()=="Correcion Menor" || silabo->getEstado()=="Aprobado con condicion")){
+//            mostrar=true;
+//        }else if(ui->Rcb_usuario->currentIndex()==4 && (silabo->getEstado()=="Listo para revision 1" || silabo->getEstado()=="Aprobado" || silabo->getEstado()=="Aprobado con condicion" )){
+//            mostrar=true;
+//        }else{
+//            mostrar=false;
+//        }
 
         if(mostrar){
             ui->RTW_revision->setRowCount(fila + 1);
@@ -509,17 +517,17 @@ void MainWindow::on_RTW_revision_cellClicked(int row, int column)
         QString estado = ui->RTW_revision->item(row, 3)->text();
         ui->Rle_estadoA->setText(estado);
 
-        if(ui->Rcb_usuario->currentIndex() ==4){
-            QStringList items;
-            ui->Rcb_cambiarE->clear();
-            if( ui->RTW_revision->item(row, 3)->text().toStdString()=="Aprobado"){
-                items<<"..."<<"Aprobar"<<"Aprobado con condicion";
+//        if(ui->Rcb_usuario->currentIndex() ==4){ si el usuario login es consultor
+//            QStringList items;
+//            ui->Rcb_cambiarE->clear();
+//            if( ui->RTW_revision->item(row, 3)->text().toStdString()=="Aprobado"){
+//                items<<"..."<<"Aprobar"<<"Aprobado con condicion";
 
-            }else{
-                items<<"..."<<"Aprobado"<<"Correcion Mayor"<<"Correcion Menor";
-            }
-            ui->Rcb_cambiarE->addItems(items);
-        }
+//            }else{
+//                items<<"..."<<"Aprobado"<<"Correcion Mayor"<<"Correcion Menor";
+//            }
+//            ui->Rcb_cambiarE->addItems(items);
+//        }
 
     }else if(column ==1){
 
@@ -533,38 +541,38 @@ void MainWindow::on_RTW_revision_cellClicked(int row, int column)
 }
 
 //logica tab3 director y decano
-void MainWindow::on_Bbtn_sesion_clicked() {
-    if (ui->Ble_name->text().isEmpty() || ui->Ble_clave->text().isEmpty() || ui->Bcb_usuario->currentIndex() == 0) {
-        QMessageBox::warning(this, "Datos no congruetes", "Favor no deje campos sin completar");
-    } else {
-        string quienSoy = ui->Bcb_usuario->currentText().toStdString();
+//void MainWindow::on_Bbtn_sesion_clicked() {
+//    if (ui->Ble_name->text().isEmpty() || ui->Ble_clave->text().isEmpty() || ui->Bcb_usuario->currentIndex() == 0) {
+//        QMessageBox::warning(this, "Datos no congruetes", "Favor no deje campos sin completar");
+//    } else {
+//        string quienSoy = ui->Bcb_usuario->currentText().toStdString();
 
-        if (listaUsuarios.buscarUsuario("11111111",ui->Ble_name->text().toStdString(),ui->Ble_clave->text().toStdString(),quienSoy,listaUsuarios)){
+//        if (listaUsuarios.buscarUsuario("11111111",ui->Ble_name->text().toStdString(),ui->Ble_clave->text().toStdString(),quienSoy,listaUsuarios)){
 
-            ui->frameB->setVisible(true);
-            ui->frameB1->setEnabled(false);
-            loginBoard = true;
-            ui->tab_3->setEnabled(false);
-            ui->tab_2->setEnabled(false);
+//            ui->frameB->setVisible(true);
+//            ui->frameB1->setEnabled(false);
+//            loginBoard = true;
+//            ui->tab_3->setEnabled(false);
+//            ui->tab_2->setEnabled(false);
 
-            // Limpiar el QTableWidget antes de agregar nuevos datos
-            ui->tableWidget->clear();
-            ui->tableWidget->setRowCount(0); // Limpiar todas las filas existentes
+//            // Limpiar el QTableWidget antes de agregar nuevos datos
+//            ui->tableWidget->clear();
+//            ui->tableWidget->setRowCount(0); // Limpiar todas las filas existentes
 
-            // Agregar encabezados de columna al QTableWidget
-            QStringList headers;
-            headers << "Facultad" << "Carreras" << "Numero de Cuenta" << "Código de Clase" << "Ruta" << "Estado" << "Observación" << "ID" << "Número de Revisiones";
-            ui->tableWidget->setColumnCount(headers.size());
-            ui->tableWidget->setHorizontalHeaderLabels(headers);
+//            // Agregar encabezados de columna al QTableWidget
+//            QStringList headers;
+//            headers << "Facultad" << "Carreras" << "Numero de Cuenta" << "Código de Clase" << "Ruta" << "Estado" << "Observación" << "ID" << "Número de Revisiones";
+//            ui->tableWidget->setColumnCount(headers.size());
+//            ui->tableWidget->setHorizontalHeaderLabels(headers);
 
-            // Llamar a la función para agregar datos al QTableWidget
-            recorrerArbolParaTable(arbolSilabo, ui->tableWidget, "Prerevision");
+//            // Llamar a la función para agregar datos al QTableWidget
+//            recorrerArbolParaTable(arbolSilabo, ui->tableWidget, "Prerevision");
 
-        } else {
-            QMessageBox::warning(this, "Datos no congruetes", "Clave incorrecta");
-        }
-    }
-}
+//        } else {
+//            QMessageBox::warning(this, "Datos no congruetes", "Clave incorrecta");
+//        }
+//    }
+//}
 void MainWindow::on_Bbtn_aceptados_clicked()
 {
     ui->tableWidget->clearContents();
@@ -628,9 +636,9 @@ void MainWindow::on_Bbtn_cerrar_clicked()
 }
 void MainWindow::limpiarBoard()
 {
-    ui->Ble_name->clear();
-    ui->Ble_clave->clear();
-    ui->Bcb_usuario->setCurrentIndex(0);
+//    ui->Ble_name->clear();
+//    ui->Ble_clave->clear();
+//    ui->Bcb_usuario->setCurrentIndex(0);
     ui->tab_3->setEnabled(true);
     ui->tab_2->setEnabled(true);
     ui->tab_5->setEnabled(true);
@@ -641,37 +649,37 @@ void MainWindow::limpiarBoard()
 
 
 //tab docente confirmar
-void MainWindow::on_Dbtn_sesion_clicked()
-{
-    if(ui->Dle_clave->text().isEmpty() || ui->Dle_cuenta->text().isEmpty() || ui->Dle_name->text().isEmpty()){
-        QMessageBox::warning(this,"Datos incompletos","Favor, no deje campos vacios");
-    }else if(true){
-        QMessageBox::warning(this,"Datos incongruentes","Clave incorrecta");
-    }else{
-        string name=obtenerNombre(ui->Dle_cuenta->text().toStdString());
-        if(name=="..."){
-            QMessageBox::warning(this,"Datos incongruentes","Numero de cuenta o usario incorrectos");
+//void MainWindow::on_Dbtn_sesion_clicked()
+//{
+//    if(ui->Dle_clave->text().isEmpty() || ui->Dle_cuenta->text().isEmpty() || ui->Dle_name->text().isEmpty()){
+//        QMessageBox::warning(this,"Datos incompletos","Favor, no deje campos vacios");
+//    }else if(true){
+//        QMessageBox::warning(this,"Datos incongruentes","Clave incorrecta");
+//    }else{
+//        string name=obtenerNombre(ui->Dle_cuenta->text().toStdString());
+//        if(name=="..."){
+//            QMessageBox::warning(this,"Datos incongruentes","Numero de cuenta o usario incorrectos");
 
-        }else{
-            if(name!=ui->Dle_name->text().toStdString() ){
-                QMessageBox::warning(this,"Datos incongruentes","Numero de cuenta o usario incorrectos");
-            }else{
-                loginCheck=true;
-                ui->tab_3->setEnabled(false);
-                ui->tab_2->setEnabled(false);
-                ui->tab_4->setEnabled(false);
-                ui->Dframe2->setVisible(true);
-                ui->Dbtn_salir->setVisible(true);
+//        }else{
+//            if(name!=ui->Dle_name->text().toStdString() ){
+//                QMessageBox::warning(this,"Datos incongruentes","Numero de cuenta o usario incorrectos");
+//            }else{
+//                loginCheck=true;
+//                ui->tab_3->setEnabled(false);
+//                ui->tab_2->setEnabled(false);
+//                ui->tab_4->setEnabled(false);
+//                ui->Dframe2->setVisible(true);
+//                ui->Dbtn_salir->setVisible(true);
 
-                ui->DRTW_revision->clearContents();
-                ui->DRTW_revision->setColumnCount(10);//tab 2 tw_doble
-                ui->DRTW_revision->setHorizontalHeaderLabels(QStringList() <<"VER DOCX"<<"ORDEN DE INGRESO"<<"INGRESADO POR"<<"# CUENTA"<<"FACULTAD"<<"CARRERA"<<"CODIGO CLASE"<<"OBSERVACION"<<"PATH"<<"RELOAD");
-                mostrarDocente(arbolSilabo,0, ui->Dle_cuenta->text().toStdString());
-            }
-        }
+//                ui->DRTW_revision->clearContents();
+//                ui->DRTW_revision->setColumnCount(10);//tab 2 tw_doble
+//                ui->DRTW_revision->setHorizontalHeaderLabels(QStringList() <<"VER DOCX"<<"ORDEN DE INGRESO"<<"INGRESADO POR"<<"# CUENTA"<<"FACULTAD"<<"CARRERA"<<"CODIGO CLASE"<<"OBSERVACION"<<"PATH"<<"RELOAD");
+//                mostrarDocente(arbolSilabo,0, ui->Dle_cuenta->text().toStdString());
+//            }
+//        }
 
-    }
-}
+//    }
+//}
 void MainWindow::mostrarDocente(Arbol *nodo,int fila,string numCuenta)
 {
     if (nodo == nullptr) {
@@ -707,9 +715,9 @@ void MainWindow::mostrarDocente(Arbol *nodo,int fila,string numCuenta)
 void MainWindow::on_Dbtn_salir_clicked()
 {
     ui->DRTW_revision->clear();
-    ui->Dle_clave->clear();
-    ui->Dle_cuenta->clear();
-    ui->Dle_name->clear();
+//    ui->Dle_clave->clear();
+//    ui->Dle_cuenta->clear();
+//    ui->Dle_name->clear();
     ui->tab_3->setEnabled(true);
     ui->tab_2->setEnabled(true);
     ui->tab_4->setEnabled(true);

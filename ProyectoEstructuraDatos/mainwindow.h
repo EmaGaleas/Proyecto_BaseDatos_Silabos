@@ -29,26 +29,26 @@ private slots:
     void on_btn_revision_clicked();
     void on_btn_dashboardM_clicked();
     //tab entrega
-    void on_btn_sesion_clicked();
+   // void on_btn_sesion_clicked();
     void on_tabWidget_currentChanged(int index);
     void on_btn_silaboE_clicked();
     void on_btn_archivoE_clicked();
     void on_cb_facultadE_currentIndexChanged(int index);
     void on_btn_closeE_clicked();
     //tab revision
-    void on_Rcb_usuario_currentIndexChanged(int index);
-    void on_Rbtn_sesion_clicked();
+   // void on_Rcb_usuario_currentIndexChanged(int index); este sirve para saber que datos mostar segun quien esta ingresado
+   // void on_Rbtn_sesion_clicked();
     void on_Rbtn_cerrar_clicked();
     void on_Rbtn_cambiar_clicked();
     void on_RTW_revision_cellClicked(int row, int column);
     //tab board
-    void on_Bbtn_sesion_clicked();
+  //  void on_Bbtn_sesion_clicked();
     void on_Bbtn_cerrar_clicked();
     void on_Bbtn_proceso_clicked();
     void on_Bbtn_aceptados_clicked();
 
     //tab reload
-    void on_Dbtn_sesion_clicked();
+   // void on_Dbtn_sesion_clicked();
     void on_Dbtn_salir_clicked();
     void on_DRTW_revision_cellClicked(int row, int column);
 
