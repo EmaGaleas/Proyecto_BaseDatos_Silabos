@@ -32,10 +32,19 @@ MainWindow::MainWindow(QWidget *parent)
     QImage menu(":/prefix/principal proyecto.png");
     ui->lbl_pngMenu->setPixmap(QPixmap::fromImage(menu));
     ui->frameMI->setVisible(false);
+   ui->btn_CerrarSesion->setVisible(false);
+   ui->Btn_CambContra->setVisible(false);
+   ui->btn_cambusuario->setVisible(false);
+   ui->RB_Board->setVisible(false);
+   ui->RB_Entrega->setVisible(false);
+   ui->RB_Rastreo->setVisible(false);
+    ui->RB_Revision->setVisible(false);
+
 
     //ui->lbl_b1M->setStyleSheet("background-color: #062458;");
     ui->lbl_b2M->setStyleSheet("background-color: #750512;");
     ui->btn_IniciarSesion->setStyleSheet("background-color: #062458;");
+    ui->btn_CerrarSesion->setStyleSheet("background-color: #062458;");
     QImage entrega(":/prefix/1.png");
     ui->lbl_pngE->setPixmap(QPixmap::fromImage(entrega));
     ui->Dlbl_png->setPixmap(QPixmap::fromImage(entrega));
@@ -764,12 +773,31 @@ void MainWindow::on_btn_Ingresar_clicked()
     if(ui->LE_Contra->text().isEmpty()||ui->LE_Username->text().isEmpty()||ui->LE_NumCuenta->text().isEmpty()){
         QMessageBox::warning(this,"Datos no congruetes","Favor no deje campos sin completar");
     }else{
-        if(listaUsuarios.buscarUsuario(ui->LE_NumCuenta->text().toStdString(),ui->LE_Username->text().toStdString(),ui->LE_Contra->text().toStdString(),ui->CB_Cargo->currentText().toStdString(),listaUsuarios)){
+        if(ui->CB_Cargo->currentText().toStdString()=="DOCENTE"||ui->CB_Cargo->currentText().toStdString()=="DECANO"||ui->CB_Cargo->currentText().toStdString()=="IEDD"||ui->CB_Cargo->currentText().toStdString()=="COORDINADOR_DE_CARRERA"||ui->CB_Cargo->currentText().toStdString()=="DIRECTOR"||ui->CB_Cargo->currentText().toStdString()=="JEFE_ACADEMICO"||ui->CB_Cargo->currentText().toStdString()=="CONSULTOR"){
+        //if(listaUsuarios.buscarUsuario(ui->LE_NumCuenta->text().toStdString(),ui->LE_Username->text().toStdString(),ui->LE_Contra->text().toStdString(),ui->CB_Cargo->currentText().toStdString(),listaUsuarios)){
          bool c=listaUsuarios.buscarUsuario(ui->LE_NumCuenta->text().toStdString(),ui->LE_Username->text().toStdString(),ui->LE_Contra->text().toStdString(),ui->CB_Cargo->currentText().toStdString(),listaUsuarios);
 
-         if(c){
-             QMessageBox::warning(this,"Datos no congruetes","ezito ");
-         }
+       //  if(c){
+             //QMessageBox::warning(this,"Se pudo","ezito ");
+             ui->LE_Contra->clear();
+             ui->LE_NumCuenta->clear();
+             ui->LE_Username->clear();
+
+             ui->LE_Contra->setEnabled(false);
+             ui->LE_NumCuenta->setEnabled(false);
+             ui->LE_Username->setEnabled(false);
+             ui->btn_Ingresar->setEnabled(false);
+             ui->CB_Cargo->setEnabled(false);
+
+             ui->btn_CerrarSesion->setVisible(true);
+             ui->Btn_CambContra->setVisible(true);
+             ui->btn_cambusuario->setVisible(true);
+             ui->RB_Board->setVisible(true);
+             ui->RB_Entrega->setVisible(true);
+             ui->RB_Rastreo->setVisible(true);
+             ui->RB_Revision->setVisible(true);
+
+       //  }
 
         }else{
 
@@ -781,6 +809,32 @@ void MainWindow::on_btn_Ingresar_clicked()
 
         }
     }
+
+}
+
+
+void MainWindow::on_btn_CerrarSesion_clicked()
+{
+
+
+    ui->lbl_pngMenu->setVisible(true);
+    ui->frameMI->setVisible(false);
+    ui->btn_IniciarSesion->setVisible(true);
+
+    ui->LE_Contra->setEnabled(true);
+    ui->LE_NumCuenta->setEnabled(true);
+    ui->LE_Username->setEnabled(true);
+    ui->btn_Ingresar->setEnabled(true);
+    ui->CB_Cargo->setEnabled(true);
+
+    ui->btn_CerrarSesion->setVisible(false);
+    ui->Btn_CambContra->setVisible(false);
+    ui->btn_cambusuario->setVisible(false);
+    ui->RB_Board->setVisible(false);
+    ui->RB_Entrega->setVisible(false);
+    ui->RB_Rastreo->setVisible(false);
+    ui->RB_Revision->setVisible(false);
+
 
 }
 

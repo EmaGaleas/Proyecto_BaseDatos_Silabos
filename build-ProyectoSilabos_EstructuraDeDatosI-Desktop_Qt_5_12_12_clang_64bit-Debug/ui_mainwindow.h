@@ -52,6 +52,13 @@ public:
     QLineEdit *LE_Contra;
     QPushButton *btn_Ingresar;
     QComboBox *CB_Cargo;
+    QRadioButton *RB_Entrega;
+    QRadioButton *RB_Revision;
+    QRadioButton *RB_Board;
+    QRadioButton *RB_Rastreo;
+    QPushButton *btn_CerrarSesion;
+    QPushButton *Btn_CambContra;
+    QPushButton *btn_cambusuario;
     QWidget *tab_2;
     QGridLayout *gridLayout_4;
     QLabel *lbl_pngE;
@@ -203,6 +210,27 @@ public:
         CB_Cargo = new QComboBox(frameMI);
         CB_Cargo->setObjectName(QString::fromUtf8("CB_Cargo"));
         CB_Cargo->setGeometry(QRect(120, 140, 231, 31));
+        RB_Entrega = new QRadioButton(frameMI);
+        RB_Entrega->setObjectName(QString::fromUtf8("RB_Entrega"));
+        RB_Entrega->setGeometry(QRect(80, 280, 100, 20));
+        RB_Revision = new QRadioButton(frameMI);
+        RB_Revision->setObjectName(QString::fromUtf8("RB_Revision"));
+        RB_Revision->setGeometry(QRect(80, 310, 100, 20));
+        RB_Board = new QRadioButton(frameMI);
+        RB_Board->setObjectName(QString::fromUtf8("RB_Board"));
+        RB_Board->setGeometry(QRect(80, 340, 100, 20));
+        RB_Rastreo = new QRadioButton(frameMI);
+        RB_Rastreo->setObjectName(QString::fromUtf8("RB_Rastreo"));
+        RB_Rastreo->setGeometry(QRect(80, 370, 100, 20));
+        btn_CerrarSesion = new QPushButton(frameMI);
+        btn_CerrarSesion->setObjectName(QString::fromUtf8("btn_CerrarSesion"));
+        btn_CerrarSesion->setGeometry(QRect(120, 410, 361, 61));
+        Btn_CambContra = new QPushButton(frameMI);
+        Btn_CambContra->setObjectName(QString::fromUtf8("Btn_CambContra"));
+        Btn_CambContra->setGeometry(QRect(300, 290, 261, 41));
+        btn_cambusuario = new QPushButton(frameMI);
+        btn_cambusuario->setObjectName(QString::fromUtf8("btn_cambusuario"));
+        btn_cambusuario->setGeometry(QRect(300, 340, 261, 41));
         tabWidget->addTab(tab, QString());
         btn_IniciarSesion->raise();
         lbl_pngMenu->raise();
@@ -593,6 +621,13 @@ public:
         label_3->setText(QApplication::translate("MainWindow", "Contrase\303\261a", nullptr));
         label_4->setText(QApplication::translate("MainWindow", "Cargo", nullptr));
         btn_Ingresar->setText(QApplication::translate("MainWindow", "Ingresar", nullptr));
+        RB_Entrega->setText(QApplication::translate("MainWindow", "Entrega", nullptr));
+        RB_Revision->setText(QApplication::translate("MainWindow", "Revision", nullptr));
+        RB_Board->setText(QApplication::translate("MainWindow", "Board", nullptr));
+        RB_Rastreo->setText(QApplication::translate("MainWindow", "Rastreo", nullptr));
+        btn_CerrarSesion->setText(QApplication::translate("MainWindow", "Cerrar Sesion", nullptr));
+        Btn_CambContra->setText(QApplication::translate("MainWindow", "Cambiar Contrase\303\261a", nullptr));
+        btn_cambusuario->setText(QApplication::translate("MainWindow", "Cambiar Usuario", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "MENU", nullptr));
         lbl_pngE->setText(QString());
         lbl_codigoE->setText(QApplication::translate("MainWindow", "Codigo de clase:", nullptr));
@@ -608,8 +643,7 @@ public:
         cb_facultadE->setItemText(3, QApplication::translate("MainWindow", "FA&D", nullptr));
 
         le_pathE->setText(QString());
-        btn_closeE->setText(QApplication::translate("MainWindow", "Cerrar\n"
-"Sesion", nullptr));
+        btn_closeE->setText(QApplication::translate("MainWindow", "Regresar", nullptr));
         btn_silaboE->setText(QApplication::translate("MainWindow", "Ingresar", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "ENTREGA", nullptr));
         lbl_pngR->setText(QString());
@@ -620,12 +654,12 @@ public:
 
         Rlbl_comentario->setText(QApplication::translate("MainWindow", "Comentario:", nullptr));
         Rbtn_cambiar->setText(QApplication::translate("MainWindow", "Cambiar", nullptr));
-        Rbtn_cerrar->setText(QApplication::translate("MainWindow", "Cerrar Sesion", nullptr));
+        Rbtn_cerrar->setText(QApplication::translate("MainWindow", "Regresar", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainWindow", "REVISION", nullptr));
         lbl_pngD->setText(QString());
         Bbtn_aceptados->setText(QApplication::translate("MainWindow", "Aceptados", nullptr));
         Bbtn_proceso->setText(QApplication::translate("MainWindow", "En proceso", nullptr));
-        Bbtn_cerrar->setText(QApplication::translate("MainWindow", "Cerrar Sesion", nullptr));
+        Bbtn_cerrar->setText(QApplication::translate("MainWindow", "Regresar", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("MainWindow", "BOARD", nullptr));
         Dlbl_png->setText(QString());
         Dlabel->setText(QApplication::translate("MainWindow", "...................................................................................", nullptr));

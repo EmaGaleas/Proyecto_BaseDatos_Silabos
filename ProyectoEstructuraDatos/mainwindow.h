@@ -59,6 +59,8 @@ private slots:
 
     void on_btn_Ingresar_clicked();
 
+    void on_btn_CerrarSesion_clicked();
+
 private:
     Ui::MainWindow *ui;
 
