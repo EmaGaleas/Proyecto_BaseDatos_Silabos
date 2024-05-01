@@ -55,6 +55,10 @@ private slots:
 
 
 
+    void on_btn_IniciarSesion_clicked();
+
+    void on_btn_Ingresar_clicked();
+
 private:
     Ui::MainWindow *ui;
 

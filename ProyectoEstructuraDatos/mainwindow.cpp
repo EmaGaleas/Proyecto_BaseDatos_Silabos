@@ -31,8 +31,11 @@ MainWindow::MainWindow(QWidget *parent)
     //imagenes y label color
     QImage menu(":/prefix/principal proyecto.png");
     ui->lbl_pngMenu->setPixmap(QPixmap::fromImage(menu));
-    ui->lbl_b1M->setStyleSheet("background-color: #062458;");
-    ui->lbl_b2M->setStyleSheet("background-color: #062458;");
+    ui->frameMI->setVisible(false);
+
+    //ui->lbl_b1M->setStyleSheet("background-color: #062458;");
+    ui->lbl_b2M->setStyleSheet("background-color: #750512;");
+    ui->btn_IniciarSesion->setStyleSheet("background-color: #062458;");
     QImage entrega(":/prefix/1.png");
     ui->lbl_pngE->setPixmap(QPixmap::fromImage(entrega));
     ui->Dlbl_png->setPixmap(QPixmap::fromImage(entrega));
@@ -643,7 +646,7 @@ void MainWindow::limpiarBoard()
     ui->tab_2->setEnabled(true);
     ui->tab_5->setEnabled(true);
     ui->frameB->setVisible(false);
-    ui->frameB1->setEnabled(true);
+    ui->frameB->setEnabled(true);
 }
 
 
@@ -738,4 +741,46 @@ void MainWindow::on_DRTW_revision_cellClicked(int row, int column)
     }
 }
 
+
+
+void MainWindow::on_btn_IniciarSesion_clicked()
+{
+    ui->lbl_pngMenu->setVisible(false);
+    ui->frameMI->setVisible(true);
+    ui->btn_IniciarSesion->setVisible(false);
+
+    ui->CB_Cargo->addItem("JEFE_ACADEMICO");
+    ui->CB_Cargo->addItem("COORDINADOR_DE_CARRERA");
+    ui->CB_Cargo->addItem("IEDD");
+    ui->CB_Cargo->addItem("CONSULTOR");
+    ui->CB_Cargo->addItem("DOCENTE");
+    ui->CB_Cargo->addItem("DECANO");
+    ui->CB_Cargo->addItem("DIRECTOR");
+}
+
+
+void MainWindow::on_btn_Ingresar_clicked()
+{
+    if(ui->LE_Contra->text().isEmpty()||ui->LE_Username->text().isEmpty()||ui->LE_NumCuenta->text().isEmpty()){
+        QMessageBox::warning(this,"Datos no congruetes","Favor no deje campos sin completar");
+    }else{
+        if(listaUsuarios.buscarUsuario(ui->LE_NumCuenta->text().toStdString(),ui->LE_Username->text().toStdString(),ui->LE_Contra->text().toStdString(),ui->CB_Cargo->currentText().toStdString(),listaUsuarios)){
+         bool c=listaUsuarios.buscarUsuario(ui->LE_NumCuenta->text().toStdString(),ui->LE_Username->text().toStdString(),ui->LE_Contra->text().toStdString(),ui->CB_Cargo->currentText().toStdString(),listaUsuarios);
+
+         if(c){
+             QMessageBox::warning(this,"Datos no congruetes","ezito ");
+         }
+
+        }else{
+
+          QMessageBox::warning(this,"ayno","No existe el usuario ingresado ");
+          ui->LE_Contra->clear();
+          ui->LE_NumCuenta->clear();
+          ui->LE_Username->clear();
+
+
+        }
+    }
+
+}
 
