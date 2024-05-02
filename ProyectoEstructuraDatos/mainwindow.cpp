@@ -797,6 +797,14 @@ void MainWindow::on_btn_Ingresar_clicked()
              ui->RB_Rastreo->setVisible(true);
              ui->RB_Revision->setVisible(true);
 
+             if(ui->CB_Cargo->currentText().toStdString()=="DOCENTE"){
+                 loginDocente=true;
+             }else if(ui->CB_Cargo->currentText().toStdString()=="JEFE_ACADEMICO"||ui->CB_Cargo->currentText().toStdString()=="IEDD"||ui->CB_Cargo->currentText().toStdString()=="CONSULTOR"||ui->CB_Cargo->currentText().toStdString()=="COORDINADOR_DE_CARRERA"){
+                 loginRevision=true;
+             }else if(ui->CB_Cargo->currentText().toStdString()=="DIRECTOR"||ui->CB_Cargo->currentText().toStdString()=="DECANO"){
+                 loginBoard=true;
+             }
+
        //  }
 
         }else{
@@ -834,6 +842,10 @@ void MainWindow::on_btn_CerrarSesion_clicked()
     ui->RB_Entrega->setVisible(false);
     ui->RB_Rastreo->setVisible(false);
     ui->RB_Revision->setVisible(false);
+
+    loginDocente=false;
+    loginBoard=false;
+    loginRevision=false;
 
 
 }
