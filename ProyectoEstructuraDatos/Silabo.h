@@ -27,7 +27,7 @@ class Silabo {
         int numRevisiones; // Para contar cuantas veces se ha revisado el silabo
 
     public:
-
+         Silabo() {}
         Silabo(string facultad, string carrera, string nombre, string codigoClase, QString ruta, string estado, string observacion, int id, int numRevisiones)
             : facultad(facultad), carrera(carrera), insertadoPor(nombre), codigoClase(codigoClase),ruta(ruta),estado(estado), observacion(observacion), id(id), numRevisiones(numRevisiones){
         }
@@ -70,6 +70,7 @@ class Silabo {
               return numRevisiones;
           }
 
+
           // Setters
           void setFacultad(const string& nuevaFacultad) {
               facultad = nuevaFacultad;
@@ -108,6 +109,7 @@ class Silabo {
               numRevisiones = nuevoNumRevisiones;
           }
 
+
           long toNum() const {
               long val = 0;
               for (int i = 0; i < codigoClase.size(); i++) {
@@ -117,6 +119,10 @@ class Silabo {
 
               return val;
           }
+          friend std::ostream& operator<<(std::ostream& os, const Silabo& s) {
+              os << "Facultad: " << s.facultad << ", Carrera: " << s.carrera << ", ..."; // Add relevant data
+              return os;
+            }
 
 };
 

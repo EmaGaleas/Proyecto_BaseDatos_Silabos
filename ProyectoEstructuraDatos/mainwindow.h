@@ -8,6 +8,8 @@
 #include <nodoD.h>
 #include <Estado.h>
 #include <Arbol.h>
+#include <ArbolB.h>
+
 #include <QTableWidgetItem>
 using std::string;
 
@@ -98,13 +100,16 @@ private:
 
     int cantSilabos=0;
     int id=0;
-    int numcuenta=0;
+    string numcuenta="";
     string username="";
-     string password="";
+    string tipoUsuario="";
+    string password="";
 
-  //  string claveDocente="teacher123", claveJefe="boss123",claveCoordinador="coordinator123",claveIEDD="what123",claveConsultor="advisor123",claveDecano="dean123",claveDirector="director123";
 
     void mostrarDocente(Arbol *nodo,int fila,string numCuenta);
+
+
+    ArbolB<Silabo> arbolB;
 
 };
 

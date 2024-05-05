@@ -23,6 +23,7 @@ using std::ios;
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , arbolB(5)
 {
 
     ui->setupUi(this);
@@ -72,6 +73,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     listaUsuarios.cargarUsuarios();
     this->arbolSilabo->extraerArbol();
+    this->arbolB.extraerArbol();
+    QMessageBox::warning(this, "Datos no congruentes", "Favor " + QString::number(arbolB.cant));
+
 
     //cosas para sustituir donde diga Rcb_usario
     //index 1 y 2 son jefe_academico y coordinador de carrera
@@ -84,6 +88,7 @@ MainWindow::~MainWindow()
 {
     listaUsuarios.guardarUsuarios(listaUsuarios);
     this->arbolSilabo->guardar();
+    this->arbolB.guardar();
     delete ui;
 }
 
@@ -220,9 +225,7 @@ void MainWindow::on_btn_silaboE_clicked()
     }else{
         QMessageBox::information(this,"Enviado","Datos han sido enviados");
         cantSilabos=this->arbolSilabo->getCantidadArbol()+1; //id seria cantidad en arbol mas uno
-        //datos usuario
-//        string name=ui->le_nameE->text().toStdString();
-//        string numCuenta=ui->le_cuentaE->text().toStdString();
+
         string codigoClase=ui->le_codigoE->text().toStdString();
 
 
@@ -235,13 +238,16 @@ void MainWindow::on_btn_silaboE_clicked()
         string carrera=ui->cb_carreraE->currentText().toStdString();
         QString path=ui->le_pathE->text();
 
-        // Silabo(string facultad, std::vector<Ingenieria> carreras, string nombre, string codigoClase, QString ruta, Estado estado, string observacion, int id, int numRevisiones)
-        Silabo* silaboEjemplo = new Silabo(facultad,carrera,"numCuentaLogin",codigoClase,path,"Prerevision","...",cantSilabos,0);
+        Silabo* silaboEjemplo = new Silabo(facultad,carrera,numcuenta,codigoClase,path,"Prerevision","...",cantSilabos,0);
+
 
         this->arbolSilabo->add(silaboEjemplo);
         this->arbolSilabo->guardar();
+        this->arbolB.insertar(*silaboEjemplo);
 
         limpiarEntrega();
+        QMessageBox::information(this, "Enviado", "Datos han sido enviados\n" + QString::fromStdString(arbolB.print(this->arbolB.root)));
+
     }
 }
 void MainWindow::on_btn_archivoE_clicked()
@@ -797,7 +803,7 @@ void MainWindow::on_btn_Ingresar_clicked()
             bool existe=listaUsuarios.buscarUsuario(ui->LE_NumCuenta->text().toStdString(),ui->LE_Username->text().toStdString(),ui->LE_Contra->text().toStdString(),ui->CB_Cargo->currentText().toStdString(),listaUsuarios);
 
             if(existe){
-                numcuenta=ui->LE_NumCuenta->text().toUInt();
+                numcuenta=ui->LE_NumCuenta->text().toStdString();
                 username=ui->LE_Username->text().toStdString();
 
                 ui->LE_Contra->clear();
@@ -876,7 +882,7 @@ void MainWindow::on_btn_CerrarSesion_clicked()
     loginDocente=false;
     loginBoard=false;
     loginRevision=false;
-    numcuenta=0;
+    numcuenta="";
 }
 
 

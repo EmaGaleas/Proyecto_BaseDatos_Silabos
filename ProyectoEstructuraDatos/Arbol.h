@@ -121,11 +121,12 @@ public:
                     int id = std::stoi(fields[7]);
                     int numRevisiones = std::stoi(fields[8]);
 
-                    std::cout << "Facultad: " << facultad << ", Carrera: " << carrera << ", Nombre: " << nombre
-                                              << ", CodigoClase: " << codigoClase << ", Ruta: " << ruta << ", Estado: " << estado
-                                              << ", Observacion: " << observacion
-                                              << ", ID: " << id << ", NumRevisiones: " << numRevisiones << std::endl;
-                    std::cout << "-----------------------\n";
+
+//                    std::cout << "Facultad: " << facultad << ", Carrera: " << carrera << ", Nombre: " << nombre
+//                                              << ", CodigoClase: " << codigoClase << ", Ruta: " << ruta << ", Estado: " << estado
+//                                              << ", Observacion: " << observacion
+//                                              << ", ID: " << id << ", NumRevisiones: " << numRevisiones << std::endl;
+//                    std::cout << "-----------------------\n";
 
                     Silabo* nuevoSilabo = new Silabo(facultad, carrera, nombre, codigoClase, QString::fromStdString(ruta), estado, observacion, id, numRevisiones);
                     this->add(nuevoSilabo);
@@ -155,8 +156,7 @@ public:
                 << silabo->getEstado() << "\t"
                 << silabo->getObservacion() << "\t"
                 << silabo->getId() << "\t"
-                << silabo->getNumRevisiones() << "\t" << "\n";
-
+                << silabo->getNumRevisiones() << "\t"<< "\n";
 
         guardarExcel(file, nodo->getArbolIzq());
         guardarExcel(file, nodo->getArbolDer());
@@ -170,7 +170,7 @@ public:
         file.close();
         std::ofstream File("silabo.xls");
         if (File.is_open()) {
-            File << "Facultad\tCarrera\tIngresado Por\tCodigo de Clase\tRuta\tEstado\tObservacion\tVisibilidad\tID\tNumero de Revisiones\n";
+            File << "Facultad\tCarrera\tIngresado Por\tCodigo de Clase\tRuta\tEstado\tObservacion\tID\tNumero de Revisiones\n";
             guardarExcel(File,this);
             File.close();
             std::cout << "XLS exportado.\n";

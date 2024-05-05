@@ -14,7 +14,9 @@ SOURCES += \
 
 HEADERS += \
     Arbol.h \
+    ArbolB.h \
     Estado.h \
+    NodoArbolB.h \
     Silabo.h \
     Usuario.h \
     listaD.h \
