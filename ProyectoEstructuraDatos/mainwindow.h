@@ -61,6 +61,14 @@ private slots:
 
     void on_btn_CerrarSesion_clicked();
 
+    void on_RB_Entrega_clicked();
+
+    void on_RB_Revision_clicked();
+
+    void on_RB_Board_clicked();
+
+    void on_RB_Rastreo_clicked();
+
 private:
     Ui::MainWindow *ui;
 
@@ -68,6 +76,7 @@ private:
     void limpiarEntrega();
     void limpiarRevision();
     void limpiarBoard();
+    void activarRegistro();
 
     void recorrerArbolParaTabla(Arbol *nodo, int &fila,nodoD<Usuario> *actD);
     void recorrerArbolParaTable(Arbol *nodo, QTableWidget *tableWidget, const std::string &estado);
@@ -89,6 +98,9 @@ private:
 
     int cantSilabos=0;
     int id=0;
+    int numcuenta=0;
+    string username="";
+     string password="";
 
   //  string claveDocente="teacher123", claveJefe="boss123",claveCoordinador="coordinator123",claveIEDD="what123",claveConsultor="advisor123",claveDecano="dean123",claveDirector="director123";
 

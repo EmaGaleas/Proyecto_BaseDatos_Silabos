@@ -897,7 +897,7 @@
           </widget>
           <widget class="QWidget" name="tab_5">
            <attribute name="title">
-            <string>DOCENTE</string>
+            <string>RASTREO</string>
            </attribute>
            <layout class="QGridLayout" name="gridLayout_18">
             <item row="0" column="0">
@@ -1121,7 +1121,7 @@
                <item row="1" column="1">
                 <widget class="QPushButton" name="Dbtn_salir">
                  <property name="text">
-                  <string>SALIR</string>
+                  <string>REGRESAR</string>
                  </property>
                 </widget>
                </item>

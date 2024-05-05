@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
 
     ui->setupUi(this);
-  //  ui->tabWidget->tabBar()->hide(); EL PODEROSO HIDE TAB
+    ui->tabWidget->tabBar()->hide(); //EL PODEROSO HIDE TAB
 
     //imagenes y label color
     QImage menu(":/prefix/principal proyecto.png");
@@ -55,11 +55,15 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lbl_pngD->setPixmap(QPixmap::fromImage(dash));
 
     //hides iniciales
-    ui->frameE->setVisible(false);
-    ui->frameR->setVisible(false);
-    ui->frameB->setVisible(false);
-    ui->Dframe2->setVisible(false);
-    ui->Dbtn_salir->setVisible(false);
+
+    //añade las opciones al combobox
+    ui->CB_Cargo->addItem("JEFE_ACADEMICO");
+    ui->CB_Cargo->addItem("COORDINADOR_DE_CARRERA");
+    ui->CB_Cargo->addItem("IEDD");
+    ui->CB_Cargo->addItem("CONSULTOR");
+    ui->CB_Cargo->addItem("DOCENTE");
+    ui->CB_Cargo->addItem("DECANO");
+    ui->CB_Cargo->addItem("DIRECTOR");
 
     ui->Dlabel->setStyleSheet("background-color: #062458;");
     ui->Dlabel2->setStyleSheet("background-color: #062458;");
@@ -185,6 +189,7 @@ void MainWindow::on_btn_closeE_clicked()
     ui->tab_5->setEnabled(true);
     limpiarEntrega();
     ui->tabWidget->setCurrentIndex(0);
+    activarRegistro();
 }
 void MainWindow::limpiarEntrega()
 {
@@ -204,7 +209,7 @@ void MainWindow::limpiarEntrega()
         ui->cb_facultadE->setCurrentIndex(0);
         ui->cb_carreraE->setCurrentIndex(0);
         ui->frameE2->setEnabled(true);
-        ui->frameE->setVisible(false);
+        //ui->frameE->setVisible(false);
     }
 }
 
@@ -321,7 +326,7 @@ void MainWindow::limpiarRevision()
 //        ui->Rle_clave->clear();
 //        ui->Rcb_usuario->setCurrentIndex(0);
         ui->Rcb_cambiarE->setCurrentIndex(0);
-        ui->frameR->setVisible(false);
+      //  ui->frameR->setVisible(false);
 //        ui->frameR1->setEnabled(true);
     }
 }
@@ -337,6 +342,7 @@ void MainWindow::on_Rbtn_cerrar_clicked()
     ui->tab_5->setEnabled(true);
     limpiarRevision();
     ui->tabWidget->setCurrentIndex(0);
+    activarRegistro();
 }
 
 void MainWindow::on_Rbtn_cambiar_clicked()
@@ -644,7 +650,9 @@ void MainWindow::recorrerArbolParaTable(Arbol *nodo, QTableWidget *tableWidget, 
 void MainWindow::on_Bbtn_cerrar_clicked()
 {
     loginBoard=false;
-    limpiarBoard();
+    //limpiarBoard();
+     ui->tabWidget->setCurrentIndex(0);
+    activarRegistro();
 }
 void MainWindow::limpiarBoard()
 {
@@ -657,8 +665,6 @@ void MainWindow::limpiarBoard()
     ui->frameB->setVisible(false);
     ui->frameB->setEnabled(true);
 }
-
-
 
 //tab docente confirmar
 //void MainWindow::on_Dbtn_sesion_clicked()
@@ -733,11 +739,10 @@ void MainWindow::on_Dbtn_salir_clicked()
     ui->tab_3->setEnabled(true);
     ui->tab_2->setEnabled(true);
     ui->tab_4->setEnabled(true);
-    ui->Dframe2->setVisible(false);
-    loginCheck=false;
-    ui->Dbtn_salir->setVisible(false);
-}
+    ui->tabWidget->setCurrentIndex(0);
+    activarRegistro();
 
+}
 
 void MainWindow::on_DRTW_revision_cellClicked(int row, int column)
 {
@@ -750,21 +755,35 @@ void MainWindow::on_DRTW_revision_cellClicked(int row, int column)
     }
 }
 
+//LOGICA MENU
+void MainWindow::activarRegistro()
+{
+    ui->lbl_pngMenu->setVisible(false);
+    ui->frameMI->setVisible(true);
+    ui->btn_IniciarSesion->setVisible(false);
+
+    ui->LE_Contra->setEnabled(true);
+    ui->LE_NumCuenta->setEnabled(true);
+    ui->LE_Username->setEnabled(true);
+    ui->btn_Ingresar->setEnabled(true);
+    ui->CB_Cargo->setEnabled(true);
+
+    ui->btn_CerrarSesion->setVisible(false);
+    ui->Btn_CambContra->setVisible(false);
+    ui->btn_cambusuario->setVisible(false);
+    ui->RB_Board->setVisible(false);
+    ui->RB_Entrega->setVisible(false);
+    ui->RB_Rastreo->setVisible(false);
+    ui->RB_Revision->setVisible(false);
 
 
+}
 void MainWindow::on_btn_IniciarSesion_clicked()
 {
     ui->lbl_pngMenu->setVisible(false);
     ui->frameMI->setVisible(true);
     ui->btn_IniciarSesion->setVisible(false);
 
-    ui->CB_Cargo->addItem("JEFE_ACADEMICO");
-    ui->CB_Cargo->addItem("COORDINADOR_DE_CARRERA");
-    ui->CB_Cargo->addItem("IEDD");
-    ui->CB_Cargo->addItem("CONSULTOR");
-    ui->CB_Cargo->addItem("DOCENTE");
-    ui->CB_Cargo->addItem("DECANO");
-    ui->CB_Cargo->addItem("DIRECTOR");
 }
 
 
@@ -774,47 +793,60 @@ void MainWindow::on_btn_Ingresar_clicked()
         QMessageBox::warning(this,"Datos no congruetes","Favor no deje campos sin completar");
     }else{
         if(ui->CB_Cargo->currentText().toStdString()=="DOCENTE"||ui->CB_Cargo->currentText().toStdString()=="DECANO"||ui->CB_Cargo->currentText().toStdString()=="IEDD"||ui->CB_Cargo->currentText().toStdString()=="COORDINADOR_DE_CARRERA"||ui->CB_Cargo->currentText().toStdString()=="DIRECTOR"||ui->CB_Cargo->currentText().toStdString()=="JEFE_ACADEMICO"||ui->CB_Cargo->currentText().toStdString()=="CONSULTOR"){
-        //if(listaUsuarios.buscarUsuario(ui->LE_NumCuenta->text().toStdString(),ui->LE_Username->text().toStdString(),ui->LE_Contra->text().toStdString(),ui->CB_Cargo->currentText().toStdString(),listaUsuarios)){
-         bool c=listaUsuarios.buscarUsuario(ui->LE_NumCuenta->text().toStdString(),ui->LE_Username->text().toStdString(),ui->LE_Contra->text().toStdString(),ui->CB_Cargo->currentText().toStdString(),listaUsuarios);
 
-       //  if(c){
-             //QMessageBox::warning(this,"Se pudo","ezito ");
-             ui->LE_Contra->clear();
-             ui->LE_NumCuenta->clear();
-             ui->LE_Username->clear();
+            bool existe=listaUsuarios.buscarUsuario(ui->LE_NumCuenta->text().toStdString(),ui->LE_Username->text().toStdString(),ui->LE_Contra->text().toStdString(),ui->CB_Cargo->currentText().toStdString(),listaUsuarios);
 
-             ui->LE_Contra->setEnabled(false);
-             ui->LE_NumCuenta->setEnabled(false);
-             ui->LE_Username->setEnabled(false);
-             ui->btn_Ingresar->setEnabled(false);
-             ui->CB_Cargo->setEnabled(false);
+            if(existe){
+                numcuenta=ui->LE_NumCuenta->text().toUInt();
+                username=ui->LE_Username->text().toStdString();
 
-             ui->btn_CerrarSesion->setVisible(true);
-             ui->Btn_CambContra->setVisible(true);
-             ui->btn_cambusuario->setVisible(true);
-             ui->RB_Board->setVisible(true);
-             ui->RB_Entrega->setVisible(true);
-             ui->RB_Rastreo->setVisible(true);
-             ui->RB_Revision->setVisible(true);
+                ui->LE_Contra->clear();
+                ui->LE_NumCuenta->clear();
+                ui->LE_Username->clear();
+                //desactivo los botones
+                ui->LE_Contra->setEnabled(false);
+                ui->LE_NumCuenta->setEnabled(false);
+                ui->LE_Username->setEnabled(false);
+                ui->btn_Ingresar->setEnabled(false);
+                ui->CB_Cargo->setEnabled(false);
+                //hago visible las nuevas opciones
+                ui->btn_CerrarSesion->setVisible(true);
+                ui->Btn_CambContra->setVisible(true);
+                ui->btn_cambusuario->setVisible(true);
+                ui->RB_Board->setVisible(true);
+                ui->RB_Entrega->setVisible(true);
+                ui->RB_Rastreo->setVisible(true);
+                ui->RB_Revision->setVisible(true);
 
-             if(ui->CB_Cargo->currentText().toStdString()=="DOCENTE"){
-                 loginDocente=true;
-             }else if(ui->CB_Cargo->currentText().toStdString()=="JEFE_ACADEMICO"||ui->CB_Cargo->currentText().toStdString()=="IEDD"||ui->CB_Cargo->currentText().toStdString()=="CONSULTOR"||ui->CB_Cargo->currentText().toStdString()=="COORDINADOR_DE_CARRERA"){
-                 loginRevision=true;
-             }else if(ui->CB_Cargo->currentText().toStdString()=="DIRECTOR"||ui->CB_Cargo->currentText().toStdString()=="DECANO"){
-                 loginBoard=true;
-             }
-
-       //  }
-
+                if(ui->CB_Cargo->currentText().toStdString()=="DOCENTE"){
+                    loginDocente=true;
+                    //entrega y rastreo
+                    ui->RB_Entrega->setEnabled(true);
+                    ui->RB_Rastreo->setEnabled(true);
+                    ui->RB_Revision->setEnabled(false);
+                    ui->RB_Board->setEnabled(false);
+                }else if(ui->CB_Cargo->currentText().toStdString()=="JEFE_ACADEMICO"||ui->CB_Cargo->currentText().toStdString()=="IEDD"||ui->CB_Cargo->currentText().toStdString()=="CONSULTOR"||ui->CB_Cargo->currentText().toStdString()=="COORDINADOR_DE_CARRERA"){
+                    loginRevision=true;
+                    ui->RB_Revision->setEnabled(true);
+                    ui->RB_Rastreo->setEnabled(false);
+                    ui->RB_Entrega->setEnabled(false);
+                    ui->RB_Board->setEnabled(false);
+                    //revison
+                }else if(ui->CB_Cargo->currentText().toStdString()=="DIRECTOR"||ui->CB_Cargo->currentText().toStdString()=="DECANO"){
+                    loginBoard=true;
+                    ui->RB_Board->setEnabled(true);
+                    ui->RB_Rastreo->setEnabled(false);
+                    ui->RB_Entrega->setEnabled(false);
+                    ui->RB_Revision->setEnabled(false);
+                    //board
+                }
+            }else{
+                QMessageBox::warning(this,"Error de autenticacion","Datos no congruentes");
+            }
         }else{
-
-          QMessageBox::warning(this,"ayno","No existe el usuario ingresado ");
-          ui->LE_Contra->clear();
-          ui->LE_NumCuenta->clear();
-          ui->LE_Username->clear();
-
-
+            ui->LE_Contra->clear();
+            ui->LE_NumCuenta->clear();
+            ui->LE_Username->clear();
         }
     }
 
@@ -823,8 +855,6 @@ void MainWindow::on_btn_Ingresar_clicked()
 
 void MainWindow::on_btn_CerrarSesion_clicked()
 {
-
-
     ui->lbl_pngMenu->setVisible(true);
     ui->frameMI->setVisible(false);
     ui->btn_IniciarSesion->setVisible(true);
@@ -846,7 +876,34 @@ void MainWindow::on_btn_CerrarSesion_clicked()
     loginDocente=false;
     loginBoard=false;
     loginRevision=false;
+    numcuenta=0;
+}
 
 
+void MainWindow::on_RB_Entrega_clicked()
+{
+    ui->tabWidget->setCurrentIndex(1);
+    ui->RB_Entrega->setChecked(false);
+}
+
+
+void MainWindow::on_RB_Revision_clicked()
+{
+  ui->tabWidget->setCurrentIndex(2);
+  ui->RB_Revision->setChecked(false);
+}
+
+
+void MainWindow::on_RB_Board_clicked()
+{
+  ui->tabWidget->setCurrentIndex(3);
+  ui->RB_Board->setChecked(false);
+}
+
+
+void MainWindow::on_RB_Rastreo_clicked()
+{
+  ui->tabWidget->setCurrentIndex(4);
+  ui->RB_Rastreo->setChecked(false);
 }
 
