@@ -15,7 +15,15 @@ public:
     cframe(QWidget *parent = nullptr);
     ~cframe();
 
+private slots:
+    void on_Mbtn_ingresar_clicked();
+
+    void on_Acb_acciones_currentIndexChanged(int index);
+
+    void on_btn_sesion_clicked();
+
 private:
     Ui::cframe *ui;
+    void visibilidad();
 };
 #endif // CFRAME_H
