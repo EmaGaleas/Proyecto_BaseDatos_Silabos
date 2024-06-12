@@ -30,6 +30,8 @@ private slots:
 
     void on_Acb_acciones_currentIndexChanged(const QString &arg1);
 
+    void on_Ebtn_archivo_clicked();
+
 private:
     Ui::cframe *ui;
     void visibilidad();

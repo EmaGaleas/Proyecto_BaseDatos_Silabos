@@ -205,3 +205,19 @@ void cframe::on_Acb_acciones_currentIndexChanged(const QString &arg1)
 
 }
 
+
+void cframe::on_Ebtn_archivo_clicked()
+{
+    if(ui->Ecb_sede->currentText() == "..."||ui->Ecb_carrera->currentText() == "..."||ui->Ecb_facultad->currentText() == "..."||ui->Ecb_clases->currentText() == "..."){
+        QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!");
+
+    }else{
+    QString filePath = QFileDialog::getOpenFileName(this, "Explorador de Archivos DOC", QDir::homePath(), "Document Files (*.doc *.docx)");
+    if (!filePath.isEmpty()) {
+        ui->Elbl_path_archivo->setText(filePath);
+    }
+    }
+
+
+}
+
