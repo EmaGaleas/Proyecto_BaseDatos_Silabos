@@ -22,6 +22,8 @@ private slots:
 
     void on_btn_sesion_clicked();
 
+    void on_Ecb_sede_currentIndexChanged(int index);
+
 private:
     Ui::cframe *ui;
     void visibilidad();

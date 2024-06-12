@@ -131,3 +131,17 @@ void cframe::on_btn_sesion_clicked()
 }
 
 
+
+void cframe::on_Ecb_sede_currentIndexChanged(int index)
+{
+    if(index==1){
+        ui->Elbl_fechas->setVisible(true);
+        ui->Elbl_path_fechas->setVisible(true);
+        ui->Ebtn_fechas->setVisible(true);
+    }else if(index==2){
+        ui->Elbl_fechas->setVisible(false);
+        ui->Elbl_path_fechas->setVisible(false);
+        ui->Ebtn_fechas->setVisible(false);
+    }
+}
+

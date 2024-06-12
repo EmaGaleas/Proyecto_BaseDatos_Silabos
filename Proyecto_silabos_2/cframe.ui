@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>910</width>
-    <height>715</height>
+    <height>736</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -257,116 +257,6 @@
           </property>
          </widget>
         </item>
-        <item row="8" column="1">
-         <spacer name="Espace">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="Elbl_clase">
-          <property name="font">
-           <font>
-            <family>Microsoft JhengHei</family>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Datos de Clase:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="Elbl_sede">
-          <property name="font">
-           <font>
-            <family>Microsoft JhengHei</family>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Sede:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1" colspan="2">
-         <widget class="QComboBox" name="Ecb_clases">
-          <property name="font">
-           <font>
-            <family>Microsoft JhengHei</family>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <item>
-           <property name="text">
-            <string>...</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="5" column="0">
-         <widget class="QLabel" name="Elbl_archivo">
-          <property name="font">
-           <font>
-            <family>Microsoft JhengHei</family>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Archivo:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="Elbl_carrera">
-          <property name="font">
-           <font>
-            <family>Microsoft JhengHei</family>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Carrera:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1" colspan="2">
-         <widget class="QComboBox" name="Ecb_carrera">
-          <property name="font">
-           <font>
-            <family>Microsoft JhengHei</family>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <item>
-           <property name="text">
-            <string>...</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="1" column="1" colspan="2">
-         <widget class="QComboBox" name="Ecb_facultad">
-          <property name="font">
-           <font>
-            <family>Microsoft JhengHei</family>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <item>
-           <property name="text">
-            <string>...</string>
-           </property>
-          </item>
-         </widget>
-        </item>
         <item row="0" column="1" colspan="2">
          <widget class="QComboBox" name="Ecb_sede">
           <property name="font">
@@ -392,17 +282,19 @@
           </item>
          </widget>
         </item>
-        <item row="6" column="1" colspan="2">
-         <widget class="QLabel" name="Elbl_path_archivo">
+        <item row="3" column="1" colspan="2">
+         <widget class="QComboBox" name="Ecb_carrera">
           <property name="font">
            <font>
             <family>Microsoft JhengHei</family>
             <pointsize>12</pointsize>
            </font>
           </property>
-          <property name="text">
-           <string>Informacion archivo</string>
-          </property>
+          <item>
+           <property name="text">
+            <string>...</string>
+           </property>
+          </item>
          </widget>
         </item>
         <item row="5" column="1" colspan="2">
@@ -416,11 +308,24 @@
            </font>
           </property>
           <property name="text">
-           <string>SELECCIONAR</string>
+           <string>SELECCIONAR SILABO</string>
           </property>
          </widget>
         </item>
-        <item row="7" column="0" colspan="3">
+        <item row="10" column="1">
+         <spacer name="Espace">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="9" column="0" colspan="3">
          <widget class="QPushButton" name="Ebtn_enviar">
           <property name="font">
            <font>
@@ -432,6 +337,140 @@
           </property>
           <property name="text">
            <string>ENVIAR</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="1" colspan="2">
+         <widget class="QPushButton" name="Ebtn_fechas">
+          <property name="font">
+           <font>
+            <family>Microsoft JhengHei</family>
+            <pointsize>14</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>SELECCIONAR FECHAS</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="Elbl_clase">
+          <property name="font">
+           <font>
+            <family>Microsoft JhengHei</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Datos de Clase:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1" colspan="2">
+         <widget class="QComboBox" name="Ecb_clases">
+          <property name="font">
+           <font>
+            <family>Microsoft JhengHei</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <item>
+           <property name="text">
+            <string>...</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="Elbl_sede">
+          <property name="font">
+           <font>
+            <family>Microsoft JhengHei</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Sede:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="1" colspan="2">
+         <widget class="QLabel" name="Elbl_path_archivo">
+          <property name="font">
+           <font>
+            <family>Microsoft JhengHei</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Informacion archivo SIALBO</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="Elbl_carrera">
+          <property name="font">
+           <font>
+            <family>Microsoft JhengHei</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Carrera:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" colspan="2">
+         <widget class="QComboBox" name="Ecb_facultad">
+          <property name="font">
+           <font>
+            <family>Microsoft JhengHei</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <item>
+           <property name="text">
+            <string>...</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="Elbl_archivo">
+          <property name="font">
+           <font>
+            <family>Microsoft JhengHei</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Archivo Silabo:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="0">
+         <widget class="QLabel" name="Elbl_fechas">
+          <property name="font">
+           <font>
+            <family>Microsoft JhengHei</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Archivo Fechas:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="1" colspan="2">
+         <widget class="QLabel" name="Elbl_path_fechas">
+          <property name="font">
+           <font>
+            <family>Microsoft JhengHei</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Informacion archivo FECHAS</string>
           </property>
          </widget>
         </item>
