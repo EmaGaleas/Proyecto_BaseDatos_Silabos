@@ -24,8 +24,15 @@ private slots:
 
     void on_Ecb_sede_currentIndexChanged(int index);
 
+    void on_Rbtn_cambiar_clicked();
+
+    void on_Abtn_cambioContra_clicked();
+
 private:
     Ui::cframe *ui;
     void visibilidad();
+    //variables para actualizar el cframe admin
+    QString nombre,numero_cuenta,tipo_usuario;
+    QString password;
 };
 #endif // CFRAME_H
