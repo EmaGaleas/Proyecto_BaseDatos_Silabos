@@ -13,7 +13,11 @@ SOURCES += \
     cframe.cpp
 
 HEADERS += \
-    cframe.h
+    Silabos.h \
+    Usuario.h \
+    cframe.h \
+    listaD.h \
+    nodoD.h
 
 FORMS += \
     cframe.ui

@@ -28,6 +28,8 @@ private slots:
 
     void on_Abtn_cambioContra_clicked();
 
+    void on_Acb_acciones_currentIndexChanged(const QString &arg1);
+
 private:
     Ui::cframe *ui;
     void visibilidad();
