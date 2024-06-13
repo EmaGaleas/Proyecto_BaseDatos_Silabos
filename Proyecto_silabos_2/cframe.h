@@ -32,6 +32,10 @@ private slots:
 
     void on_Ebtn_archivo_clicked();
 
+    void on_Ebtn_fechas_clicked();
+
+    void on_Ebtn_enviar_clicked();
+
 private:
     Ui::cframe *ui;
     void visibilidad();
