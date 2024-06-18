@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,6 +13,7 @@ SOURCES += \
     cframe.cpp
 
 HEADERS += \
+    Clases.h \
     Silabos.h \
     Usuario.h \
     cframe.h \

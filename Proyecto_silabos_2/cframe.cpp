@@ -30,6 +30,8 @@ cframe::cframe(QWidget *parent)
     , ui(new Ui::cframe)
 {
     ui->setupUi(this);
+    ConectarBase();
+    cargarClasesDB();
     ui->tabWidget->setCurrentIndex(0);
 
     visibilidad();
@@ -37,12 +39,7 @@ cframe::cframe(QWidget *parent)
 
     QImage menu(":/new/prefix1/menu.png");
     ui->lbl_png->setPixmap(QPixmap::fromImage(menu));
-//    ui->lbl_color1->setStyleSheet("background-color: #A61400;");
-//    ui->lbl_color2->setStyleSheet("background-color: #A61400;");
-//    ui->lbl_color3->setStyleSheet("background-color: #A61400;");
-//    ui->lbl_color4->setStyleSheet("background-color: #A61400;");
     ui->lbl_png->setStyleSheet("background-color: #A61400;");
-
 }
 
 cframe::~cframe()
@@ -86,8 +83,6 @@ void cframe::visibilidad()
 
     }
 }
-
-
 void cframe::on_Mbtn_ingresar_clicked(){
     if(ui->Mle_cuenta->text().isEmpty()||ui->Mle_contra->text().isEmpty()||ui->Mle_name->text().isEmpty()||ui->Mcb_tipo->currentText() == "..."){
         QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!");
@@ -122,11 +117,7 @@ void cframe::on_Mbtn_ingresar_clicked(){
 
     visibilidad();
 }
-
-
-void cframe::on_Acb_acciones_currentIndexChanged(int index)
-{}
-
+void cframe::on_Acb_acciones_currentIndexChanged(int index){}
 void cframe::on_btn_sesion_clicked()
 {
     if(ui->tabWidget->currentIndex() ==0){
@@ -143,7 +134,6 @@ void cframe::on_btn_sesion_clicked()
         visibilidad();
     }
 }
-
 void cframe::on_Ecb_sede_currentIndexChanged(int index)
 {
     if(index==1){
@@ -156,8 +146,6 @@ void cframe::on_Ecb_sede_currentIndexChanged(int index)
         ui->Ebtn_fechas->setVisible(false);
     }
 }
-
-
 void cframe::on_Rbtn_cambiar_clicked()
 {
 
@@ -166,8 +154,6 @@ void cframe::on_Rbtn_cambiar_clicked()
     }
 
 }
-
-
 void cframe::on_Abtn_cambioContra_clicked()
 {
     bool ok;
@@ -185,8 +171,6 @@ void cframe::on_Abtn_cambioContra_clicked()
         }
     }
 }
-
-
 void cframe::on_Acb_acciones_currentIndexChanged(const QString &arg1)
 {
     if(arg1=="ENTREGAR"){
@@ -204,8 +188,6 @@ void cframe::on_Acb_acciones_currentIndexChanged(const QString &arg1)
     visibilidad();
 
 }
-
-
 void cframe::on_Ebtn_archivo_clicked()
 {
     if(ui->Ecb_sede->currentText() == "..."||ui->Ecb_carrera->currentText() == "..."||ui->Ecb_facultad->currentText() == "..."||ui->Ecb_clases->currentText() == "..."){
@@ -220,8 +202,6 @@ void cframe::on_Ebtn_archivo_clicked()
 
 
 }
-
-
 void cframe::on_Ebtn_fechas_clicked()
 {
     if(ui->Ecb_sede->currentText() == "..."||ui->Ecb_carrera->currentText() == "..."||ui->Ecb_facultad->currentText() == "..."||ui->Ecb_clases->currentText() == "..."){
@@ -235,8 +215,6 @@ void cframe::on_Ebtn_fechas_clicked()
     }
 
 }
-
-
 void cframe::on_Ebtn_enviar_clicked()
 {
     //volver a inicializar en 0 los indices para que se muestren ...
@@ -246,7 +224,115 @@ void cframe::on_Ebtn_enviar_clicked()
     ui->Ecb_clases->setCurrentIndex(0);
     ui->Elbl_path_fechas->clear();
     ui->Elbl_path_archivo->clear();
+}
+
+//relacionado con las clases disponibles en UNITEC / CEUTEC
+QList<Clase> cframe::DescargarClases()
+{
+    QList<Clase> ClasesDescargadas;
+    QSqlQuery *Query = new QSqlQuery();
+    Query->prepare("select * from SilabosClases");
+    Query->exec();
+    short CurrentRow=0;
+    while(Query->next())
+    {
+        //    Clase(string CodigoClase,string Nombre, string Carrera,string Facultad, bool Sede);
+        Clase* Temp = new Clase(Query->value(0).toString(),Query->value(4).toString(),Query->value(1).toString(),Query->value(2).toString(),Query->value(3).toString());
+        ClasesDescargadas.append(*Temp);
+
+        delete Temp;
+        CurrentRow++;
+    }
+    return ClasesDescargadas;
+}
+void cframe::cargarClasesDB()
+{
+    db.open();
+    ClasesAgregadas=DescargarClases();
+    db.close();
+    Sedes.clear();
+    for(int i=0;i<ClasesAgregadas.size();i++)
+    {
+        Sedes.append(ClasesAgregadas[i].Sede);
+
+    }
+    QSet<QString> temp = QSet<QString>::fromList(Sedes);
+    Sedes = temp.toList();
+    //clear a todos los cb
+//    ui->Ecb_sede->clear();
+//    ui->Ecb_facultad->clear();
+//    ui->Ecb_carrera->clear();
+//    ui->Ecb_clases->clear();
+}
+
+void cframe::ConectarBase()
+{
+    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
+    db.setDatabaseName(connectionString);
+    if(db.open())
+    {
+       listaUsuarios.DescargarUsuarios();
+        QGuiApplication::restoreOverrideCursor();
+        QMessageBox::information(this,"Exito!","Conectado a Azure SQL Database");
+    }
+    else
+    {
+        QGuiApplication::restoreOverrideCursor();
+        QMessageBox::critical(this,"Error en la conexion!","No ha sido posible conectar con el servidor. Intentelo de nuevo.");
+    }
+    db.close();
+}
 
 
+void cframe::on_Ecb_sede_currentIndexChanged(const QString &arg1)
+{
+    Facultades.clear();
+    Facultades.append("...");
+    for(int i=0;i<ClasesAgregadas.size();i++)
+    {
+        if(ClasesAgregadas[i].Sede==arg1)
+            Facultades.append(ClasesAgregadas[i].Facultad);
+    }
+    QSet<QString> temp = QSet<QString>::fromList(Facultades);
+    Facultades = temp.toList();
+    ui->Ecb_facultad->clear();
+    ui->Ecb_carrera->clear();
+    ui->Ecb_clases->clear();
+
+    ui->Ecb_facultad->addItems(Facultades);
+
+}
+
+
+void cframe::on_Ecb_facultad_currentIndexChanged(const QString &arg1)
+{
+    Carreras.clear();
+    Carreras.append("...");
+    for(int i=0;i<ClasesAgregadas.size();i++)
+    {
+        if(ClasesAgregadas[i].Facultad==arg1 && ClasesAgregadas[i].Sede==ui->Ecb_sede->currentText())
+            Carreras.append(ClasesAgregadas[i].Carrera);
+    }
+    QSet<QString> temp = QSet<QString>::fromList(Carreras);
+    Carreras = temp.toList();
+    ui->Ecb_carrera->clear();
+    ui->Ecb_clases->clear();
+    ui->Ecb_carrera->addItems(Carreras);
+}
+
+
+void cframe::on_Ecb_carrera_currentIndexChanged(const QString &arg1)
+{
+    Clases.clear();
+    Clases.append("...");
+    for(int i=0;i<ClasesAgregadas.size();i++)
+    {
+        if(ClasesAgregadas[i].Carrera==arg1 && ClasesAgregadas[i].Sede==ui->Ecb_sede->currentText() && ClasesAgregadas[i].Facultad==ui->Ecb_facultad->currentText())
+            Clases.append(ClasesAgregadas[i].Nombre);
+    }
+    QSet<QString> temp = QSet<QString>::fromList(Clases);
+    Clases = temp.toList();
+    ui->Ecb_clases->clear();
+    ui->Ecb_clases->addItems(Clases);
 }
 

@@ -1,21 +1,24 @@
 #ifndef USUARIO_H
 #define USUARIO_H
 
-
 #include <iostream>
 #include <string>
+#include <QApplication>
+
 
 using std::string;
 
 class Usuario{
     friend class cframe;
 private:
-    string nombre,contraActual,contraAnterior;
-    short tipo;
-    int cuenta;
+
+    string Nombre,ContrasenaActual,ContrasenaAnterior;
+    short Tipo;
+    int NumeroCuenta;
+
 public:
     Usuario( int cuenta, string nombre,string contraActual, string contraAnterior,short tipo)
-        : cuenta(cuenta),nombre(nombre), contraActual(contraActual),contraAnterior(contraAnterior),tipo(tipo){
+        : NumeroCuenta(cuenta),Nombre(nombre), ContrasenaActual(contraActual),ContrasenaAnterior(contraAnterior),Tipo(tipo){
 
     }
     ~Usuario(){}
@@ -32,33 +35,33 @@ public:
     */
 
     void setNombre(const string& nombreN) {
-        nombre = nombreN;
+        Nombre = nombreN;
     }
     void setContraActual(const string& contraActualN) {
-        contraActual = contraActualN;
+        ContrasenaActual = contraActualN;
     }
 
     void setContraAnterior(const string& contraAnteriorN) {
-        contraAnterior = contraAnteriorN;
+        ContrasenaAnterior = contraAnteriorN;
     }
 
     void setTipo(short tipoN) {
-        tipo = tipoN;
+        Tipo = tipoN;
     }
     void setCuenta(int cuentaN) {
-        cuenta = cuentaN;
+        NumeroCuenta = cuentaN;
     }
 
     // Getters
-    string getNombre() const        {return nombre;}
+    string getNombre() const        {return Nombre;}
 
-    string getContraActual() const  {return contraActual;}
+    string getContraActual() const  {return ContrasenaActual;}
 
-    string getContraAnterior() const{return contraAnterior;}
+    string getContraAnterior() const{return ContrasenaAnterior;}
 
-    short getTipo() const           {return tipo;}
+    short getTipo() const           {return Tipo;}
 
-    int getCuenta() const           {return cuenta;}
+    int getCuenta() const           {return NumeroCuenta;}
 
 
 };

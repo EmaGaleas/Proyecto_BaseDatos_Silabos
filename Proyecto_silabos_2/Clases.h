@@ -1,0 +1,31 @@
+#ifndef CLASES_H
+#define CLASES_H
+#include <QApplication>
+
+class Clase{
+public:
+    Clase();
+    Clase(QString,QString,QString,QString,QString);
+    ~Clase();
+    QString CodigoClase;
+    QString Nombre;
+    QString Carrera;
+    QString Facultad;
+    QString Sede;
+};
+
+inline Clase::Clase(QString Codigo, QString Nombre, QString Carrera, QString Facultad, QString Sede)
+{
+    this->CodigoClase=Codigo;
+    this->Nombre=Nombre;
+    this->Carrera=Carrera;
+    this->Facultad=Facultad;
+    this->Sede=Sede;
+}
+
+inline Clase::~Clase()
+{
+
+}
+
+#endif // CLASES_H
