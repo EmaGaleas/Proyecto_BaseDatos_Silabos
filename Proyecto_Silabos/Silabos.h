@@ -1,37 +1,39 @@
 #ifndef SILABOS_H
 #define SILABOS_H
 
-
 #include <string>
 #include <QString>
+#include <iostream>
 
 using std::string;
-using std::ofstream;
 
-class Silabo {
+class Silabos {
 private:
-    string facultad;//
-    string carrera;//
-    int insertadoPor;//
-    string datosClase;//
-    QString rutaSilabos;//
-    QString rutaFechas;//
-
+    string facultad;
+    string carrera;
+    int insertadoPor;
+    string datosClase;
+    QString rutaSilabos;
+    QString rutaFechas;
     string estado;
-    string observacion; // Para que digan que quieren de cambi
-
-    int id; // Para mantener track de los archivos
-    short numRevisiones; // Para contar cuantas veces se ha revisado el silabo
-    short numRechazado;//veces que ha sido rechazado
-    short visibilidad;//quien lo puede revisar segun estado
+    string observacion;
+    int id;
+    short numRevisiones;
+    short numRechazado;
+    short visibilidad;
 
 public:
+    // Constructor predeterminado
+    Silabos() : id(0), numRevisiones(0), numRechazado(0), visibilidad(0) {}
 
-    Silabo(int id,string facultad, string carrera, int insertadoPor, string datosClase, QString rutaSilabos,QString rutaFechas, string estado, string observacion,  short numRevisiones,short numRechazados, short visibilidad)
-        :  id(id),facultad(facultad), carrera(carrera), insertadoPor(insertadoPor), datosClase(datosClase),rutaSilabos(rutaSilabos),rutaFechas(rutaFechas),estado(estado), observacion(observacion), numRevisiones(numRevisiones),numRechazado(numRechazados),visibilidad(visibilidad){
+    // Constructor parametrizado
+    Silabos(string facultad, string carrera, int insertadoPor, string datosClase, QString rutaSilabos, QString rutaFechas, string estado, string observacion, short numRevisiones, short numRechazado, short visibilidad)
+        : facultad(facultad), carrera(carrera), insertadoPor(insertadoPor), datosClase(datosClase), rutaSilabos(rutaSilabos), rutaFechas(rutaFechas), estado(estado), observacion(observacion), numRevisiones(numRevisiones), numRechazado(numRechazado), visibilidad(visibilidad) {
     }
-    ~Silabo(){}
 
+    ~Silabos() {}
+
+    // Getters
     string getFacultad() const {
         return facultad;
     }
@@ -51,6 +53,7 @@ public:
     QString getRutaSilabos() const {
         return rutaSilabos;
     }
+
     QString getRutaFechas() const {
         return rutaFechas;
     }
@@ -70,9 +73,11 @@ public:
     short getNumRevisiones() const {
         return numRevisiones;
     }
+
     short getNumRechazados() const {
         return numRechazado;
     }
+
     short getVisibilidad() const {
         return visibilidad;
     }
@@ -97,6 +102,7 @@ public:
     void setRutaSilabos(const QString& rutaSilabosN) {
         rutaSilabos = rutaSilabosN;
     }
+
     void setRutaFechas(const QString& rutaFechasN) {
         rutaFechas = rutaFechasN;
     }
@@ -109,7 +115,6 @@ public:
         observacion = nuevaObservacion;
     }
 
-
     void setId(int nuevoId) {
         id = nuevoId;
     }
@@ -117,24 +122,40 @@ public:
     void setNumRevisiones(short nuevoNumRevisiones) {
         numRevisiones = nuevoNumRevisiones;
     }
+
     void setNumRechazado(short nuevoNumRechazado) {
         numRechazado = nuevoNumRechazado;
     }
+
     void setVisibilidad(short nuevoVisibilidad) {
         visibilidad = nuevoVisibilidad;
     }
 
+    // Método para convertir datos de clase a un valor numérico
     long toNum() const {
         long val = 0;
-        for (int i = 0; i < datosClase.size(); i++) {
+        for (size_t i = 0; i < datosClase.size(); i++) {
             char c = datosClase[i];
             val += c;
         }
-
         return val;
     }
 
+    // Método para imprimir los detalles del Silabo
+    void imprimir() const {
+        std::cout << "ID: " << id << "\n"
+                  << "Facultad: " << facultad << "\n"
+                  << "Carrera: " << carrera << "\n"
+                  << "Insertado por: " << insertadoPor << "\n"
+                  << "Datos de clase: " << datosClase << "\n"
+                  << "Ruta de Silabos: " << rutaSilabos.toStdString() << "\n"
+                  << "Ruta de Fechas: " << rutaFechas.toStdString() << "\n"
+                  << "Estado: " << estado << "\n"
+                  << "Observación: " << observacion << "\n"
+                  << "Número de Revisiones: " << numRevisiones << "\n"
+                  << "Número de Rechazados: " << numRechazado << "\n"
+                  << "Visibilidad: " << visibilidad << "\n";
+    }
 };
-
 
 #endif // SILABOS_H
