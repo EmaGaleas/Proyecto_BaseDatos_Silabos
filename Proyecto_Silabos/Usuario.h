@@ -12,12 +12,12 @@ class Usuario{
     friend class cframe;
 private:
 
-    string Nombre,ContrasenaActual,ContrasenaAnterior;
+    QString Nombre,ContrasenaActual,ContrasenaAnterior;
     short Tipo;
-    int NumeroCuenta;
+    QString NumeroCuenta;
 
 public:
-    Usuario( int cuenta, string nombre,string contraActual, string contraAnterior,short tipo)
+    Usuario( QString cuenta, QString nombre,QString contraActual, QString contraAnterior,short tipo)
         : NumeroCuenta(cuenta),Nombre(nombre), ContrasenaActual(contraActual),ContrasenaAnterior(contraAnterior),Tipo(tipo){
 
     }
@@ -34,14 +34,14 @@ public:
     PONER TIPO EN NEGATIVO SI SE APRUEBA CAMBIO DE CONTRA
     */
 
-    void setNombre(const string& nombreN) {
+    void setNombre(const QString& nombreN) {
         Nombre = nombreN;
     }
-    void setContraActual(const string& contraActualN) {
+    void setContraActual(const QString& contraActualN) {
         ContrasenaActual = contraActualN;
     }
 
-    void setContraAnterior(const string& contraAnteriorN) {
+    void setContraAnterior(const QString& contraAnteriorN) {
         ContrasenaAnterior = contraAnteriorN;
     }
 
@@ -53,15 +53,15 @@ public:
     }
 
     // Getters
-    string getNombre() const        {return Nombre;}
+    QString getNombre() const        {return Nombre;}
 
-    string getContraActual() const  {return ContrasenaActual;}
+    QString getContraActual() const  {return ContrasenaActual;}
 
-    string getContraAnterior() const{return ContrasenaAnterior;}
+    QString getContraAnterior() const{return ContrasenaAnterior;}
 
     short getTipo() const           {return Tipo;}
 
-    int getCuenta() const           {return NumeroCuenta;}
+    QString getCuenta() const           {return NumeroCuenta;}
 
 
 };

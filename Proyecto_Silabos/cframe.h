@@ -2,6 +2,10 @@
 #define CFRAME_H
 
 #include <QMainWindow>
+#include <QtSql>
+
+#include "Usuario.h"
+#include "Clase.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class cframe; }
@@ -36,11 +40,35 @@ private slots:
 
     void on_Ebtn_enviar_clicked();
 
+    void on_Ecb_sede_currentIndexChanged(const QString &arg1);
+
+    void on_Ecb_facultad_currentIndexChanged(const QString &arg1);
+
+    void on_Ecb_carrera_currentIndexChanged(const QString &arg1);
+
 private:
     Ui::cframe *ui;
     void visibilidad();
     //variables para actualizar el cframe admin
     QString nombre,numero_cuenta,tipo_usuario;
     QString password;
+    QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
+    QString connectionString = QString("Driver={ODBC Driver 18 for SQL Server};Server=tcp:estrudatosii.database.windows.net,1433;Database=ProyectoTest;Uid=rajuria;Pwd={TobiichiOrigami11!};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;");
+    QList<Usuario> DescargarUsuarios();
+    QList<Clase> DescargarClases();
+    QString Encrypt(QString, int);
+    QString Decrypt(QString, int);
+    int Key=980487;
+    QList<Usuario> UsuariosRegistrados;
+    QList<Clase> ClasesAgregadas;
+    QStringList Sedes;
+    QStringList Facultades;
+    QStringList Carreras;
+    QStringList Clases;
+    QByteArray docx2BA(QString);
+    void BA2docx(QByteArray, QString);
+    void SubirSilabo(QString, QByteArray);
+    QByteArray DescargarSilabo(QString);
+    void Conectar();
 };
 #endif // CFRAME_H

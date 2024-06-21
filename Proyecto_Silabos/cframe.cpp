@@ -87,12 +87,177 @@ void cframe::visibilidad()
     }
 }
 
+QList<Usuario> cframe::DescargarUsuarios()
+{
+    //Base de datos debe estar abierta!!!
+    QList<Usuario> UsuariosDescargados;
+    QSqlQuery *Query = new QSqlQuery();
+    Query->prepare("select * from SilabosUsuarios");
+    Query->exec();
+    int CurrentRow=0;
+    while(Query->next())
+    {
+        //Codigo-Contrasena-Nombre-Tipo
+        //QString cuenta, QString nombre,QString contraActual, QString contraAnterior,short tipo
+        Usuario* Temp = new Usuario(Query->value(0).toString(),Query->value(3).toString(),Query->value(1).toString(),Query->value(2).toString(),Query->value(4).toInt());
+        UsuariosDescargados.append(*Temp);
+        delete Temp;
+        CurrentRow++;
+    }
+    return UsuariosDescargados;
+}
+
+QList<Clase> cframe::DescargarClases()
+{
+    QList<Clase> ClasesDescargadas;
+    QSqlQuery *Query = new QSqlQuery();
+    Query->prepare("select * from SilabosClases");
+    Query->exec();
+    int CurrentRow=0;
+    while(Query->next())
+    {
+        //Codigo-Nombre-Carrera-Facultad-Sede
+        Clase* Temp = new Clase(Query->value(0).toString(),Query->value(4).toString(),Query->value(1).toString(),Query->value(2).toString(),Query->value(3).toString());
+        ClasesDescargadas.append(*Temp);
+        delete Temp;
+        CurrentRow++;
+    }
+    return ClasesDescargadas;
+}
+
+QString cframe::Encrypt(QString Message, int Key)
+{
+    QChar c;
+    QString EncryptedMessage;
+    for(int i=0;i<Message.length();i++)
+    {
+        c=Message.at(i).toLatin1()+(Key/(Key%100))%10;
+        EncryptedMessage+=c;
+    }
+    return EncryptedMessage;
+}
+
+QString cframe::Decrypt(QString Message, int Key)
+{
+    QChar c;
+    QString DecryptedMessage;
+    for(int i=0;i<Message.length();i++)
+    {
+        c=Message.at(i).toLatin1()-(Key/(Key%100))%10;
+        DecryptedMessage+=c;
+    }
+    return DecryptedMessage;
+}
+
+QByteArray cframe::docx2BA(QString Path)
+{
+    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
+    QFile file(Path);
+    if (!file.open(QIODevice::ReadOnly)) {
+        QMessageBox::critical(this, "Error", "No se pudo abrir el archivo");
+        return QByteArray();
+    }
+
+    QByteArray byteArray = file.readAll();
+    file.close();
+    QGuiApplication::restoreOverrideCursor();
+    return byteArray;
+}
+
+void cframe::BA2docx(QByteArray ByteArray, QString NewFile)
+{
+    QFile newFile(NewFile);
+    if (!newFile.open(QIODevice::WriteOnly)) {
+        QMessageBox::critical(this, "Error", "No se pudo abrir el archivo");
+        return;
+    }
+    newFile.write(ByteArray);
+    newFile.close();
+
+}
+
+void cframe::SubirSilabo(QString CodigoSilabo, QByteArray Archivo)
+{
+    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
+    db.open();
+    QSqlQuery query(db);
+    query.prepare("INSERT INTO SilabosArchivos(Codigo,Archivo) VALUES(:Codigo,:docxData)");
+    query.bindValue(":Codigo", CodigoSilabo);
+    query.bindValue(":docxData", Archivo);
+    if (!query.exec())
+    {
+        QMessageBox::critical(this, "Error", "Error en la base de datos. Error: " + query.lastError().text());
+    }
+    db.close();
+    QGuiApplication::restoreOverrideCursor();
+}
+
+QByteArray cframe::DescargarSilabo(QString Codigo)
+{
+    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
+    db.open();
+    QSqlQuery query(db);
+    query.prepare("SELECT Archivo FROM SilabosArchivos WHERE Codigo = :code");
+    query.bindValue(":code", Codigo);
+    if (!query.exec())
+    {
+        QMessageBox::critical(this, "Error", "Error en la base de datos. Error: " + query.lastError().text());
+        db.close();
+        return QByteArray();
+    }
+    QByteArray byteArray;
+    if (query.next())
+    {
+        byteArray = query.value(0).toByteArray();
+    } else
+    {
+        QMessageBox::critical(this, "Error", "No existe un archivo con el codigo seleccionado");
+    }
+    db.close();
+    QGuiApplication::restoreOverrideCursor();
+    return byteArray;
+}
+
+void cframe::Conectar()
+{
+    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
+    db.setDatabaseName(connectionString);
+    if(db.open())
+    {
+        UsuariosRegistrados=DescargarUsuarios();
+        ClasesAgregadas=DescargarClases();
+        Sedes.clear();
+        for(int i=0;i<ClasesAgregadas.size();i++)
+        {
+            Sedes.append(ClasesAgregadas[i].Sede);
+        }
+        QSet<QString> temp = QSet<QString>::fromList(Sedes);
+        Sedes = temp.toList();
+        ui->Ecb_sede->clear();
+        ui->Ecb_facultad->clear();
+        ui->Ecb_carrera->clear();
+        ui->Ecb_clases->clear();
+        ui->Ecb_sede->addItem("...");
+        ui->Ecb_sede->addItems(Sedes);
+        QGuiApplication::restoreOverrideCursor();
+        QMessageBox::information(this,"Exito!","Conectado a Azure SQL Database");
+    }
+    else
+    {
+        QGuiApplication::restoreOverrideCursor();
+        QMessageBox::critical(this,"Error en la conexion!","No ha sido posible conectar con el servidor. Intentelo de nuevo.");
+    }
+    db.close();
+
+}
+
 
 void cframe::on_Mbtn_ingresar_clicked(){
     if(ui->Mle_cuenta->text().isEmpty()||ui->Mle_contra->text().isEmpty()||ui->Mle_name->text().isEmpty()||ui->Mcb_tipo->currentText() == "..."){
         QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!");
 
     }else{
+        Conectar();
         ui->Albl_cuenta->setText(ui->Mle_cuenta->text());
         ui->Albl_tipo->setText(ui->Mcb_tipo->currentText());
         ui->Albl_username->setText(ui->Mle_name->text());
@@ -118,8 +283,6 @@ void cframe::on_Mbtn_ingresar_clicked(){
         ui->tabWidget->setCurrentIndex(5);
         ui->btn_sesion->setVisible(true);
     }
-
-
     visibilidad();
 }
 
@@ -248,5 +411,57 @@ void cframe::on_Ebtn_enviar_clicked()
     ui->Elbl_path_archivo->clear();
 
 
+}
+
+
+void cframe::on_Ecb_sede_currentIndexChanged(const QString &arg1)
+{
+    Facultades.clear();
+    for(int i=0;i<ClasesAgregadas.size();i++)
+    {
+        if(ClasesAgregadas[i].Sede==arg1)
+            Facultades.append(ClasesAgregadas[i].Facultad);
+    }
+    QSet<QString> temp = QSet<QString>::fromList(Facultades);
+    Facultades = temp.toList();
+    ui->Ecb_facultad->clear();
+    ui->Ecb_carrera->clear();
+    ui->Ecb_clases->clear();
+    ui->Ecb_facultad->addItem("...");
+    ui->Ecb_facultad->addItems(Facultades);
+
+}
+
+
+void cframe::on_Ecb_facultad_currentIndexChanged(const QString &arg1)
+{
+    Carreras.clear();
+    for(int i=0;i<ClasesAgregadas.size();i++)
+    {
+        if(ClasesAgregadas[i].Facultad==arg1 && ClasesAgregadas[i].Sede==ui->Ecb_sede->currentText())
+            Carreras.append(ClasesAgregadas[i].Carrera);
+    }
+    QSet<QString> temp = QSet<QString>::fromList(Carreras);
+    Carreras = temp.toList();
+    ui->Ecb_carrera->clear();
+    ui->Ecb_clases->clear();
+    ui->Ecb_carrera->addItem("...");
+    ui->Ecb_carrera->addItems(Carreras);
+}
+
+
+void cframe::on_Ecb_carrera_currentIndexChanged(const QString &arg1)
+{
+    Clases.clear();
+    for(int i=0;i<ClasesAgregadas.size();i++)
+    {
+        if(ClasesAgregadas[i].Carrera==arg1 && ClasesAgregadas[i].Sede==ui->Ecb_sede->currentText() && ClasesAgregadas[i].Facultad==ui->Ecb_facultad->currentText())
+            Clases.append(ClasesAgregadas[i].Nombre);
+    }
+    QSet<QString> temp = QSet<QString>::fromList(Clases);
+    Clases = temp.toList();
+    ui->Ecb_clases->clear();
+    ui->Ecb_clases->addItem("...");
+    ui->Ecb_clases->addItems(Clases);
 }
 
