@@ -44,7 +44,6 @@ cframe::cframe(QWidget *parent)
     //    ui->lbl_color4->setStyleSheet("background-color: #A61400;");
     ui->lbl_png->setStyleSheet("background-color: #A61400;");
     QMessageBox::StandardButton reply;
-    MostrarSilabos();
 
     reply = QMessageBox::information(this, "Bienvenido", "Cargar base de datos para iniciar.\nEsto puede tardar unos segundos.", QMessageBox::Ok);
     if (reply == QMessageBox::Ok) {
@@ -328,6 +327,7 @@ void cframe::on_Acb_acciones_currentIndexChanged(const QString &arg1)
         ui->tabWidget->setCurrentIndex(1);
     }else if(arg1=="REVISION"){
         ui->tabWidget->setCurrentIndex(2);
+        MostrarSilabos();
     }else if(arg1=="BOARD"){
         ui->tabWidget->setCurrentIndex(3);
     }else if(arg1=="FEED"){
@@ -387,8 +387,6 @@ void cframe::on_Ebtn_enviar_clicked()
                    facultad = "-" + facultad;
             }
 
-            // Crear un nuevo Silabos con los datos capturados
-            // y valores predeterminados para los demás campos
             Silabos s(facultad.toStdString(),
                       carrera.toStdString(),
                       0,  // insertadoPor
@@ -422,7 +420,7 @@ void cframe::MostrarSilabos() {
     std::vector<Silabos> silabos = arbol->obtenerTodos();
 
     ui->Rtw_revision->setRowCount(0);  // Limpiar la tabla
-    ui->Rtw_revision->setColumnCount(11);  // Asegúrate de tener el número correcto de columnas
+    ui->Rtw_revision->setColumnCount(12);  // Asegúrate de tener el número correcto de columnas
 
     QStringList headers;
     headers << "ID" << "Facultad" << "Carrera" << "Insertado Por" << "Datos Clase"

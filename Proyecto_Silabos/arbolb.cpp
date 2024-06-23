@@ -1,6 +1,6 @@
 #include "arbolB.h"
 
-// Constructor del árbol B
+
 arbolB::arbolB(int t) {
     raiz = nullptr;
     this->t = t;
