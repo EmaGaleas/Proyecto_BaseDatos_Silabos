@@ -13,9 +13,10 @@ void arbolB::recorrer() {
 }
 
 // Buscar una llave en el árbol por datosClase
-Silabos* arbolB::buscar(const std::string& datosClase) {
-    return (raiz == nullptr) ? nullptr : raiz->buscar(datosClase);
+Silabos* arbolB::buscar(int id) {
+    return (raiz == nullptr) ? nullptr : raiz->buscar(id);
 }
+
 
 // Insertar una llave en el árbol
 void arbolB::insertar(Silabos& k) {

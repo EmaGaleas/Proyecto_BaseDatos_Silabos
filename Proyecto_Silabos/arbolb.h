@@ -17,7 +17,7 @@ public:
     void recorrer();
 
     // Buscar una llave en el árbol por datosClase
-    Silabos* buscar(const std::string& datosClase);
+    Silabos* buscar(int id);
 
     // Insertar una llave en el árbol
     void insertar(Silabos& k);

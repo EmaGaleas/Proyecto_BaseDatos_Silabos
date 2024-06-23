@@ -680,3 +680,18 @@ void cframe::on_Itw_usuarios_cellClicked(int row, int column)
 }
 
 
+void cframe::on_Rtw_revision_cellClicked(int row, int column)
+{
+    // Obtener el ID del Silabo desde la primera columna de la fila seleccionada
+    int id = ui->Rtw_revision->item(row, 0)->text().toInt();
+
+    // Buscar el Silabo por ID en el árbol
+    Silabos* s = arbol->buscar(id);
+
+    if (s != nullptr) {
+        ui->Rle_seleccion->setText(ui->Rtw_revision->item(row, column)->text());
+        ui->Rle_estadoActual->setText(QString::fromStdString(s->getEstado()));
+    }
+
+}
+

@@ -26,7 +26,8 @@ public:
     void recorrer();
 
     // Buscar una llave en el nodo por datosClase
-    Silabos* buscar(const string& datosClase);
+    Silabos* buscar(int id);
+
 
     // Obtener todos los Silabos en el nodo
     void obtenerTodos(vector<Silabos>& resultado);

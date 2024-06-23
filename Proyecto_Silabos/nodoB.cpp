@@ -21,13 +21,13 @@ void nodoB::recorrer() {
 }
 
 // Buscar una llave en el nodo por datosClase
-Silabos* nodoB::buscar(const string& datosClase) {
+Silabos* nodoB::buscar(int id) {
     int i = 0;
-    while (i < llaves.size() && datosClase > llaves[i].getDatosClase()) {
+    while (i < llaves.size() && id > llaves[i].getId()) {
         i++;
     }
 
-    if (i < llaves.size() && llaves[i].getDatosClase() == datosClase) {
+    if (i < llaves.size() && llaves[i].getId() == id) {
         return &llaves[i];
     }
 
@@ -35,8 +35,9 @@ Silabos* nodoB::buscar(const string& datosClase) {
         return nullptr;
     }
 
-    return hijos[i]->buscar(datosClase);
+    return hijos[i]->buscar(id);
 }
+
 
 // Insertar una llave en un nodo no lleno
 void nodoB::insertarNoLleno(Silabos k) {

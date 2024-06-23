@@ -53,6 +53,8 @@ private slots:
 
     void on_Itw_usuarios_cellClicked(int row, int column);
 
+    void on_Rtw_revision_cellClicked(int row, int column);
+
 private:
     Ui::cframe *ui;
     void visibilidad();
