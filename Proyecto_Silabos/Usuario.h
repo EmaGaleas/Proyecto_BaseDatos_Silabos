@@ -63,7 +63,6 @@ public:
 
     QString getCuenta() const           {return NumeroCuenta;}
 
-
 };
 
 #endif // USUARIO_H

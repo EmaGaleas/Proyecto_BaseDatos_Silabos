@@ -1,10 +1,12 @@
 #ifndef LISTAD_H
 #define LISTAD_H
-#include <nodoB.h>
+#include <nodoD.h>
 #include <iostream>
 #include <QMessageBox>
 #include <Usuario.h>
 #include <fstream>
+#include <string>
+#include <QApplication>
 using std::cout;
 using std::string;
 using std::cerr;
@@ -12,29 +14,26 @@ using std::cerr;
 
 template<typename tipo>
 class listaD{
-    friend class MainWindow;
+    friend class cframe;
     friend class Arbol;
 private:
     nodoD<tipo> *PrimPtr;
     nodoD<tipo> *UltPtr;
-    int Cantidad;
+    int Cantidad=0;
 
 public:
     listaD();
     ~listaD();
-    void InsertarFin(const tipo &);
 
+    void InsertarFin(const tipo &);
     bool Vacia()const;
 
-    bool GuardarEnArchivo(string Nombre)const;
-    bool ImportarArchivo(string Nombre);
+    QString tipoUsuario(short t);
+    bool numCuentaDisponible(QString num);
+    bool login(QString cuenta, QString nombre,QString contraActual, short type);
+    void cambioContra(QString contraNueva, QString cuenta, listaD<Usuario>& listaUsuarios);
 
-    void guardarUsuariosBase(listaD<Usuario> &listaUsuarios);
-    void guardarUsuarios(listaD<Usuario> &listaUsuarios);
-    void cargarUsuarios();
 
-    string cifrarContraseña(string c);
-    string descifrarContrasena(string c);
 
 };
 
@@ -94,32 +93,84 @@ bool listaD<tipo>::Vacia() const
 }
 
 template<typename tipo>
-void listaD<tipo>::guardarUsuariosBase(listaD<Usuario> &listaUsuarios)
+QString listaD<tipo>::tipoUsuario(short t)
 {
+    QString tipoStr;
 
+    switch (t) {
+    case 1:
+        tipoStr = "DOCENTE";
+        break;
+    case 2:
+        tipoStr = "DIRECTOR";
+        break;
+    case 3:
+        tipoStr = "DECANO";
+        break;
+    case 4:
+        tipoStr = "JEFE ACADEMICO";
+        break;
+    case 5:
+        tipoStr = "COORDINADOR DE CARRERA";
+        break;
+    case 6:
+        tipoStr = "IEDD";
+        break;
+    case 7:
+        tipoStr = "CONSULTOR";
+        break;
+    default:
+        tipoStr = "ERROR"; // En caso de que el tipo no esté definido
+        break;
+    }
+
+    return tipoStr;
 }
 
 template<typename tipo>
-void listaD<tipo>::guardarUsuarios(listaD<Usuario> &listaUsuarios)
+bool listaD<tipo>::numCuentaDisponible(QString num)
 {
-
+    nodoD<Usuario>* temp = PrimPtr;
+    while (temp != nullptr) {
+        if (temp->getDato().getCuenta() == num) {
+            return false;
+        }
+        temp = temp->SigPtr;
+    }
+    return true;
 }
 
 template<typename tipo>
-void listaD<tipo>::cargarUsuarios()
+bool listaD<tipo>::login(QString cuenta, QString nombre, QString contraActual, short type)
 {
+    nodoD<Usuario>* temp = PrimPtr;
+    while (temp != nullptr) {
+        if (temp->getDato().getCuenta() == cuenta &&
+            temp->getDato().getNombre() == nombre &&
+            temp->getDato().getContraActual() == contraActual &&
+            temp->getDato().getTipo() == type) {
+            return true;
+        }
+        temp = temp->SigPtr;
+    }
 
+   return false;
 }
 
 template<typename tipo>
-string listaD<tipo>::cifrarContraseña(std::string contraseña)
+void listaD<tipo>::cambioContra(QString contraNueva,QString cuenta, listaD<Usuario>& listaUsuarios)
 {
+    nodoD<Usuario>* temp = listaUsuarios.PrimPtr;
+        while (temp != nullptr) {
+            if (temp->getDato().getCuenta() == cuenta) {
 
+                temp->getDato().setContraAnterior(contraNueva);
+
+                return;
+            }
+            temp = temp->SigPtr;
+        }
 }
 
-template<typename tipo>
-string listaD<tipo>::descifrarContrasena(std::string contraCifrada)
-{
 
-}
 #endif // LISTAD_H

@@ -37,11 +37,18 @@ cframe::cframe(QWidget *parent)
 
     QImage menu(":/new/prefix1/menu.png");
     ui->lbl_png->setPixmap(QPixmap::fromImage(menu));
-//    ui->lbl_color1->setStyleSheet("background-color: #A61400;");
-//    ui->lbl_color2->setStyleSheet("background-color: #A61400;");
-//    ui->lbl_color3->setStyleSheet("background-color: #A61400;");
-//    ui->lbl_color4->setStyleSheet("background-color: #A61400;");
+    //    ui->lbl_color1->setStyleSheet("background-color: #A61400;");
+    //    ui->lbl_color2->setStyleSheet("background-color: #A61400;");
+    //    ui->lbl_color3->setStyleSheet("background-color: #A61400;");
+    //    ui->lbl_color4->setStyleSheet("background-color: #A61400;");
     ui->lbl_png->setStyleSheet("background-color: #A61400;");
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::information(this, "Bienvenido", "Cargar base de datos para iniciar.\nEsto puede tardar unos segundos.", QMessageBox::Ok);
+    if (reply == QMessageBox::Ok) {
+        Conectar();
+    }else{
+
+    }
 
 }
 
@@ -72,7 +79,7 @@ void cframe::visibilidad()
         QImage menu(":/new/prefix1/dashboard.png");
         ui->lbl_png->setPixmap(QPixmap::fromImage(menu));
 
-    }else if(ui->tabWidget->currentIndex()==4){
+    }else if(ui->tabWidget->currentIndex()==4 || ui->tabWidget->currentIndex()==6){
         ui->btn_sesion->setText("VOLVER A MENU");
         ui->btn_sesion->setVisible(true);
         QImage menu(":/new/prefix1/actividad.png");
@@ -87,25 +94,7 @@ void cframe::visibilidad()
     }
 }
 
-QList<Usuario> cframe::DescargarUsuarios()
-{
-    //Base de datos debe estar abierta!!!
-    QList<Usuario> UsuariosDescargados;
-    QSqlQuery *Query = new QSqlQuery();
-    Query->prepare("select * from SilabosUsuarios");
-    Query->exec();
-    int CurrentRow=0;
-    while(Query->next())
-    {
-        //Codigo-Contrasena-Nombre-Tipo
-        //QString cuenta, QString nombre,QString contraActual, QString contraAnterior,short tipo
-        Usuario* Temp = new Usuario(Query->value(0).toString(),Query->value(3).toString(),Query->value(1).toString(),Query->value(2).toString(),Query->value(4).toInt());
-        UsuariosDescargados.append(*Temp);
-        delete Temp;
-        CurrentRow++;
-    }
-    return UsuariosDescargados;
-}
+
 
 QList<Clase> cframe::DescargarClases()
 {
@@ -251,41 +240,50 @@ void cframe::Conectar()
 
 }
 
-
 void cframe::on_Mbtn_ingresar_clicked(){
     if(ui->Mle_cuenta->text().isEmpty()||ui->Mle_contra->text().isEmpty()||ui->Mle_name->text().isEmpty()||ui->Mcb_tipo->currentText() == "..."){
         QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!");
 
     }else{
-        Conectar();
-        ui->Albl_cuenta->setText(ui->Mle_cuenta->text());
-        ui->Albl_tipo->setText(ui->Mcb_tipo->currentText());
-        ui->Albl_username->setText(ui->Mle_name->text());
+        //Conectar();
 
-        if(ui->Mcb_tipo->currentIndex()==1){
-            QStringList acciones;
-            acciones << "..." << "FEED" << "ENTREGAR";
-            ui->Acb_acciones->addItems(acciones);
+        if(listaUsuarios.login(ui->Mle_cuenta->text(), ui->Mle_name->text(),ui->Mle_contra->text() ,ui->Mcb_tipo->currentIndex())){
 
-        }else if(ui->Mcb_tipo->currentIndex()==2||ui->Mcb_tipo->currentIndex()==3){
-            QStringList acciones;
-            acciones << "..." << "BOARD";
-            ui->Acb_acciones->addItems(acciones);
-        }else if(ui->Mcb_tipo->currentIndex()==4||ui->Mcb_tipo->currentIndex()==5||ui->Mcb_tipo->currentIndex()==6||ui->Mcb_tipo->currentIndex()==7){
-            QStringList acciones;
-            acciones << "..." << "REVISION";
-            ui->Acb_acciones->addItems(acciones);
+            ui->Albl_cuenta->setText(ui->Mle_cuenta->text());
+            ui->Albl_tipo->setText(ui->Mcb_tipo->currentText());
+            ui->Albl_username->setText(ui->Mle_name->text());
+
+            if(ui->Mcb_tipo->currentIndex()==7){
+                QStringList acciones;
+                acciones << "..." << "FEED" << "ENTREGAR";
+                ui->Acb_acciones->addItems(acciones);
+
+            }else if(ui->Mcb_tipo->currentIndex()==2||ui->Mcb_tipo->currentIndex()==3){
+                QStringList acciones;
+                acciones << "..." << "BOARD";
+                ui->Acb_acciones->addItems(acciones);
+            }else if(ui->Mcb_tipo->currentIndex()==6 || ui->Mcb_tipo->currentIndex()==1){
+                QStringList acciones;
+                acciones << "..." << "REVISION"<<"USUARIOS";
+                ui->Acb_acciones->addItems(acciones);
+            }else if(ui->Mcb_tipo->currentIndex()==4||ui->Mcb_tipo->currentIndex()==5||ui->Mcb_tipo->currentIndex()==7){
+                QStringList acciones;
+                acciones << "..." << "REVISION";
+                ui->Acb_acciones->addItems(acciones);
+            }
+            ui->Mle_cuenta->clear();
+            ui->Mle_contra->clear();
+            ui->Mle_name->clear();
+
+            ui->tabWidget->setCurrentIndex(5);
+            ui->btn_sesion->setVisible(true);
+        }else{
+            QMessageBox::critical(this, "Error", "Datos incongruentes");
+
         }
-        ui->Mle_cuenta->clear();
-        ui->Mle_contra->clear();
-        ui->Mle_name->clear();
-
-        ui->tabWidget->setCurrentIndex(5);
-        ui->btn_sesion->setVisible(true);
     }
     visibilidad();
 }
-
 
 void cframe::on_Acb_acciones_currentIndexChanged(int index)
 {}
@@ -320,36 +318,6 @@ void cframe::on_Ecb_sede_currentIndexChanged(int index)
     }
 }
 
-
-void cframe::on_Rbtn_cambiar_clicked()
-{
-
-    if(ui->Rle_seleccion->text().isEmpty()||ui->Rle_comentarios->text().isEmpty()||ui->Rle_estadoActual->text().isEmpty()||ui->Rlbl_estado->text().isEmpty()||ui->Rcb_estadoCambiar->currentText() == "..."){
-        QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!");
-    }
-
-}
-
-
-void cframe::on_Abtn_cambioContra_clicked()
-{
-    bool ok;
-    while (true) {
-        QString newPassword = QInputDialog::getText(this, "Nueva Contrseña", "Ingrese la Nueva Contraseña:", QLineEdit::Password, "", &ok);
-        if (!ok) {
-            return;
-        }
-        if (newPassword.isEmpty()) {
-            QMessageBox::critical(this, "Error", "Porfavor ingrese una contraseña valida");
-        } else {
-            password = newPassword;
-            QMessageBox::information(this, "Enviado", "Su solicitud fue enviada.");
-            return;
-        }
-    }
-}
-
-
 void cframe::on_Acb_acciones_currentIndexChanged(const QString &arg1)
 {
     if(arg1=="ENTREGAR"){
@@ -360,6 +328,9 @@ void cframe::on_Acb_acciones_currentIndexChanged(const QString &arg1)
         ui->tabWidget->setCurrentIndex(3);
     }else if(arg1=="FEED"){
         ui->tabWidget->setCurrentIndex(4);
+    }else if(arg1=="USUARIOS"){
+        mostrarUsuarios();
+        ui->tabWidget->setCurrentIndex(6);
     }else if(arg1=="..."){
 
     }
@@ -368,22 +339,20 @@ void cframe::on_Acb_acciones_currentIndexChanged(const QString &arg1)
 
 }
 
-
 void cframe::on_Ebtn_archivo_clicked()
 {
     if(ui->Ecb_sede->currentText() == "..."||ui->Ecb_carrera->currentText() == "..."||ui->Ecb_facultad->currentText() == "..."||ui->Ecb_clases->currentText() == "..."){
         QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!");
 
     }else{
-    QString filePath = QFileDialog::getOpenFileName(this, "Explorador de Archivos DOC", QDir::homePath(), "Document Files (*.doc *.docx)");
-    if (!filePath.isEmpty()) {
-        ui->Elbl_path_archivo->setText(filePath);
-    }
+        QString filePath = QFileDialog::getOpenFileName(this, "Explorador de Archivos DOC", QDir::homePath(), "Document Files (*.doc *.docx)");
+        if (!filePath.isEmpty()) {
+            ui->Elbl_path_archivo->setText(filePath);
+        }
     }
 
 
 }
-
 
 void cframe::on_Ebtn_fechas_clicked()
 {
@@ -391,14 +360,13 @@ void cframe::on_Ebtn_fechas_clicked()
         QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!");
 
     }else{
-    QString filePath = QFileDialog::getOpenFileName(this, "Explorador de Archivos DOC", QDir::homePath(), "Document Files (*.doc *.docx)");
-    if (!filePath.isEmpty()) {
-        ui->Elbl_path_fechas->setText(filePath);
-    }
+        QString filePath = QFileDialog::getOpenFileName(this, "Explorador de Archivos DOC", QDir::homePath(), "Document Files (*.doc *.docx)");
+        if (!filePath.isEmpty()) {
+            ui->Elbl_path_fechas->setText(filePath);
+        }
     }
 
 }
-
 
 void cframe::on_Ebtn_enviar_clicked()
 {
@@ -413,7 +381,6 @@ void cframe::on_Ebtn_enviar_clicked()
 
 
 }
-
 
 void cframe::on_Ecb_sede_currentIndexChanged(const QString &arg1)
 {
@@ -433,7 +400,6 @@ void cframe::on_Ecb_sede_currentIndexChanged(const QString &arg1)
 
 }
 
-
 void cframe::on_Ecb_facultad_currentIndexChanged(const QString &arg1)
 {
     Carreras.clear();
@@ -450,7 +416,6 @@ void cframe::on_Ecb_facultad_currentIndexChanged(const QString &arg1)
     ui->Ecb_carrera->addItems(Carreras);
 }
 
-
 void cframe::on_Ecb_carrera_currentIndexChanged(const QString &arg1)
 {
     Clases.clear();
@@ -464,5 +429,125 @@ void cframe::on_Ecb_carrera_currentIndexChanged(const QString &arg1)
     ui->Ecb_clases->clear();
     ui->Ecb_clases->addItem("...");
     ui->Ecb_clases->addItems(Clases);
+}
+
+void cframe::on_Rbtn_cambiar_clicked()
+{
+
+    if(ui->Rle_seleccion->text().isEmpty()||ui->Rle_comentarios->text().isEmpty()||ui->Rle_estadoActual->text().isEmpty()||ui->Rlbl_estado->text().isEmpty()||ui->Rcb_estadoCambiar->currentText() == "..."){
+        QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!");
+    }
+
+}
+
+void cframe::on_Abtn_cambioContra_clicked()
+{
+    bool ok;
+    while (true) {
+        QString newPassword = QInputDialog::getText(this, "Nueva Contrseña", "Ingrese la Nueva Contraseña:", QLineEdit::Password, "", &ok);
+        if (!ok) {
+            return;
+        }
+        if (newPassword.isEmpty()) {
+            QMessageBox::critical(this, "Error", "Porfavor ingrese una contraseña valida");
+        } else {
+            // password = newPassword;
+
+            listaUsuarios.cambioContra(newPassword, numero_cuenta, listaUsuarios);
+            QMessageBox::information(this, "Enviado", "Su solicitud fue enviada.\n");
+            return;
+        }
+    }
+}
+QList<Usuario> cframe::DescargarUsuarios()
+{
+    //Base de datos debe estar abierta!!!
+    QList<Usuario> UsuariosDescargados;
+    QSqlQuery *Query = new QSqlQuery();
+    Query->prepare("select * from SilabosUsuarios");
+    Query->exec();
+    int CurrentRow=0;
+    while(Query->next())
+    {
+        //QString cuenta, QString nombre,QString contraActual, QString contraAnterior,short tipo
+        Usuario* Temp = new Usuario(Query->value(0).toString(),Query->value(3).toString(),Query->value(1).toString(),Query->value(2).toString(),Query->value(4).toInt());
+        UsuariosDescargados.append(*Temp);
+        listaUsuarios.InsertarFin(*Temp);
+        delete Temp;
+        CurrentRow++;
+    }
+    return UsuariosDescargados;
+}
+void cframe::mostrarUsuarios()
+{
+    ui->Itw_usuarios->clearContents();
+    QStringList headers = { "CUENTA", "NOMBRE", "CONTRASEÑA ACTUAL", "CONTRASEÑA ANTERIOR", "TIPO" };
+    ui->Itw_usuarios->setColumnCount(headers.size());
+    ui->Itw_usuarios->setHorizontalHeaderLabels(headers);
+    ui->Itw_usuarios->setRowCount(listaUsuarios.Cantidad);
+
+    actD = listaUsuarios.PrimPtr;
+    int row = 0;
+
+    while (actD != nullptr && row < listaUsuarios.Cantidad) {
+        Usuario usuario = actD->getDato();
+
+        ui->Itw_usuarios->setItem(row, 0, new QTableWidgetItem(usuario.getCuenta()));
+        ui->Itw_usuarios->setItem(row, 1, new QTableWidgetItem(usuario.getNombre()));
+        ui->Itw_usuarios->setItem(row, 2, new QTableWidgetItem(usuario.getContraActual()));
+        ui->Itw_usuarios->setItem(row, 3, new QTableWidgetItem(usuario.getContraAnterior()));
+        ui->Itw_usuarios->setItem(row, 4, new QTableWidgetItem(listaUsuarios.tipoUsuario(usuario.getTipo())));
+
+        actD = actD->SigPtr;
+        ++row;
+    }
+    ui->Itw_usuarios->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+}
+void cframe::on_pushButton_clicked()
+{
+    if(ui->Ile_contra->text().isEmpty() || ui->Ile_cuenta->text().isEmpty()|| ui->Ile_name->text().isEmpty() || ui->Icb_tipo->currentIndex()==0){
+        QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!");
+
+    }else{
+        cuentaNumero( ui->Ile_cuenta->text().toStdString());
+        if(listaUsuarios.numCuentaDisponible(ui->Ile_cuenta->text())){
+            Usuario* Temp = new Usuario(ui->Ile_cuenta->text(),ui->Ile_name->text(),ui->Ile_contra->text(),"",ui->Icb_tipo->currentIndex());
+            listaUsuarios.InsertarFin(*Temp);
+            delete Temp;
+            mostrarUsuarios();
+        }else{
+            QMessageBox::critical(this, "Error", "Numero de cuenta no disponible");
+
+        }
+    }
+}
+
+bool cframe::cuentaNumero(const std::string &tt)
+{
+    for (char car : tt) {
+        if (!std::isdigit(car)) {
+            QMessageBox::warning(this,  "Datos incongruentes","Favor, asegurese de que el numero de cuenta solo contenga digitos");
+            return false;
+        }
+    }
+    if(ui->Ile_cuenta->text().length() !=8){
+        QMessageBox::warning(this,  "Datos incongruentes","Favor, asegurese de que la cuenta sea de 8 digitos");
+        return false;
+    }
+    return true;
+}
+
+
+void cframe::on_Itw_usuarios_cellClicked(int row, int column)
+{
+    if(column==3){
+        QTableWidgetItem *item = ui->Itw_usuarios->item(row, 0);
+        if (item) {
+            QString dato = item->text();
+            QMessageBox::information(this, "Dato en columna 0", "El dato en la columna 0 de esta fila es: " + dato);
+        } else {
+            QMessageBox::warning(this, "Error", "No se pudo obtener el dato en la columna 0.");
+        }
+    }
 }
 

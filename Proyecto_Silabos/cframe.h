@@ -6,7 +6,9 @@
 
 #include "Usuario.h"
 #include "Clase.h"
-#include "arbolB.h"
+#include "arbolb.h"
+#include "listaD.h"
+#include "nodoD.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class cframe; }
@@ -47,6 +49,10 @@ private slots:
 
     void on_Ecb_carrera_currentIndexChanged(const QString &arg1);
 
+    void on_pushButton_clicked();
+
+    void on_Itw_usuarios_cellClicked(int row, int column);
+
 private:
     Ui::cframe *ui;
     void visibilidad();
@@ -72,5 +78,12 @@ private:
     QByteArray DescargarSilabo(QString);
     void Conectar();
     arbolB *arbol;
+
+
+    void mostrarUsuarios();
+    listaD<Usuario> listaUsuarios;
+    nodoD<Usuario> *actD;
+    nodoD<Usuario> *ultD;
+    bool cuentaNumero(const std::string &tt);
 };
 #endif // CFRAME_H
