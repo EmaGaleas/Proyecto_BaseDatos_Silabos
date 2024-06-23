@@ -243,6 +243,31 @@ void cframe::Conectar()
 
 }
 
+void cframe::SubirDatos()
+{
+    //subir Usuarios
+    db.open();
+    QSqlQuery query(db);
+    query.prepare("Delete FROM SilaboUsuarios");
+    query.exec();
+    actD = listaUsuarios.PrimPtr;
+    int row = 0;
+    while (actD != nullptr && row < listaUsuarios.size()) {
+        Usuario usuario = actD->getDato();
+        query.prepare("Insert into SilabosUsuarios (Cuenta, Contrasena, NombreCompleto, tipo) VALUES(:Cuenta,:Contrasena,:Nombre,:Tipo)");
+        query.bindValue(":Cuenta", usuario.getCuenta());
+        query.bindValue(":Contrasena", usuario.getContraActual());
+        query.bindValue(":Nombre", usuario.getNombre());
+        query.bindValue(":Tipo", usuario.getTipo());
+        query.exec();
+        actD = actD->SigPtr;
+        ++row;
+    }
+    //SubirSilabos
+
+
+}
+
 void cframe::on_Mbtn_ingresar_clicked(){
     if(ui->Mle_cuenta->text().isEmpty()||ui->Mle_contra->text().isEmpty()||ui->Mle_name->text().isEmpty()||ui->Mcb_tipo->currentText() == "..."){
         QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!");

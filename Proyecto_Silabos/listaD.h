@@ -34,6 +34,7 @@ public:
     void cambioContra(QString contraNueva, QString cuenta, listaD<Usuario>& listaUsuarios);
     short numeroTipoUsuario(const QString &tipoStr);
     bool verficarContraActualizada(QString cuenta, QString contradeseada, short type);
+    int size();
 
 
 
@@ -192,7 +193,13 @@ bool listaD<tipo>::verficarContraActualizada(QString cuenta, QString contradesea
         temp = temp->SigPtr;
     }
 
-   return false;
+    return false;
+}
+
+template<typename tipo>
+int listaD<tipo>::size()
+{
+   return Cantidad;
 }
 template<typename tipo>
 void listaD<tipo>::cambioContra(QString contraNueva, QString cuenta, listaD<Usuario>& listaUsuarios)
