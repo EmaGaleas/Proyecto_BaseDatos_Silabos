@@ -405,7 +405,7 @@
            </font>
           </property>
           <property name="text">
-           <string/>
+           <string>...</string>
           </property>
          </widget>
         </item>
@@ -477,7 +477,7 @@
            </font>
           </property>
           <property name="text">
-           <string/>
+           <string>...</string>
           </property>
          </widget>
         </item>
@@ -1021,7 +1021,7 @@
      <x>0</x>
      <y>0</y>
      <width>910</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>

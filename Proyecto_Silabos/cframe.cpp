@@ -249,14 +249,23 @@ void cframe::on_Mbtn_ingresar_clicked(){
 
     }else{
         //Conectar();
+    QString contraDeseada= listaUsuarios.login(ui->Mle_cuenta->text(), ui->Mle_name->text(),ui->Mle_contra->text() ,ui->Mcb_tipo->currentIndex());
+        if(contraDeseada!="no"){
+            //bool listaD<tipo>::verficarContraActualizada(QString cuenta, QString contradeseada, short type)
+            if(contraDeseada != "" && contraDeseada.startsWith("°") && listaUsuarios.verficarContraActualizada(ui->Mle_cuenta->text(),  contraDeseada, ui->Mcb_tipo->currentIndex())){
+                contraDeseada = contraDeseada.mid(1);
 
-        if(listaUsuarios.login(ui->Mle_cuenta->text(), ui->Mle_name->text(),ui->Mle_contra->text() ,ui->Mcb_tipo->currentIndex())){
-
+                QMessageBox::information(this, "Cambio de contraseña", "Su solicitud de contraseña fue aprobada\n"+contraDeseada);
+                Usuario* Temp = new Usuario(ui->Mle_cuenta->text(),ui->Mle_name->text(),contraDeseada,"",ui->Mcb_tipo->currentIndex());
+                listaUsuarios.cambioContra(ui->Mle_contra->text(), "21811092", listaUsuarios);
+                listaUsuarios.InsertarFin(*Temp);
+                delete Temp;
+            }
             ui->Albl_cuenta->setText(ui->Mle_cuenta->text());
             ui->Albl_tipo->setText(ui->Mcb_tipo->currentText());
             ui->Albl_username->setText(ui->Mle_name->text());
 
-            if(ui->Mcb_tipo->currentIndex()==7){
+            if(ui->Mcb_tipo->currentIndex()==1){
                 QStringList acciones;
                 acciones << "..." << "FEED" << "ENTREGAR";
                 ui->Acb_acciones->addItems(acciones);
@@ -265,11 +274,11 @@ void cframe::on_Mbtn_ingresar_clicked(){
                 QStringList acciones;
                 acciones << "..." << "BOARD";
                 ui->Acb_acciones->addItems(acciones);
-            }else if(ui->Mcb_tipo->currentIndex()==6 || ui->Mcb_tipo->currentIndex()==1){
+            }else if(ui->Mcb_tipo->currentIndex()==6 ){
                 QStringList acciones;
-                acciones << "..." << "REVISION"<<"USUARIOS"<<"ENTREGAR";
+                acciones << "..." << "REVISION"<<"USUARIOS";
                 ui->Acb_acciones->addItems(acciones);
-            }else if(ui->Mcb_tipo->currentIndex()==4||ui->Mcb_tipo->currentIndex()==5||ui->Mcb_tipo->currentIndex()==7){
+            }else if(ui->Mcb_tipo->currentIndex()==4||ui->Mcb_tipo->currentIndex()==5){
                 QStringList acciones;
                 acciones << "..." << "REVISION";
                 ui->Acb_acciones->addItems(acciones);
@@ -378,10 +387,12 @@ void cframe::on_Ebtn_enviar_clicked()
     QString carrera = ui->Ecb_carrera->currentText();
     QString datosClase = ui->Ecb_clases->currentText();
     QString path_silabo=ui->Elbl_path_archivo->text();
-    QString path_fecha=ui->Elbl_path_fechas->text();
+    QString path_fecha = (ui->Ecb_sede->currentIndex() != 2) ? "NO APLICA" : ui->Elbl_path_fechas->text();
+
     if(path_silabo.isEmpty()||path_fecha.isEmpty()){
         QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!");
     }else{
+//    Silabos(string facultad, string carrera, int insertadoPor, string datosClase, QString rutaSilabos, QString rutaFechas, string estado, string observacion, short numRevisiones, short numRechazado, short visibilidad)
 
             if (ui->Ecb_facultad->currentIndex() == 2) {
                    facultad = "-" + facultad;
@@ -389,15 +400,15 @@ void cframe::on_Ebtn_enviar_clicked()
 
             Silabos s(facultad.toStdString(),
                       carrera.toStdString(),
-                      0,  // insertadoPor
+                      ui->Albl_cuenta->text().toInt(),  // insertadoPor
                       datosClase.toStdString(),
-                      "no aplica",
-                      "no aplica",
+                      path_silabo,
+                      path_fecha,
                       "no aplica",
                       "no aplica",
                       0,  // numRevisiones
                       0,  // numRechazado
-                      0   // visibilidad
+                      45   // visibilidad para jefe (numero 4) y para coordinador(numero 5)
                       );
 
             // Insertar el Silabos en el árbol
@@ -508,18 +519,45 @@ void cframe::on_Abtn_cambioContra_clicked()
 {
     bool ok;
     while (true) {
-        QString newPassword = QInputDialog::getText(this, "Nueva Contrseña", "Ingrese la Nueva Contraseña:", QLineEdit::Password, "", &ok);
+        QString newPassword = QInputDialog::getText(this, "Nueva Contraseña", "Ingrese la Nueva Contraseña:", QLineEdit::Password, "", &ok);
         if (!ok) {
             return;
         }
         if (newPassword.isEmpty()) {
-            QMessageBox::critical(this, "Error", "Porfavor ingrese una contraseña valida");
+            QMessageBox::critical(this, "Error", "Por favor ingrese una contraseña válida.");
         } else {
-            // password = newPassword;
+            actD = listaUsuarios.PrimPtr;
+            while (actD != nullptr) {
+               Usuario usuario = actD->getDato();
+                if (usuario.getCuenta() == ui->Albl_cuenta->text()) {
+                    QString oldPassword = QInputDialog::getText(this, "Contraseña Anterior", "Ingrese la Contraseña Anterior\npara confirmar su identidad:", QLineEdit::Password, "", &ok);
+                    if (!ok) {
+                        return;
+                    }
+                    if (oldPassword != usuario.getContraActual()) {
+                        QMessageBox::critical(this, "Error", "Contraseña original incorrecta.");
+                        break;
+                    }else{
+                         usuario.setContraAnterior(newPassword);
+                         //    Usuario( QString cuenta, QString nombre,QString contraActual, QString contraAnterior,short tipo)
 
-            listaUsuarios.cambioContra(newPassword, numero_cuenta, listaUsuarios);
-            QMessageBox::information(this, "Enviado", "Su solicitud fue enviada.\n");
-            return;
+                         Usuario* Temp = new Usuario(usuario.getCuenta(),usuario.getNombre(),usuario.getContraActual(),newPassword,usuario.getTipo());
+                         listaUsuarios.cambioContra(newPassword, ui->Albl_cuenta->text(), listaUsuarios);
+
+                         listaUsuarios.InsertarFin(*Temp);
+                         delete Temp;
+                         QMessageBox::information(this, "Contraseña ", "Cambio ha sido solicitado");
+                         return;
+                    }
+
+                    return;
+                }
+                actD = actD->SigPtr;
+            }
+
+            if (actD == nullptr) {
+                QMessageBox::critical(this, "Error", "No se encontró el usuario correspondiente para cambiar la contraseña.");
+            }
         }
     }
 }
@@ -545,7 +583,7 @@ QList<Usuario> cframe::DescargarUsuarios()
 void cframe::mostrarUsuarios()
 {
     ui->Itw_usuarios->clearContents();
-    QStringList headers = { "CUENTA", "NOMBRE", "CONTRASEÑA ACTUAL", "CONTRASEÑA ANTERIOR", "TIPO" };
+    QStringList headers = { "CUENTA", "NOMBRE", "CONTRASEÑA ACTUAL", "CONTRASEÑA SOLICITADA", "TIPO" };
     ui->Itw_usuarios->setColumnCount(headers.size());
     ui->Itw_usuarios->setHorizontalHeaderLabels(headers);
     ui->Itw_usuarios->setRowCount(listaUsuarios.Cantidad);
@@ -573,8 +611,8 @@ void cframe::on_pushButton_clicked()
         QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!");
 
     }else{
-        cuentaNumero( ui->Ile_cuenta->text().toStdString());
-        if(listaUsuarios.numCuentaDisponible(ui->Ile_cuenta->text())){
+
+        if(  cuentaNumero( ui->Ile_cuenta->text().toStdString())  && listaUsuarios.numCuentaDisponible(ui->Ile_cuenta->text())){
             Usuario* Temp = new Usuario(ui->Ile_cuenta->text(),ui->Ile_name->text(),ui->Ile_contra->text(),"",ui->Icb_tipo->currentIndex());
             listaUsuarios.InsertarFin(*Temp);
             delete Temp;
@@ -604,14 +642,41 @@ bool cframe::cuentaNumero(const std::string &tt)
 
 void cframe::on_Itw_usuarios_cellClicked(int row, int column)
 {
-    if(column==3){
-        QTableWidgetItem *item = ui->Itw_usuarios->item(row, 0);
-        if (item) {
-            QString dato = item->text();
-            QMessageBox::information(this, "Dato en columna 0", "El dato en la columna 0 de esta fila es: " + dato);
+    if (column == 3) { // Columna 3 es la columna de "CONTRASEÑA ANTERIOR"
+        QTableWidgetItem *item = ui->Itw_usuarios->item(row, 0); // Obtener el item de la columna 0 (CUENTA)
+        QString contraDeseada= ui->Itw_usuarios->item(row, 3)->text();
+
+        if (item && (contraDeseada != "RECHAZADA" && !contraDeseada.isEmpty())) {
+            QString cuenta = item->text();
+            QString nombre= ui->Itw_usuarios->item(row, 1)->text();
+            QString contraActual= ui->Itw_usuarios->item(row, 2)->text();
+            int tipo= listaUsuarios.numeroTipoUsuario(ui->Itw_usuarios->item(row, 4)->text());
+
+            // Mostrar un mensaje de confirmación
+            QMessageBox::StandardButton reply;
+            reply = QMessageBox::question(this, "Confirmación",
+                                          "Contraseña propuesta:"+contraDeseada+"\n¿Estás seguro que deseas eliminar este usuario con cuenta " + cuenta + "?",
+                                          QMessageBox::Yes | QMessageBox::No);
+            if (reply == QMessageBox::Yes) {
+                Usuario* Temp = new Usuario(cuenta,nombre,contraActual,contraDeseada="°"+contraDeseada,tipo);
+                listaUsuarios.cambioContra(contraActual, ui->Albl_cuenta->text(), listaUsuarios);
+                listaUsuarios.InsertarFin(*Temp);
+                mostrarUsuarios();
+                delete Temp;
+
+
+            } else {
+                Usuario* Temp = new Usuario(cuenta,nombre,contraActual,"RECHAZADA",tipo);
+                listaUsuarios.cambioContra(contraActual, ui->Albl_cuenta->text(), listaUsuarios);
+                listaUsuarios.InsertarFin(*Temp);
+                mostrarUsuarios();
+                delete Temp;
+
+
+            }
         } else {
-            QMessageBox::warning(this, "Error", "No se pudo obtener el dato en la columna 0.");
         }
     }
 }
+
 
