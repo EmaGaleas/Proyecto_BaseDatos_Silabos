@@ -270,7 +270,7 @@
           </item>
           <item>
            <property name="text">
-            <string>New Item</string>
+            <string>prueba_carrera</string>
            </property>
           </item>
          </widget>
@@ -359,7 +359,7 @@
           </item>
           <item>
            <property name="text">
-            <string/>
+            <string>prueba_datosclase</string>
            </property>
           </item>
          </widget>
@@ -418,7 +418,7 @@
           </item>
           <item>
            <property name="text">
-            <string/>
+            <string>prueba_facultad</string>
            </property>
           </item>
          </widget>
@@ -845,7 +845,7 @@
      <x>0</x>
      <y>0</y>
      <width>910</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

@@ -402,6 +402,7 @@ void cframe::on_Ebtn_fechas_clicked()
 
 void cframe::on_Ebtn_enviar_clicked()
 {
+
     //volver a inicializar en 0 los indices para que se muestren ...
     ui->Ecb_carrera->setCurrentIndex(0);
     ui->Ecb_facultad->setCurrentIndex(0);

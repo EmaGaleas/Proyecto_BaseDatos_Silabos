@@ -6,6 +6,7 @@
 
 #include "Usuario.h"
 #include "Clase.h"
+#include "arbolB.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class cframe; }
@@ -70,5 +71,6 @@ private:
     void SubirSilabo(QString, QByteArray);
     QByteArray DescargarSilabo(QString);
     void Conectar();
+    arbolB *arbol;
 };
 #endif // CFRAME_H
