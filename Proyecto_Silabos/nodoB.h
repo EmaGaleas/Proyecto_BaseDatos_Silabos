@@ -27,6 +27,9 @@ public:
 
     // Buscar una llave en el nodo por datosClase
     Silabos* buscar(const string& datosClase);
+
+    // Obtener todos los Silabos en el nodo
+    void obtenerTodos(vector<Silabos>& resultado);
 };
 
 #endif // NODOB_H

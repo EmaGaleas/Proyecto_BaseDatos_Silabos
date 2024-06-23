@@ -28,6 +28,7 @@ using std::cout;
 cframe::cframe(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::cframe)
+    ,arbol(new arbolB(5))
 {
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
@@ -43,6 +44,8 @@ cframe::cframe(QWidget *parent)
     //    ui->lbl_color4->setStyleSheet("background-color: #A61400;");
     ui->lbl_png->setStyleSheet("background-color: #A61400;");
     QMessageBox::StandardButton reply;
+    MostrarSilabos();
+
     reply = QMessageBox::information(this, "Bienvenido", "Cargar base de datos para iniciar.\nEsto puede tardar unos segundos.", QMessageBox::Ok);
     if (reply == QMessageBox::Ok) {
         Conectar();
@@ -55,6 +58,7 @@ cframe::cframe(QWidget *parent)
 cframe::~cframe()
 {
     delete ui;
+    delete arbol;
 }
 
 void cframe::visibilidad()
@@ -264,7 +268,7 @@ void cframe::on_Mbtn_ingresar_clicked(){
                 ui->Acb_acciones->addItems(acciones);
             }else if(ui->Mcb_tipo->currentIndex()==6 || ui->Mcb_tipo->currentIndex()==1){
                 QStringList acciones;
-                acciones << "..." << "REVISION"<<"USUARIOS";
+                acciones << "..." << "REVISION"<<"USUARIOS"<<"ENTREGAR";
                 ui->Acb_acciones->addItems(acciones);
             }else if(ui->Mcb_tipo->currentIndex()==4||ui->Mcb_tipo->currentIndex()==5||ui->Mcb_tipo->currentIndex()==7){
                 QStringList acciones;
@@ -370,6 +374,38 @@ void cframe::on_Ebtn_fechas_clicked()
 
 void cframe::on_Ebtn_enviar_clicked()
 {
+    QString facultad = ui->Ecb_facultad->currentText();
+    QString carrera = ui->Ecb_carrera->currentText();
+    QString datosClase = ui->Ecb_clases->currentText();
+    QString path_silabo=ui->Elbl_path_archivo->text();
+    QString path_fecha=ui->Elbl_path_fechas->text();
+    if(path_silabo.isEmpty()||path_fecha.isEmpty()){
+        QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!");
+    }else{
+
+            if (ui->Ecb_facultad->currentIndex() == 2) {
+                   facultad = "-" + facultad;
+            }
+
+            // Crear un nuevo Silabos con los datos capturados
+            // y valores predeterminados para los demás campos
+            Silabos s(facultad.toStdString(),
+                      carrera.toStdString(),
+                      0,  // insertadoPor
+                      datosClase.toStdString(),
+                      "no aplica",
+                      "no aplica",
+                      "no aplica",
+                      "no aplica",
+                      0,  // numRevisiones
+                      0,  // numRechazado
+                      0   // visibilidad
+                      );
+
+            // Insertar el Silabos en el árbol
+            arbol->insertar(s);
+
+    }
 
     //volver a inicializar en 0 los indices para que se muestren ...
     ui->Ecb_carrera->setCurrentIndex(0);
@@ -380,6 +416,36 @@ void cframe::on_Ebtn_enviar_clicked()
     ui->Elbl_path_archivo->clear();
 
 
+}
+
+void cframe::MostrarSilabos() {
+    std::vector<Silabos> silabos = arbol->obtenerTodos();
+
+    ui->Rtw_revision->setRowCount(0);  // Limpiar la tabla
+    ui->Rtw_revision->setColumnCount(11);  // Asegúrate de tener el número correcto de columnas
+
+    QStringList headers;
+    headers << "ID" << "Facultad" << "Carrera" << "Insertado Por" << "Datos Clase"
+            << "Ruta Silabos" << "Ruta Fechas" << "Estado" << "Observación"
+            << "Número de Revisiones" << "Número de Rechazados" << "Visibilidad";
+    ui->Rtw_revision->setHorizontalHeaderLabels(headers);
+
+    for (const Silabos& s : silabos) {
+        int row = ui->Rtw_revision->rowCount();
+        ui->Rtw_revision->insertRow(row);
+        ui->Rtw_revision->setItem(row, 0, new QTableWidgetItem(QString::number(s.getId())));
+        ui->Rtw_revision->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(s.getFacultad())));
+        ui->Rtw_revision->setItem(row, 2, new QTableWidgetItem(QString::fromStdString(s.getCarreras())));
+        ui->Rtw_revision->setItem(row, 3, new QTableWidgetItem(QString::number(s.getInsertadoPor())));
+        ui->Rtw_revision->setItem(row, 4, new QTableWidgetItem(QString::fromStdString(s.getDatosClase())));
+        ui->Rtw_revision->setItem(row, 5, new QTableWidgetItem(s.getRutaSilabos()));
+        ui->Rtw_revision->setItem(row, 6, new QTableWidgetItem(s.getRutaFechas()));
+        ui->Rtw_revision->setItem(row, 7, new QTableWidgetItem(QString::fromStdString(s.getEstado())));
+        ui->Rtw_revision->setItem(row, 8, new QTableWidgetItem(QString::fromStdString(s.getObservacion())));
+        ui->Rtw_revision->setItem(row, 9, new QTableWidgetItem(QString::number(s.getNumRevisiones())));
+        ui->Rtw_revision->setItem(row, 10, new QTableWidgetItem(QString::number(s.getNumRechazados())));
+        ui->Rtw_revision->setItem(row, 11, new QTableWidgetItem(QString::number(s.getVisibilidad())));
+    }
 }
 
 void cframe::on_Ecb_sede_currentIndexChanged(const QString &arg1)

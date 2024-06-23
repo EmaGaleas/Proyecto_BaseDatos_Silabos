@@ -2,19 +2,19 @@
 
 // Constructor del árbol B
 arbolB::arbolB(int t) {
-    raiz = NULL;
+    raiz = nullptr;
     this->t = t;
     nextId = 1;  // Inicializar el próximo ID a 1
 }
 
 // Recorrer y mostrar todas las llaves del árbol
 void arbolB::recorrer() {
-    if (raiz != NULL) raiz->recorrer();
+    if (raiz != nullptr) raiz->recorrer();
 }
 
 // Buscar una llave en el árbol por datosClase
-Silabos* arbolB::buscar(const string& datosClase) {
-    return (raiz == NULL) ? NULL : raiz->buscar(datosClase);
+Silabos* arbolB::buscar(const std::string& datosClase) {
+    return (raiz == nullptr) ? nullptr : raiz->buscar(datosClase);
 }
 
 // Insertar una llave en el árbol
@@ -22,13 +22,13 @@ void arbolB::insertar(Silabos& k) {
     k.setId(nextId++);  // Asignar el próximo ID disponible al Silabos
 
     // Si el árbol está vacío
-    if (raiz == NULL) {
+    if (raiz == nullptr) {
         // Asignar raíz
         raiz = new nodoB(true);
         raiz->llaves.push_back(k);
     } else { // Si el árbol no está vacío
         // Si la raíz está llena, el árbol crece en altura
-        if (raiz->llaves.size() == 2*t-1) {
+        if (raiz->llaves.size() == 2 * t - 1) {
             // Crear una nueva raíz
             nodoB *s = new nodoB(false);
 
@@ -52,4 +52,13 @@ void arbolB::insertar(Silabos& k) {
             raiz->insertarNoLleno(k);
         }
     }
+}
+
+// Obtener todos los Silabos en el árbol
+std::vector<Silabos> arbolB::obtenerTodos() {
+    std::vector<Silabos> resultado;
+    if (raiz != nullptr) {
+        raiz->obtenerTodos(resultado);
+    }
+    return resultado;
 }

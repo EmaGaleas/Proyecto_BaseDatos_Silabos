@@ -2,6 +2,7 @@
 #define ARBOLB_H
 
 #include "nodoB.h"
+#include <vector>
 
 class arbolB {
 public:
@@ -16,10 +17,13 @@ public:
     void recorrer();
 
     // Buscar una llave en el árbol por datosClase
-    Silabos* buscar(const string& datosClase);
+    Silabos* buscar(const std::string& datosClase);
 
     // Insertar una llave en el árbol
     void insertar(Silabos& k);
+
+    // Obtener todos los Silabos en el árbol
+    std::vector<Silabos> obtenerTodos();
 };
 
 #endif // ARBOLB_H

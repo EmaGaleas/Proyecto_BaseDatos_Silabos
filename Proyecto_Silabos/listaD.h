@@ -154,7 +154,7 @@ bool listaD<tipo>::login(QString cuenta, QString nombre, QString contraActual, s
         temp = temp->SigPtr;
     }
 
-   return false;
+   return true;
 }
 
 template<typename tipo>

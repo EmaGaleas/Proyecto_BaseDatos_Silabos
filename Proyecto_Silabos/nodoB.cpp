@@ -32,7 +32,7 @@ Silabos* nodoB::buscar(const string& datosClase) {
     }
 
     if (hoja) {
-        return NULL;
+        return nullptr;
     }
 
     return hijos[i]->buscar(datosClase);
@@ -54,7 +54,7 @@ void nodoB::insertarNoLleno(Silabos k) {
             i--;
         }
         i++;
-        if (hijos[i]->llaves.size() == 2*5-1) {  // 2*t - 1, donde t=5 para Árbol B de orden 5
+        if (hijos[i]->llaves.size() == 2 * 5 - 1) {  // 2*t - 1, donde t=5 para Árbol B de orden 5
             dividirHijo(i, hijos[i]);
             if (llaves[i].getDatosClase() < k.getDatosClase()) {
                 i++;
@@ -67,22 +67,37 @@ void nodoB::insertarNoLleno(Silabos k) {
 // Dividir un hijo en dos nodos
 void nodoB::dividirHijo(int i, nodoB *y) {
     nodoB *z = new nodoB(y->hoja);
-    z->llaves.resize(5-1);  // t - 1, donde t=5 para Árbol B de orden 5
+    z->llaves.resize(5 - 1);  // t - 1, donde t=5 para Árbol B de orden 5
 
-    for (int j = 0; j < 5-1; j++) {
-        z->llaves[j] = y->llaves[j+5];
+    for (int j = 0; j < 5 - 1; j++) {
+        z->llaves[j] = y->llaves[j + 5];
     }
 
     if (!y->hoja) {
         z->hijos.resize(5);
         for (int j = 0; j < 5; j++) {
-            z->hijos[j] = y->hijos[j+5];
+            z->hijos[j] = y->hijos[j + 5];
         }
     }
 
-    y->llaves.resize(5-1);
+    y->llaves.resize(5 - 1);
 
     hijos.insert(hijos.begin() + i + 1, z);
 
-    llaves.insert(llaves.begin() + i, y->llaves[5-1]);
+    llaves.insert(llaves.begin() + i, y->llaves[5 - 1]);
+}
+
+// Obtener todos los Silabos en el nodo
+void nodoB::obtenerTodos(vector<Silabos>& resultado) {
+    int i;
+    for (i = 0; i < llaves.size(); i++) {
+        if (!hoja) {
+            hijos[i]->obtenerTodos(resultado);
+        }
+        resultado.push_back(llaves[i]);
+    }
+
+    if (!hoja) {
+        hijos[i]->obtenerTodos(resultado);
+    }
 }

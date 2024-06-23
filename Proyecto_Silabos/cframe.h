@@ -79,7 +79,7 @@ private:
     void Conectar();
     arbolB *arbol;
 
-
+    void MostrarSilabos();
     void mostrarUsuarios();
     listaD<Usuario> listaUsuarios;
     nodoD<Usuario> *actD;
