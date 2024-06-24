@@ -69,6 +69,7 @@ private:
     QString connectionString = QString("Driver={ODBC Driver 18 for SQL Server};Server=tcp:estrudatosii.database.windows.net,1433;Database=ProyectoTest;Uid=rajuria;Pwd={TobiichiOrigami11!};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;");
     QList<Usuario> DescargarUsuarios();
     QList<Clase> DescargarClases();
+    void DescargarSilabos();
     QString Encrypt(QString, int);
     QString Decrypt(QString, int);
     int Key=980487;

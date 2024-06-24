@@ -56,6 +56,7 @@ cframe::cframe(QWidget *parent)
 
 cframe::~cframe()
 {
+    SubirDatos();
     delete ui;
     delete arbol;
 }
@@ -117,6 +118,39 @@ QList<Clase> cframe::DescargarClases()
     return ClasesDescargadas;
 }
 
+void cframe::DescargarSilabos()
+{
+    QSqlQuery *Query = new QSqlQuery();
+    Query->prepare("select * from SilabosClases");
+    Query->exec();
+    string Facultad;
+    while(Query->next())
+    {
+        if(Query->value(3).toString()=="UNITEC")
+        {
+            Facultad="-"+Query->value(2).toString().toStdString();
+        }
+        else
+        {
+            Facultad=Query->value(2).toString().toStdString();
+        }
+            Silabos s(Facultad,
+                      Query->value(1).toString().toStdString(),
+                      Query->value(5).toInt(),  // insertadoPor
+                      Query->value(4).toString().toStdString(),
+                      "\\"+Query->value(4).toString(),
+                      "",
+                      Query->value(6).toString().toStdString(),
+                      Query->value(7).toString().toStdString(),
+                      Query->value(8).toInt(),  // numRevisiones
+                      Query->value(9).toInt(),  // numRechazado
+                      Query->value(10).toInt()   // visibilidad para jefe (numero 4) y para coordinador(numero 5)
+                      );
+            arbol->insertar(s);
+            BA2docx(DescargarSilabo(Query->value(4).toString().left(6)),Query->value(4).toString().left(6)+".docx");
+    }
+}
+
 QString cframe::Encrypt(QString Message, int Key)
 {
     QChar c;
@@ -146,7 +180,7 @@ QByteArray cframe::docx2BA(QString Path)
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
     QFile file(Path);
     if (!file.open(QIODevice::ReadOnly)) {
-        QMessageBox::critical(this, "Error", "No se pudo abrir el archivo");
+        //QMessageBox::critical(this, "Error", "No se pudo abrir el archivo");
         return QByteArray();
     }
 
@@ -160,7 +194,7 @@ void cframe::BA2docx(QByteArray ByteArray, QString NewFile)
 {
     QFile newFile(NewFile);
     if (!newFile.open(QIODevice::WriteOnly)) {
-        QMessageBox::critical(this, "Error", "No se pudo abrir el archivo");
+        //QMessageBox::critical(this, "Error", "No se pudo abrir el archivo");
         return;
     }
     newFile.write(ByteArray);
@@ -170,8 +204,6 @@ void cframe::BA2docx(QByteArray ByteArray, QString NewFile)
 
 void cframe::SubirSilabo(QString CodigoSilabo, QByteArray Archivo)
 {
-    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
-    db.open();
     QSqlQuery query(db);
     query.prepare("INSERT INTO SilabosArchivos(Codigo,Archivo) VALUES(:Codigo,:docxData)");
     query.bindValue(":Codigo", CodigoSilabo);
@@ -180,8 +212,6 @@ void cframe::SubirSilabo(QString CodigoSilabo, QByteArray Archivo)
     {
         QMessageBox::critical(this, "Error", "Error en la base de datos. Error: " + query.lastError().text());
     }
-    db.close();
-    QGuiApplication::restoreOverrideCursor();
 }
 
 QByteArray cframe::DescargarSilabo(QString Codigo)
@@ -203,7 +233,7 @@ QByteArray cframe::DescargarSilabo(QString Codigo)
         byteArray = query.value(0).toByteArray();
     } else
     {
-        QMessageBox::critical(this, "Error", "No existe un archivo con el codigo seleccionado");
+        //QMessageBox::critical(this, "Error", "No existe un archivo con el codigo seleccionado");
     }
     db.close();
     QGuiApplication::restoreOverrideCursor();
@@ -218,6 +248,7 @@ void cframe::Conectar()
     {
         UsuariosRegistrados=DescargarUsuarios();
         ClasesAgregadas=DescargarClases();
+        DescargarSilabos();
         Sedes.clear();
         for(int i=0;i<ClasesAgregadas.size();i++)
         {
@@ -248,7 +279,7 @@ void cframe::SubirDatos()
     //subir Usuarios
     db.open();
     QSqlQuery query(db);
-    query.prepare("Delete FROM SilaboUsuarios");
+    query.prepare("Delete FROM SilabosUsuarios");
     query.exec();
     actD = listaUsuarios.PrimPtr;
     int row = 0;
@@ -263,9 +294,39 @@ void cframe::SubirDatos()
         actD = actD->SigPtr;
         ++row;
     }
+
     //SubirSilabos
-
-
+    query.prepare("Delete FROM SilabosClases");
+    query.exec();
+    query.prepare("Delete FROM SilabosArchivos");
+    query.exec();
+    QString Sede;
+    std::vector<Silabos> silabos = arbol->obtenerTodos();
+    for(int i=0;i<silabos.size();i++)
+    {
+        QString facultad = QString::fromStdString(silabos[i].getFacultad());
+        if (!facultad.isEmpty() && facultad.at(0) == '-') {
+            Sede="UNITEC";
+        } else {
+            Sede="CEUTEC";
+        }
+        query.prepare("Insert into SilabosClases (CodigoClase, Carrera, Facultad, Sede, Nombre, InsertadoPor, Estado, Observacion, NumRevisiones, NumRechazado, Visibilidad) VALUES(:Codigo,:Carrera,:Facultad,:Sede,:Nombre,:InsertadoPor,:Estado,:Observacion,:NumRevisiones,:NumRechazado,:Visibilidad)");
+        //:Codigo,:Carrera,:Facultad,:Sede,:Nombre,:InsertadoPor,:Estado,:Observacion,:NumRevisiones,:NumRechazado,:Visibilidad
+        query.bindValue(":Codigo", QString::fromStdString(silabos[i].getDatosClase()).left(6));
+        query.bindValue(":Carrera", QString::fromStdString(silabos[i].getCarreras()));
+        query.bindValue(":Facultad", QString::fromStdString(silabos[i].getFacultad()));
+        query.bindValue(":Sede", Sede);
+        query.bindValue(":Nombre", QString::fromStdString(silabos[i].getDatosClase()));
+        query.bindValue(":InsertadoPor", silabos[i].getInsertadoPor());
+        query.bindValue(":Estado", QString::fromStdString(silabos[i].getEstado()));
+        query.bindValue(":Observacion", QString::fromStdString(silabos[i].getObservacion()));
+        query.bindValue(":NumRevisiones", silabos[i].getNumRevisiones());
+        query.bindValue(":NumRechazado", silabos[i].getNumRechazados());
+        query.bindValue(":Visibilidad", silabos[i].getVisibilidad());
+        SubirSilabo(QString::fromStdString(silabos[i].getDatosClase()).left(6), docx2BA(silabos[i].getRutaSilabos()));
+        cout<<"Silabo Insertado";
+    }
+    db.close();
 }
 
 void cframe::on_Mbtn_ingresar_clicked(){

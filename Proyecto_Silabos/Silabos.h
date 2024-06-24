@@ -1,3 +1,4 @@
+
 #ifndef SILABOS_H
 #define SILABOS_H
 
@@ -27,7 +28,7 @@ public:
     Silabos() : id(0), numRevisiones(0), numRechazado(0), visibilidad(0) {}
 
     // Constructor parametrizado
-    Silabos(string facultad, string carrera, int insertadoPor, string datosClase, QString rutaSilabos, QString rutaFechas, string estado, string observacion, short numRevisiones, short numRechazado, short visibilidad)
+    Silabos( string facultad, string carrera, int insertadoPor, string datosClase, QString rutaSilabos, QString rutaFechas, string estado, string observacion, short numRevisiones, short numRechazado, short visibilidad)
         : facultad(facultad), carrera(carrera), insertadoPor(insertadoPor), datosClase(datosClase), rutaSilabos(rutaSilabos), rutaFechas(rutaFechas), estado(estado), observacion(observacion), numRevisiones(numRevisiones), numRechazado(numRechazado), visibilidad(visibilidad) {
     }
 
@@ -156,6 +157,6 @@ public:
                   << "Número de Rechazados: " << numRechazado << "\n"
                   << "Visibilidad: " << visibilidad << "\n";
     }
+    const string &getSede() const;
 };
-
 #endif // SILABOS_H
