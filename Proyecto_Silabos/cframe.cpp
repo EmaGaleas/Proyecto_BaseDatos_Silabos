@@ -120,23 +120,28 @@ QList<Silabos> cframe::DescargarListaSilabos()
     Query->exec();
     int CurrentRow=0;
     string Facultad;
+    QString Fechas;
     while(Query->next())
     {
         if(Query->value(3).toString()=="UNITEC")
         {
             Facultad="-"+Query->value(2).toString().toStdString();
+            Fechas="";
         }
         else
         {
             Facultad=Query->value(2).toString().toStdString();
-        }
+            Fechas="";
+            Fechas.append("F");
+            Fechas.append(Query->value(4).toString().left(6));
+            Fechas.append(".docx");
         //Codigo-Nombre-Carrera-Facultad-Sede
         Silabos* Temp = new Silabos(Facultad,
                                     Query->value(1).toString().toStdString(),
                                     Query->value(5).toInt(),  // insertadoPor
                                     Query->value(4).toString().toStdString(),
                                     Query->value(4).toString().left(6)+".docx",
-                                    "",
+                                    "Fechas""",
                                     Query->value(6).toString().toStdString(),
                                     Query->value(7).toString().toStdString(),
                                     Query->value(8).toInt(),  // numRevisiones
@@ -147,12 +152,13 @@ QList<Silabos> cframe::DescargarListaSilabos()
         delete Temp;
         CurrentRow++;
         BA2docx(DescargarSilabo(Query->value(4).toString().left(6)),Query->value(4).toString().left(6)+".docx");
-        QMessageBox::critical(this, "Lista", Query->value(4).toString());
+        }
+        //QMessageBox::critical(this, "Lista", Query->value(4).toString());
     }
     for(int i=0;i<ClasesDescargadas.size();i++)
     {
         arbol->insertar(ClasesDescargadas[i]);
-        QMessageBox::critical(this, "Arbol", QString::fromStdString(ClasesDescargadas[i].getDatosClase()));
+        //QMessageBox::critical(this, "Arbol", QString::fromStdString(ClasesDescargadas[i].getDatosClase()));
     }
     return ClasesDescargadas;
 
@@ -190,7 +196,7 @@ void cframe::DescargarSilabos()
         arbol->insertar(*s);
         delete s;
         BA2docx(DescargarSilabo(Query->value(4).toString().left(6)),Query->value(4).toString().left(6)+".docx");
-        cout<<"Silabo Cargado "<<Query->value(4).toString().toStdString();
+        //cout<<"Silabo Cargado "<<Query->value(4).toString().toStdString();
     }
 }
 
@@ -556,7 +562,7 @@ void cframe::on_Ebtn_enviar_clicked()
     }else{
         //    Silabos(string facultad, string carrera, int insertadoPor, string datosClase, QString rutaSilabos, QString rutaFechas, string estado, string observacion, short numRevisiones, short numRechazado, short visibilidad)
 
-        if (ui->Ecb_facultad->currentIndex() == 2) {
+        if (ui->Ecb_facultad->currentIndex() == 1) {
             facultad = "-" + facultad;
         }
 
@@ -1029,7 +1035,7 @@ void cframe::mostrarSilabosBoard(bool aprobado)
 
         if (aprobado && s.getEstado() == "Aprobar"){
             mostrar=true;
-        }else if(!aprobado && s.getEstado() != "Aprobar"){
+        }else if(s.getEstado() != "Aprobar"){
             mostrar =true;
         }
         if(mostrar){
@@ -1150,9 +1156,10 @@ void cframe::on_Rtw_revision_cellClicked(int row, int column)
                 items<<"..."<<"Aprobado"<<"Correcion Mayor"<<"Correcion Menor";
             }
             ui->Rcb_estadoCambiar->addItems(items);
-        }else if(column ==6 || column==7){//para ver ese archivo
-
-
+        }else if(column ==6 || column==7){
+                QString Ruta = ui->Ftw_feed->item(row, column)->text();
+                //QMessageBox::warning(this, "No posible", Ruta);
+                QDesktopServices::openUrl(QUrl::fromLocalFile(Ruta));
         }else if(column==13 ){
 
             cambiarSilabo( id, ui->Rtw_revision->item(row, 6)->text(),13);
@@ -1191,10 +1198,21 @@ void cframe::cambiarSilabo(int id, QString pathActual, short i)
 
 void cframe::on_Ftw_feed_cellClicked(int row, int column)
 {
-    if(column==6)
+    if(column==6 || column==7)
     {
-        QString Ruta = ui->Ftw_feed->item(row, 6)->text();
-        QMessageBox::warning(this, "No posible", Ruta);
+        QString Ruta = ui->Ftw_feed->item(row, column)->text();
+        //QMessageBox::warning(this, "No posible", Ruta);
+        QDesktopServices::openUrl(QUrl::fromLocalFile(Ruta));
+    }
+}
+
+
+void cframe::on_Btw_dashboard_cellClicked(int row, int column)
+{
+    if(column==6 || column==7)
+    {
+        QString Ruta = ui->Ftw_feed->item(row, column)->text();
+        //QMessageBox::warning(this, "No posible", Ruta);
         QDesktopServices::openUrl(QUrl::fromLocalFile(Ruta));
     }
 }
