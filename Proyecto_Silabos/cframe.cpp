@@ -100,13 +100,13 @@ QList<Clase> cframe::DescargarClases()
 {
     QList<Clase> ClasesDescargadas;
     QSqlQuery *Query = new QSqlQuery();
-    Query->prepare("select * from SilabosClases");
+    Query->prepare("select * from SilabosClasesDisponibles");
     Query->exec();
     int CurrentRow=0;
     while(Query->next())
     {
         //Codigo-Nombre-Carrera-Facultad-Sede
-        Clase* Temp = new Clase(Query->value(0).toString(),Query->value(4).toString(),Query->value(1).toString(),Query->value(2).toString(),Query->value(3).toString());
+        Clase* Temp = new Clase(Query->value(0).toString(),Query->value(1).toString(),Query->value(2).toString(),Query->value(3).toString(),Query->value(4).toString());
         ClasesDescargadas.append(*Temp);
         delete Temp;
         CurrentRow++;
@@ -120,6 +120,7 @@ void cframe::DescargarSilabos()
     Query->prepare("select * from SilabosClases");
     Query->exec();
     string Facultad;
+
     while(Query->next())
     {
         if(Query->value(3).toString()=="UNITEC")
@@ -130,11 +131,11 @@ void cframe::DescargarSilabos()
         {
             Facultad=Query->value(2).toString().toStdString();
         }
-        Silabos s(Facultad,
+        Silabos* s = new Silabos(Facultad,
                   Query->value(1).toString().toStdString(),
                   Query->value(5).toInt(),  // insertadoPor
                   Query->value(4).toString().toStdString(),
-                  "\\"+Query->value(4).toString(),
+                  Query->value(4).toString().left(6)+".docx",
                   "",
                   Query->value(6).toString().toStdString(),
                   Query->value(7).toString().toStdString(),
@@ -142,8 +143,10 @@ void cframe::DescargarSilabos()
                   Query->value(9).toInt(),  // numRechazado
                   Query->value(10).toInt()   // visibilidad para jefe (numero 4) y para coordinador(numero 5)
                   );
-        arbol->insertar(s);
+        arbol->insertar(*s);
+        delete s;
         BA2docx(DescargarSilabo(Query->value(4).toString().left(6)),Query->value(4).toString().left(6)+".docx");
+        cout<<"Silabo Cargado "<<Query->value(4).toString().toStdString();
     }
 }
 
@@ -195,7 +198,6 @@ void cframe::BA2docx(QByteArray ByteArray, QString NewFile)
     }
     newFile.write(ByteArray);
     newFile.close();
-
 }
 
 void cframe::SubirSilabo(QString CodigoSilabo, QByteArray Archivo)
@@ -320,7 +322,7 @@ void cframe::SubirDatos()
         query.bindValue(":NumRechazado", silabos[i].getNumRechazados());
         query.bindValue(":Visibilidad", silabos[i].getVisibilidad());
         SubirSilabo(QString::fromStdString(silabos[i].getDatosClase()).left(6), docx2BA(silabos[i].getRutaSilabos()));
-        cout<<"Silabo Insertado";
+        query.exec();
     }
     db.close();
 }
