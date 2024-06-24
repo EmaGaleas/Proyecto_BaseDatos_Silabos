@@ -53,10 +53,14 @@ private slots:
 
     void on_Itw_usuarios_cellClicked(int row, int column);
 
+    void on_Brb_aprobados_clicked();
+
     void on_Rtw_revision_cellClicked(int row, int column);
 
 private:
     Ui::cframe *ui;
+    void on_Brb_proceso_clicked();
+
     void visibilidad();
     //variables para actualizar el cframe admin
     QString nombre,numero_cuenta,tipo_usuario;
@@ -79,6 +83,7 @@ private:
     void SubirSilabo(QString, QByteArray);
     QByteArray DescargarSilabo(QString);
     void Conectar();
+    void Su();
     arbolB *arbol;
 
     void MostrarSilabos();
@@ -87,5 +92,10 @@ private:
     nodoD<Usuario> *actD;
     nodoD<Usuario> *ultD;
     bool cuentaNumero(const std::string &tt);
+
+    void SubirDatos();
+    void mostrarSilabosBoard(bool aprobado);
+    void mostrarSilabosFeed(QString cuenta);
+    short tipo;
 };
 #endif // CFRAME_H
