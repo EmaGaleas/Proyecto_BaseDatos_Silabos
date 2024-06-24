@@ -531,12 +531,12 @@ void cframe::on_Ebtn_archivo_clicked()
 
 void cframe::on_Ebtn_fechas_clicked()
 {
-    QString filePath = cargarArchivo(ui->Ecb_carrera->currentText(),false);
+    QString filePath = cargarArchivo(ui->Ecb_carrera->currentText(),true);
     if (filePath=="...") {
         QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!\n");
 
     }else{
-        ui->Elbl_path_fechas->setText(cargarArchivo(filePath,true));
+        ui->Elbl_path_fechas->setText(filePath);
 
     }
 
