@@ -94,8 +94,6 @@ void cframe::visibilidad()
     }
 }
 
-
-
 QList<Clase> cframe::DescargarClases()
 {
     QList<Clase> ClasesDescargadas;
@@ -397,21 +395,18 @@ void cframe::on_Mbtn_ingresar_clicked(){
             ui->Albl_tipo->setText(ui->Mcb_tipo->currentText());
             ui->Albl_username->setText(ui->Mle_name->text());
 
+            QStringList acciones;
             if(ui->Mcb_tipo->currentIndex()==1){
-                QStringList acciones;
                 acciones << "..." << "FEED" << "ENTREGAR";
                 ui->Acb_acciones->addItems(acciones);
 
             }else if(ui->Mcb_tipo->currentIndex()==2||ui->Mcb_tipo->currentIndex()==3){
-                QStringList acciones;
                 acciones << "..." << "BOARD" <<"USUARIOS";
                 ui->Acb_acciones->addItems(acciones);
             }else if(ui->Mcb_tipo->currentIndex()==6 ){
-                QStringList acciones;
                 acciones << "..." << "REVISION"<<"USUARIOS";
                 ui->Acb_acciones->addItems(acciones);
             }else if(ui->Mcb_tipo->currentIndex()==4||ui->Mcb_tipo->currentIndex()==5){
-                QStringList acciones;
                 acciones << "..." << "REVISION";
                 ui->Acb_acciones->addItems(acciones);
             }
@@ -466,10 +461,12 @@ void cframe::on_Acb_acciones_currentIndexChanged(const QString &arg1)
 {
 
     if(arg1=="ENTREGAR"){
+        QStringList item;
+        item<<"..."<<"UNITEC"<<"CEUTEC";
+        ui->Ecb_sede->addItems(item);
         ui->tabWidget->setCurrentIndex(1);
     }else if(arg1=="REVISION"){
         //añadi de aqui
-        QMessageBox::information(this,"asa",""+QString::number(tipo));
         QStringList items;
         ui->Rcb_estadoCambiar->clear();
         if(tipo==4 || tipo==5){//jefe o coordinador
@@ -505,30 +502,31 @@ void cframe::on_Acb_acciones_currentIndexChanged(const QString &arg1)
 
 void cframe::on_Ebtn_archivo_clicked()
 {
-    if(ui->Ecb_sede->currentText() == "..."||ui->Ecb_carrera->currentText() == "..."||ui->Ecb_facultad->currentText() == "..."||ui->Ecb_clases->currentText() == "..."){
-        QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!");
 
-    }else{
-        QString filePath = QFileDialog::getOpenFileName(this, "Explorador de Archivos DOC", QDir::homePath(), "Document Files (*.doc *.docx)");
-        if (!filePath.isEmpty()) {
+        QString filePath = cargarArchivo(ui->Ecb_carrera->currentText(),false);
+        if (filePath=="...") {
+            QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!\n");
+
+        }else{
             ui->Elbl_path_archivo->setText(filePath);
+
         }
-    }
+
 
 
 }
 
 void cframe::on_Ebtn_fechas_clicked()
 {
-    if(ui->Ecb_sede->currentText() == "..."||ui->Ecb_carrera->currentText() == "..."||ui->Ecb_facultad->currentText() == "..."||ui->Ecb_clases->currentText() == "..."){
-        QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!");
+    QString filePath = cargarArchivo(ui->Ecb_carrera->currentText(),false);
+    if (filePath=="...") {
+        QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!\n");
 
     }else{
-        QString filePath = QFileDialog::getOpenFileName(this, "Explorador de Archivos DOC", QDir::homePath(), "Document Files (*.doc *.docx)");
-        if (!filePath.isEmpty()) {
-            ui->Elbl_path_fechas->setText(filePath);
-        }
+        ui->Elbl_path_fechas->setText(cargarArchivo(filePath,true));
+
     }
+
 
 }
 
@@ -538,9 +536,9 @@ void cframe::on_Ebtn_enviar_clicked()
     QString carrera = ui->Ecb_carrera->currentText();
     QString datosClase = ui->Ecb_clases->currentText();
     QString path_silabo=ui->Elbl_path_archivo->text();
-    QString path_fecha = (ui->Ecb_sede->currentIndex() != 1) ? "NO APLICA" : ui->Elbl_path_fechas->text();
+    QString path_fecha = (ui->Ecb_sede->currentIndex() != 1) ? "" : ui->Elbl_path_fechas->text();
 
-    if(path_silabo.isEmpty()){
+    if(path_silabo=="..." || (ui->Ecb_sede->currentIndex()==2 && path_fecha=="...")){
         QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!");
     }else{
         //    Silabos(string facultad, string carrera, int insertadoPor, string datosClase, QString rutaSilabos, QString rutaFechas, string estado, string observacion, short numRevisiones, short numRechazado, short visibilidad)
@@ -555,7 +553,7 @@ void cframe::on_Ebtn_enviar_clicked()
                   datosClase.toStdString(),
                   path_silabo,
                   path_fecha,
-                  "no aplica",
+                  "Prerevision",
                   "no aplica",
                   0,  // numRevisiones
                   0,  // numRechazado
@@ -564,16 +562,16 @@ void cframe::on_Ebtn_enviar_clicked()
 
         // Insertar el Silabos en el árbol
         arbol->insertar(s);
-
+        //volver a inicializar en 0 los indices para que se muestren ...
+        ui->Ecb_carrera->setCurrentIndex(0);
+        ui->Ecb_facultad->setCurrentIndex(0);
+        ui->Ecb_sede->setCurrentIndex(0);
+        ui->Ecb_clases->setCurrentIndex(0);
+        ui->Elbl_path_fechas->setText("...");
+        ui->Elbl_path_archivo->setText("...");
     }
 
-    //volver a inicializar en 0 los indices para que se muestren ...
-    ui->Ecb_carrera->setCurrentIndex(0);
-    ui->Ecb_facultad->setCurrentIndex(0);
-    ui->Ecb_sede->setCurrentIndex(0);
-    ui->Ecb_clases->setCurrentIndex(0);
-    ui->Elbl_path_fechas->setText("...");
-    ui->Elbl_path_archivo->setText("...");
+
 
 
 }
@@ -688,13 +686,16 @@ void cframe::on_Ecb_carrera_currentIndexChanged(const QString &arg1)
 void cframe::on_Rbtn_cambiar_clicked()
 {
 
-    if(ui->Rle_seleccion->text().isEmpty()||ui->Rle_comentarios->text().isEmpty()||ui->Rle_estadoActual->text().isEmpty()||ui->Rlbl_estado->text().isEmpty()||ui->Rcb_estadoCambiar->currentText() == "..."){
+    if(ui->Rle_seleccion->text().isEmpty()||ui->Rle_comentarios->text().isEmpty()||ui->Rle_estadoActual->text().isEmpty()||ui->Rlbl_estado->text().isEmpty()||ui->Ecb_sede->currentText() == "..."){
         QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!");
     }else{
         cambiarEstado=true;
         modificarDatosSilabo(id,"QString pathNuevo");
         QMessageBox::information(this,"Datos congruetes","Datos han sido actualizados");
-        //limpiar casillas
+        ui->Rle_seleccion->setText("");
+        ui->Rle_comentarios->setText("");
+        ui->Rle_estadoActual->setText("");
+        ui->Rcb_estadoCambiar->setCurrentIndex(0);
     }
 
 }
@@ -742,6 +743,7 @@ void cframe::modificarDatosSilabo(int id, QString pathNuevo)
         if(nuevoNumRevisiones>2){
             QMessageBox::warning(this,"RECHAZADO","El silabo "+QString::fromStdString(s->getDatosClase()+"\nHa excedido el numero de revisiones\nNuevo estado: RECHAZADO"));
             s->setEstado("Rechazar");
+            s->setNumRechazado(s->getNumRechazados()+1);
             cambiarEstado=false;
             return;
         }
@@ -757,6 +759,44 @@ void cframe::modificarDatosSilabo(int id, QString pathNuevo)
 
 
 }
+QString cframe::cargarArchivo(QString nombre, bool fechas)
+{
+    if( ui->Ecb_clases->currentText() == "...")
+    {
+        QMessageBox::critical(this, "Error", "Por favor llenar todos los Espacios!");
+    }
+    else
+    {
+        QString filePath = QFileDialog::getOpenFileName(this, "Explorador de Archivos DOC", QDir::homePath(), "Document Files (*.doc *.docx)");
+        if (!filePath.isEmpty())
+        {
+//            QFileInfo fileInfo(filePath);
+//            QString baseName = fileInfo.baseName(); // Obtiene el nombre del archivo sin la extensión
+
+//            QString expectedName;
+//            if (fechas)
+//            {
+//                expectedName = nombre + "_FECHAS";
+//            }
+//            else
+//            {
+//                expectedName = nombre;
+//            }
+
+//            // Comparamos el nombre del archivo sin la extensión
+//            if (baseName == expectedName)
+//            {
+                return filePath;
+//            }
+//            else
+//            {
+//                QMessageBox::critical(this, "Error", "El nombre del archivo no coincide con el parámetro esperado.");
+//                return "...";
+//            }
+        }
+    }
+}
+
 
 void cframe::on_Abtn_cambioContra_clicked()
 {
@@ -1044,7 +1084,7 @@ void cframe::on_Rtw_revision_cellClicked(int row, int column)
     if (s != nullptr) {
         ui->Rle_seleccion->setText(ui->Rtw_revision->item(row, column)->text());
         ui->Rle_estadoActual->setText(QString::fromStdString(s->getEstado()));
-        if(tipo ==7){
+        if(tipo ==7 && column!=14 && column !=13){
             QStringList items;
             ui->Rcb_estadoCambiar->clear();
             if( ui->Rtw_revision->item(row, 8)->text().toStdString()=="Aprobado"){
@@ -1054,8 +1094,35 @@ void cframe::on_Rtw_revision_cellClicked(int row, int column)
                 items<<"..."<<"Aprobado"<<"Correcion Mayor"<<"Correcion Menor";
             }
             ui->Rcb_estadoCambiar->addItems(items);
+        }else if(column ==6 || column==7){//para ver ese archivo
+
+
+        }else if(column==13 ){
+
+           cambiarSilabo( id, ui->Rtw_revision->item(row, 6)->text());
+        }else if(column==14){
+            cambiarSilabo( id, ui->Rtw_revision->item(row, 7)->text());
+
+        }else{
+
+
+
         }
+
+
     }
 
+}
+void cframe::cambiarSilabo(int id, QString pathActual)
+{
+    QString filePath = QFileDialog::getOpenFileName(this, "Explorador de Archivos PDF", QDir::homePath(), "PDF Files (*.pdf)");
+    if (pathActual==filePath) {
+        QMessageBox::warning(this, "No posible", "Ha seleccionado el mismo silabo");
+    }else if(!filePath.isEmpty()){
+        cambiarPath=true;
+        modificarDatosSilabo(id,filePath);
+    }else{
+        QMessageBox::warning(this, "No posible", "No ha seleccionado");
+    }
 }
 

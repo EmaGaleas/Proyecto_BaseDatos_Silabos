@@ -104,5 +104,9 @@ private:
     bool cambiarPath=false, cambiarEstado=false;
     void modificarDatosSilabo(int id,QString pathNuevo);
     int id=0;
+
+    QString cargarArchivo(QString nombre,bool);
+
+    void cambiarSilabo(int id, QString pathActual);
 };
 #endif // CFRAME_H
