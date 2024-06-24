@@ -119,10 +119,19 @@ QList<Silabos> cframe::DescargarListaSilabos()
     Query->prepare("select * from SilabosClases");
     Query->exec();
     int CurrentRow=0;
+    string Facultad;
     while(Query->next())
     {
+        if(Query->value(3).toString()=="UNITEC")
+        {
+            Facultad="-"+Query->value(2).toString().toStdString();
+        }
+        else
+        {
+            Facultad=Query->value(2).toString().toStdString();
+        }
         //Codigo-Nombre-Carrera-Facultad-Sede
-        Silabos* Temp = new Silabos("Facultad",
+        Silabos* Temp = new Silabos(Facultad,
                                     Query->value(1).toString().toStdString(),
                                     Query->value(5).toInt(),  // insertadoPor
                                     Query->value(4).toString().toStdString(),
@@ -1176,6 +1185,17 @@ void cframe::cambiarSilabo(int id, QString pathActual, short i)
         }
     }else{
         QMessageBox::warning(this, "No posible", "No ha seleccionado");
+    }
+}
+
+
+void cframe::on_Ftw_feed_cellClicked(int row, int column)
+{
+    if(column==6)
+    {
+        QString Ruta = ui->Ftw_feed->item(row, 6)->text();
+        QMessageBox::warning(this, "No posible", Ruta);
+        QDesktopServices::openUrl(QUrl::fromLocalFile(Ruta));
     }
 }
 
