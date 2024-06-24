@@ -114,13 +114,49 @@ QList<Clase> cframe::DescargarClases()
     return ClasesDescargadas;
 }
 
+QList<Silabos> cframe::DescargarListaSilabos()
+{
+    QList<Silabos> ClasesDescargadas;
+    QSqlQuery *Query = new QSqlQuery();
+    Query->prepare("select * from SilabosClases");
+    Query->exec();
+    int CurrentRow=0;
+    while(Query->next())
+    {
+        //Codigo-Nombre-Carrera-Facultad-Sede
+        Silabos* Temp = new Silabos("Facultad",
+                  Query->value(1).toString().toStdString(),
+                  Query->value(5).toInt(),  // insertadoPor
+                  Query->value(4).toString().toStdString(),
+                  Query->value(4).toString().left(6)+".docx",
+                  "",
+                  Query->value(6).toString().toStdString(),
+                  Query->value(7).toString().toStdString(),
+                  Query->value(8).toInt(),  // numRevisiones
+                  Query->value(9).toInt(),  // numRechazado
+                  Query->value(10).toInt()   // visibilidad para jefe (numero 4) y para coordinador(numero 5)
+                  );
+        ClasesDescargadas.append(*Temp);
+        delete Temp;
+        CurrentRow++;
+        BA2docx(DescargarSilabo(Query->value(4).toString().left(6)),Query->value(4).toString().left(6)+".docx");
+        QMessageBox::critical(this, "Lista", Query->value(4).toString());
+    }
+    for(int i=0;i<ClasesDescargadas.size();i++)
+    {
+        arbol->insertar(ClasesDescargadas[i]);
+        QMessageBox::critical(this, "Arbol", QString::fromStdString(ClasesDescargadas[i].getDatosClase()));
+    }
+    return ClasesDescargadas;
+
+}
+
 void cframe::DescargarSilabos()
 {
     QSqlQuery *Query = new QSqlQuery();
     Query->prepare("select * from SilabosClases");
     Query->exec();
     string Facultad;
-
     while(Query->next())
     {
         if(Query->value(3).toString()=="UNITEC")
@@ -143,6 +179,7 @@ void cframe::DescargarSilabos()
                   Query->value(9).toInt(),  // numRechazado
                   Query->value(10).toInt()   // visibilidad para jefe (numero 4) y para coordinador(numero 5)
                   );
+        QMessageBox::critical(this, "Arbol", Query->value(4).toString());
         arbol->insertar(*s);
         delete s;
         BA2docx(DescargarSilabo(Query->value(4).toString().left(6)),Query->value(4).toString().left(6)+".docx");
@@ -215,7 +252,7 @@ void cframe::SubirSilabo(QString CodigoSilabo, QByteArray Archivo)
 QByteArray cframe::DescargarSilabo(QString Codigo)
 {
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
-    db.open();
+    //db.open();
     QSqlQuery query(db);
     query.prepare("SELECT Archivo FROM SilabosArchivos WHERE Codigo = :code");
     query.bindValue(":code", Codigo);
@@ -233,7 +270,7 @@ QByteArray cframe::DescargarSilabo(QString Codigo)
     {
         //QMessageBox::critical(this, "Error", "No existe un archivo con el codigo seleccionado");
     }
-    db.close();
+    //db.close();
     QGuiApplication::restoreOverrideCursor();
     return byteArray;
 }
@@ -246,7 +283,7 @@ void cframe::Conectar()
     {
         UsuariosRegistrados=DescargarUsuarios();
         ClasesAgregadas=DescargarClases();
-        DescargarSilabos();
+        SilabosDescargados=DescargarListaSilabos();
         Sedes.clear();
         for(int i=0;i<ClasesAgregadas.size();i++)
         {
@@ -261,7 +298,8 @@ void cframe::Conectar()
         ui->Ecb_sede->addItem("...");
         ui->Ecb_sede->addItems(Sedes);
         QGuiApplication::restoreOverrideCursor();
-        QMessageBox::information(this,"Exito!","Conectado a Azure SQL Database");
+        //DescargarSilabos();
+        //QMessageBox::information(this,"Exito!","Conectado a Azure SQL Database");
     }
     else
     {
@@ -303,6 +341,7 @@ void cframe::SubirDatos()
     for(int i=0;i<silabos.size();i++)
     {
         QString facultad = QString::fromStdString(silabos[i].getFacultad());
+
         if (!facultad.isEmpty() && facultad.at(0) == '-') {
             Sede="UNITEC";
         } else {
