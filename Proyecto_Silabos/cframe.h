@@ -59,6 +59,10 @@ private slots:
 
     void on_Ftw_feed_cellClicked(int row, int column);
 
+    void on_Btw_dashboard_cellClicked(int row, int column);
+
+    void on_Ftw_feed_cellActivated(int row, int column);
+
 private:
     Ui::cframe *ui;
     void on_Brb_proceso_clicked();

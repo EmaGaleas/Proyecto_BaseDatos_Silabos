@@ -1178,7 +1178,7 @@ void cframe::on_Rtw_revision_cellClicked(int row, int column)
 }
 void cframe::cambiarSilabo(int id, QString pathActual, short i)
 {
-    QString filePath = QFileDialog::getOpenFileName(this, "Explorador de Archivos PDF", QDir::homePath(), "PDF Files (*.pdf)");
+    QString filePath = QFileDialog::getOpenFileName(this, "Explorador de Archivos DOC", QDir::homePath(), "Document Files (*.doc *.docx)");
     if (pathActual==filePath) {
         QMessageBox::warning(this, "No posible", "Ha seleccionado el mismo silabo");
     }else if(!filePath.isEmpty()){
@@ -1198,11 +1198,21 @@ void cframe::cambiarSilabo(int id, QString pathActual, short i)
 
 void cframe::on_Ftw_feed_cellClicked(int row, int column)
 {
+    id = ui->Ftw_feed->item(row, 1)->text().toInt();
     if(column==6 || column==7)
     {
         QString Ruta = ui->Ftw_feed->item(row, column)->text();
         //QMessageBox::warning(this, "No posible", Ruta);
         QDesktopServices::openUrl(QUrl::fromLocalFile(Ruta));
+    }else if(column==13 || column==14){
+        cambiarPath=true;
+        if(column==13 ){
+
+                    cambiarSilabo( id, ui->Ftw_feed->item(row, 6)->text(),13);
+                }else if(column==14){
+                    cambiarSilabo( id, ui->Ftw_feed->item(row, 7)->text(),14);
+
+                }
     }
 }
 
@@ -1210,10 +1220,16 @@ void cframe::on_Ftw_feed_cellClicked(int row, int column)
 void cframe::on_Btw_dashboard_cellClicked(int row, int column)
 {
     if(column==6 || column==7)
-    {
-        QString Ruta = ui->Ftw_feed->item(row, column)->text();
-        //QMessageBox::warning(this, "No posible", Ruta);
-        QDesktopServices::openUrl(QUrl::fromLocalFile(Ruta));
-    }
+      {
+          QString Ruta = ui->Ftw_feed->item(row, column)->text();
+          //QMessageBox::warning(this, "No posible", Ruta);
+          QDesktopServices::openUrl(QUrl::fromLocalFile(Ruta));
+      }
+}
+
+
+void cframe::on_Ftw_feed_cellActivated(int row, int column)
+{
+
 }
 
