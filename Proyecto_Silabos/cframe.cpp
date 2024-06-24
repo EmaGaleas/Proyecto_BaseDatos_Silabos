@@ -177,7 +177,7 @@ void cframe::DescargarSilabos()
                   Query->value(9).toInt(),  // numRechazado
                   Query->value(10).toInt()   // visibilidad para jefe (numero 4) y para coordinador(numero 5)
                   );
-        QMessageBox::critical(this, "Arbol", Query->value(4).toString());
+      //  QMessageBox::critical(this, "Arbol", Query->value(4).toString());
         arbol->insertar(*s);
         delete s;
         BA2docx(DescargarSilabo(Query->value(4).toString().left(6)),Query->value(4).toString().left(6)+".docx");
@@ -409,6 +409,9 @@ void cframe::on_Mbtn_ingresar_clicked(){
             }else if(ui->Mcb_tipo->currentIndex()==4||ui->Mcb_tipo->currentIndex()==5){
                 acciones << "..." << "REVISION";
                 ui->Acb_acciones->addItems(acciones);
+            }else if(ui->Mcb_tipo->currentIndex()==7){
+                acciones << "..." << "REVISION";
+                ui->Acb_acciones->addItems(acciones);
             }
             ui->Mle_cuenta->clear();
             ui->Mle_contra->clear();
@@ -462,6 +465,7 @@ void cframe::on_Acb_acciones_currentIndexChanged(const QString &arg1)
 
     if(arg1=="ENTREGAR"){
         QStringList item;
+        ui->Ecb_sede->clear();
         item<<"..."<<"UNITEC"<<"CEUTEC";
         ui->Ecb_sede->addItems(item);
         ui->tabWidget->setCurrentIndex(1);
@@ -686,7 +690,7 @@ void cframe::on_Ecb_carrera_currentIndexChanged(const QString &arg1)
 void cframe::on_Rbtn_cambiar_clicked()
 {
 
-    if(ui->Rle_seleccion->text().isEmpty()||ui->Rle_comentarios->text().isEmpty()||ui->Rle_estadoActual->text().isEmpty()||ui->Rlbl_estado->text().isEmpty()||ui->Ecb_sede->currentText() == "..."){
+    if(ui->Rle_seleccion->text().isEmpty()||ui->Rle_comentarios->text().isEmpty()||ui->Rle_estadoActual->text().isEmpty() || ui->Rcb_estadoCambiar->currentText() == "..."){
         QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!");
     }else{
         cambiarEstado=true;
@@ -753,6 +757,7 @@ void cframe::modificarDatosSilabo(int id, QString pathNuevo)
         s->setNumRevisiones(nuevoNumRevisiones);
 
         cambiarEstado=false;
+        MostrarSilabos();
         return;
 
     }
@@ -968,7 +973,7 @@ void cframe::on_Itw_usuarios_cellClicked(int row, int column)
 void cframe::mostrarSilabosBoard(bool aprobado)
 {
     std::vector<Silabos> silabos = arbol->obtenerTodos();
-
+    ui->Btw_dashboard->clear();
     ui->Btw_dashboard->setRowCount(0);
     ui->Btw_dashboard->setColumnCount(13);
 
