@@ -102,11 +102,11 @@ private:
     short tipo;
 
     bool cambiarPath=false, cambiarEstado=false;
-    void modificarDatosSilabo(int id,QString pathNuevo);
+    void modificarDatosSilabo(int id,QString pathNuevo, bool silabo);
     int id=0;
 
     QString cargarArchivo(QString nombre,bool);
 
-    void cambiarSilabo(int id, QString pathActual);
+    void cambiarSilabo(int id, QString pathActual,short i);
 };
 #endif // CFRAME_H

@@ -123,17 +123,17 @@ QList<Silabos> cframe::DescargarListaSilabos()
     {
         //Codigo-Nombre-Carrera-Facultad-Sede
         Silabos* Temp = new Silabos("Facultad",
-                  Query->value(1).toString().toStdString(),
-                  Query->value(5).toInt(),  // insertadoPor
-                  Query->value(4).toString().toStdString(),
-                  Query->value(4).toString().left(6)+".docx",
-                  "",
-                  Query->value(6).toString().toStdString(),
-                  Query->value(7).toString().toStdString(),
-                  Query->value(8).toInt(),  // numRevisiones
-                  Query->value(9).toInt(),  // numRechazado
-                  Query->value(10).toInt()   // visibilidad para jefe (numero 4) y para coordinador(numero 5)
-                  );
+                                    Query->value(1).toString().toStdString(),
+                                    Query->value(5).toInt(),  // insertadoPor
+                                    Query->value(4).toString().toStdString(),
+                                    Query->value(4).toString().left(6)+".docx",
+                                    "",
+                                    Query->value(6).toString().toStdString(),
+                                    Query->value(7).toString().toStdString(),
+                                    Query->value(8).toInt(),  // numRevisiones
+                                    Query->value(9).toInt(),  // numRechazado
+                                    Query->value(10).toInt()   // visibilidad para jefe (numero 4) y para coordinador(numero 5)
+                                    );
         ClasesDescargadas.append(*Temp);
         delete Temp;
         CurrentRow++;
@@ -166,18 +166,18 @@ void cframe::DescargarSilabos()
             Facultad=Query->value(2).toString().toStdString();
         }
         Silabos* s = new Silabos(Facultad,
-                  Query->value(1).toString().toStdString(),
-                  Query->value(5).toInt(),  // insertadoPor
-                  Query->value(4).toString().toStdString(),
-                  Query->value(4).toString().left(6)+".docx",
-                  "",
-                  Query->value(6).toString().toStdString(),
-                  Query->value(7).toString().toStdString(),
-                  Query->value(8).toInt(),  // numRevisiones
-                  Query->value(9).toInt(),  // numRechazado
-                  Query->value(10).toInt()   // visibilidad para jefe (numero 4) y para coordinador(numero 5)
-                  );
-      //  QMessageBox::critical(this, "Arbol", Query->value(4).toString());
+                                 Query->value(1).toString().toStdString(),
+                                 Query->value(5).toInt(),  // insertadoPor
+                                 Query->value(4).toString().toStdString(),
+                                 Query->value(4).toString().left(6)+".docx",
+                                 "",
+                                 Query->value(6).toString().toStdString(),
+                                 Query->value(7).toString().toStdString(),
+                                 Query->value(8).toInt(),  // numRevisiones
+                                 Query->value(9).toInt(),  // numRechazado
+                                 Query->value(10).toInt()   // visibilidad para jefe (numero 4) y para coordinador(numero 5)
+                                 );
+        //  QMessageBox::critical(this, "Arbol", Query->value(4).toString());
         arbol->insertar(*s);
         delete s;
         BA2docx(DescargarSilabo(Query->value(4).toString().left(6)),Query->value(4).toString().left(6)+".docx");
@@ -507,14 +507,14 @@ void cframe::on_Acb_acciones_currentIndexChanged(const QString &arg1)
 void cframe::on_Ebtn_archivo_clicked()
 {
 
-        QString filePath = cargarArchivo(ui->Ecb_carrera->currentText(),false);
-        if (filePath=="...") {
-            QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!\n");
+    QString filePath = cargarArchivo(ui->Ecb_carrera->currentText(),false);
+    if (filePath=="...") {
+        QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!\n");
 
-        }else{
-            ui->Elbl_path_archivo->setText(filePath);
+    }else{
+        ui->Elbl_path_archivo->setText(filePath);
 
-        }
+    }
 
 
 
@@ -558,10 +558,10 @@ void cframe::on_Ebtn_enviar_clicked()
                   path_silabo,
                   path_fecha,
                   "Prerevision",
-                  "no aplica",
+                  "NO APLICA",
                   0,  // numRevisiones
                   0,  // numRechazado
-                  45   // visibilidad para jefe (numero 4) y para coordinador(numero 5)
+                  0   // veces revisado de forma general
                   );
 
         // Insertar el Silabos en el árbol
@@ -588,7 +588,7 @@ void cframe::MostrarSilabos() {
     QStringList headers;
     headers <<"SEDE"<< "ID" << "Facultad" << "Carrera" << "Insertado Por" << "Datos Clase"
            << "Ruta Silabos" << "Ruta Fechas" << "Estado" << "Observación"
-           << "Número de Revisiones" << "Número de Rechazados" << "Ubicacion"
+           << "# Revisiones Consultor" << "Número de Rechazados" << "# Revisiones General"
            << "Cambiar Silabo"<<"Cambiar Fechas";
     ui->Rtw_revision->setHorizontalHeaderLabels(headers);
     bool mostrar=false;
@@ -694,7 +694,7 @@ void cframe::on_Rbtn_cambiar_clicked()
         QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!");
     }else{
         cambiarEstado=true;
-        modificarDatosSilabo(id,"QString pathNuevo");
+        modificarDatosSilabo(id,"QString pathNuevo",false);
         QMessageBox::information(this,"Datos congruetes","Datos han sido actualizados");
         ui->Rle_seleccion->setText("");
         ui->Rle_comentarios->setText("");
@@ -703,7 +703,7 @@ void cframe::on_Rbtn_cambiar_clicked()
     }
 
 }
-void cframe::modificarDatosSilabo(int id, QString pathNuevo)
+void cframe::modificarDatosSilabo(int id, QString pathNuevo, bool silabo)
 {
     Silabos* s = arbol->buscar(id);
     if (s == nullptr) {
@@ -715,21 +715,30 @@ void cframe::modificarDatosSilabo(int id, QString pathNuevo)
         }else{
 
             if(ui->tabWidget->currentIndex() == 2){
-                s->setRutaSilabos(pathNuevo);
+                if(silabo){
+                    s->setRutaSilabos(pathNuevo);
+                }else{
+                    s->setRutaFechas(pathNuevo);
+                }
                 cambiarPath=false;
                 MostrarSilabos();
 
             }else{
-                if(s->getNumRevisiones()>=2){
-                    QMessageBox::warning(this,"RECHAZADO","El silabo "+QString::fromStdString(s->getDatosClase()+"\nHa excedido el numero de revisiones\nRealice el proceso de ENTREGA de nuevo"));
-                    s->setEstado("Rechazar");
-                    return;
+                //                if(s->getNumRevisiones()>=2){
+                //                    QMessageBox::warning(this,"RECHAZADO","El silabo "+QString::fromStdString(s->getDatosClase()+"\nHa excedido el numero de revisiones\nRealice el proceso de ENTREGA de nuevo"));
+                //                    s->setEstado("Rechazar");
+                //                    return;
+                //                }
+                if(silabo){
+                    s->setRutaSilabos(pathNuevo);
+                }else{
+                    s->setRutaFechas(pathNuevo);
                 }
-                s->setRutaSilabos(pathNuevo);
                 cambiarPath=false;
                 s->setEstado("Prerevision");
-                s->setNumRevisiones(s->getNumRevisiones()+1);
+                //s->setNumRevisiones(s->getNumRevisiones()+1);
                 s->setObservacion("Reloaded");
+                s->setVisibilidad(s->getVisibilidad()+1);
                 mostrarSilabosFeed(ui->Albl_cuenta->text());
 
             }
@@ -742,20 +751,44 @@ void cframe::modificarDatosSilabo(int id, QString pathNuevo)
         int nuevoNumRevisiones=s->getNumRevisiones();
 
         if(tipo==6 && nuevoEstado=="Listo para revision 1"){
+            s->setVisibilidad(s->getVisibilidad()+1);
             nuevoNumRevisiones++;
         }
-        if(nuevoNumRevisiones>2){
-            QMessageBox::warning(this,"RECHAZADO","El silabo "+QString::fromStdString(s->getDatosClase()+"\nHa excedido el numero de revisiones\nNuevo estado: RECHAZADO"));
-            s->setEstado("Rechazar");
+        if (nuevoNumRevisiones > 2) {
+            QMessageBox::StandardButton reply;
+            reply = QMessageBox::question(this, "Revisión Excedida",
+                                          "El silabo " + QString::fromStdString(s->getDatosClase()) +
+                                          "\nHa excedido el número de revisiones.\n¿Desea reiniciar el contador?",
+                                          QMessageBox::Yes | QMessageBox::No);
+
+            if (reply == QMessageBox::Yes) {
+                s->setNumRevisiones(0);
+                s->setEstado("Prerevision");
+
+
+            } else {
+                s->setEstado("Rechazar");
+
+            }
             s->setNumRechazado(s->getNumRechazados()+1);
             cambiarEstado=false;
+            s->setVisibilidad(s->getVisibilidad()+1);
+            MostrarSilabos();
+
             return;
         }
+        //        if(nuevoNumRevisiones>2){
+        //            QMessageBox::warning(this,"RECHAZADO","El silabo "+QString::fromStdString(s->getDatosClase()+"\nHa excedido el numero de revisiones\nNuevo estado: RECHAZADO"));
+        //            s->setEstado("Rechazar");
+        //            s->setNumRechazado(s->getNumRechazados()+1);
+        //            cambiarEstado=false;
+        //            return;
+        //        }
 
         s->setEstado(nuevoEstado);
         s->setObservacion(nuevaObservacion);
         s->setNumRevisiones(nuevoNumRevisiones);
-
+        s->setVisibilidad(s->getVisibilidad()+1);
         cambiarEstado=false;
         MostrarSilabos();
         return;
@@ -775,29 +808,29 @@ QString cframe::cargarArchivo(QString nombre, bool fechas)
         QString filePath = QFileDialog::getOpenFileName(this, "Explorador de Archivos DOC", QDir::homePath(), "Document Files (*.doc *.docx)");
         if (!filePath.isEmpty())
         {
-//            QFileInfo fileInfo(filePath);
-//            QString baseName = fileInfo.baseName(); // Obtiene el nombre del archivo sin la extensión
+            //            QFileInfo fileInfo(filePath);
+            //            QString baseName = fileInfo.baseName(); // Obtiene el nombre del archivo sin la extensión
 
-//            QString expectedName;
-//            if (fechas)
-//            {
-//                expectedName = nombre + "_FECHAS";
-//            }
-//            else
-//            {
-//                expectedName = nombre;
-//            }
+            //            QString expectedName;
+            //            if (fechas)
+            //            {
+            //                expectedName = nombre + "_FECHAS";
+            //            }
+            //            else
+            //            {
+            //                expectedName = nombre;
+            //            }
 
-//            // Comparamos el nombre del archivo sin la extensión
-//            if (baseName == expectedName)
-//            {
-                return filePath;
-//            }
-//            else
-//            {
-//                QMessageBox::critical(this, "Error", "El nombre del archivo no coincide con el parámetro esperado.");
-//                return "...";
-//            }
+            //            // Comparamos el nombre del archivo sin la extensión
+            //            if (baseName == expectedName)
+            //            {
+            return filePath;
+            //            }
+            //            else
+            //            {
+            //                QMessageBox::critical(this, "Error", "El nombre del archivo no coincide con el parámetro esperado.");
+            //                return "...";
+            //            }
         }
     }
 }
@@ -976,16 +1009,24 @@ void cframe::mostrarSilabosBoard(bool aprobado)
     ui->Btw_dashboard->clear();
     ui->Btw_dashboard->setRowCount(0);
     ui->Btw_dashboard->setColumnCount(13);
-
+    bool mostrar=false;
     QStringList headers;
     headers << "SEDE" << "ID" << "Facultad" << "Carrera" << "Insertado Por" << "Datos Clase"
             << "Ruta Silabos" << "Ruta Fechas" << "Estado" << "Observación"
-            << "Número de Revisiones" << "Número de Rechazados" << "Visibilidad";
+            << "# revisiones consultor" << "# veces Rechazado" << "# Revisiones general";
     ui->Btw_dashboard->setHorizontalHeaderLabels(headers);
 
     for (const Silabos& s : silabos) {
-        if ((aprobado && s.getEstado() == "Aprobar") ||
-                (!aprobado && s.getEstado() != "Aprobar")) {
+
+        if (aprobado && s.getEstado() == "Aprobar"){
+            mostrar=true;
+        }else if(!aprobado && s.getEstado() != "Aprobar"){
+            mostrar =true;
+        }
+        if(mostrar){
+
+
+
             int row = ui->Btw_dashboard->rowCount();
             ui->Btw_dashboard->insertRow(row);
 
@@ -1010,6 +1051,7 @@ void cframe::mostrarSilabosBoard(bool aprobado)
             ui->Btw_dashboard->setItem(row, 11, new QTableWidgetItem(QString::number(s.getNumRechazados())));
             ui->Btw_dashboard->setItem(row, 12, new QTableWidgetItem(QString::number(s.getVisibilidad())));
         }
+        mostrar=false;
     }
 
     ui->Btw_dashboard->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -1027,7 +1069,7 @@ void cframe::mostrarSilabosFeed(QString cuenta)
     QStringList headers;
     headers <<"SEDE"<< "ID" << "Facultad" << "Carrera" << "Insertado Por" << "Datos Clase"
            << "Ruta Silabos" << "Ruta Fechas" << "Estado" << "Observación"
-           << "Número de Revisiones" << "Número de Rechazados" << "Ubicacion"
+           << "# revisiones consultor" << "# veces Rechazado" << "# Revisiones general"
            << "Cambiar Silabo"<<"Cambiar Fechas";
     ui->Ftw_feed->setHorizontalHeaderLabels(headers);
 
@@ -1104,9 +1146,9 @@ void cframe::on_Rtw_revision_cellClicked(int row, int column)
 
         }else if(column==13 ){
 
-           cambiarSilabo( id, ui->Rtw_revision->item(row, 6)->text());
+            cambiarSilabo( id, ui->Rtw_revision->item(row, 6)->text(),13);
         }else if(column==14){
-            cambiarSilabo( id, ui->Rtw_revision->item(row, 7)->text());
+            cambiarSilabo( id, ui->Rtw_revision->item(row, 7)->text(),14);
 
         }else{
 
@@ -1118,14 +1160,20 @@ void cframe::on_Rtw_revision_cellClicked(int row, int column)
     }
 
 }
-void cframe::cambiarSilabo(int id, QString pathActual)
+void cframe::cambiarSilabo(int id, QString pathActual, short i)
 {
     QString filePath = QFileDialog::getOpenFileName(this, "Explorador de Archivos PDF", QDir::homePath(), "PDF Files (*.pdf)");
     if (pathActual==filePath) {
         QMessageBox::warning(this, "No posible", "Ha seleccionado el mismo silabo");
     }else if(!filePath.isEmpty()){
         cambiarPath=true;
-        modificarDatosSilabo(id,filePath);
+        if(i==13){
+            modificarDatosSilabo(id,filePath, true);
+        }else{
+
+            modificarDatosSilabo(id,filePath, false);
+
+        }
     }else{
         QMessageBox::warning(this, "No posible", "No ha seleccionado");
     }
