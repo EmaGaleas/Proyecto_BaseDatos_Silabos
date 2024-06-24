@@ -98,5 +98,9 @@ private:
     void mostrarSilabosBoard(bool aprobado);
     void mostrarSilabosFeed(QString cuenta);
     short tipo;
+
+    bool cambiarPath=false, cambiarEstado=false;
+    void modificarDatosSilabo(int id,QString pathNuevo);
+    int id=0;
 };
 #endif // CFRAME_H
