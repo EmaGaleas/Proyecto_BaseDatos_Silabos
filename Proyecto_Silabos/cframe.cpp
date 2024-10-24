@@ -47,7 +47,7 @@ cframe::cframe(QWidget *parent)
     }else{
 
     }
-//insertarUser();
+insertarUser();
 }
 
 cframe::~cframe()
@@ -70,6 +70,9 @@ void cframe::insertarUser()
     Usuario* Temp3 = new Usuario("44444444","4JUAN","444","",4);
     listaUsuarios.listaInsertarFinal(*Temp3);
     delete Temp3;
+    Usuario* Temp4= new Usuario("55555555","5JUAN","555","",5);
+    listaUsuarios.listaInsertarFinal(*Temp3);
+    delete Temp4;
 
 }
 void cframe::visibilidad()
@@ -349,9 +352,10 @@ void cframe::SubirDatos()
     int row = 0;
     while (actD != nullptr && row < listaUsuarios.listaTamano()) {
         Usuario usuario = actD->getDato();
-        query.prepare("Insert into SilabosUsuarios (Cuenta, Contrasena, NombreCompleto, tipo) VALUES(:Cuenta,:Contrasena,:Nombre,:Tipo)");
+        query.prepare("Insert into SilabosUsuarios (Cuenta, Contrasena,ContrasenaAnterior, NombreCompleto, tipo) VALUES(:Cuenta,:Contrasena,:ContrasenaAnterior,:Nombre,:Tipo)");
         query.bindValue(":Cuenta", usuario.getCuenta());
         query.bindValue(":Contrasena", usuario.getContraActual());
+        query.bindValue(":ContrasenaAnterior", usuario.getContraAnterior());
         query.bindValue(":Nombre", usuario.getNombre());
         query.bindValue(":Tipo", usuario.getTipo());
         query.exec();
