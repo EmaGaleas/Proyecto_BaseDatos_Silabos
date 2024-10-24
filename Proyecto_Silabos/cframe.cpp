@@ -43,11 +43,11 @@ cframe::cframe(QWidget *parent)
 
     reply = QMessageBox::information(this, "Bienvenido", "Cargar base de datos para iniciar.\nEsto puede tardar unos segundos.", QMessageBox::Ok);
     if (reply == QMessageBox::Ok) {
-        Conectar();
+       Conectar();
     }else{
 
     }
-
+//insertarUser();
 }
 
 cframe::~cframe()
@@ -56,7 +56,22 @@ cframe::~cframe()
     delete ui;
     delete arbol;
 }
+void cframe::insertarUser()
+{
+    Usuario* Temp = new Usuario("11111111","1JUAN","111","",1);
+    listaUsuarios.listaInsertarFinal(*Temp);
+    delete Temp;
+    Usuario* Temp1 = new Usuario("22222222","2JUAN","222","",2);
+    listaUsuarios.listaInsertarFinal(*Temp1);
+    delete Temp1;
+    Usuario* Temp2 = new Usuario("33333333","3JUAN","333","",6);
+    listaUsuarios.listaInsertarFinal(*Temp2);
+    delete Temp2;
+    Usuario* Temp3 = new Usuario("44444444","4JUAN","444","",4);
+    listaUsuarios.listaInsertarFinal(*Temp3);
+    delete Temp3;
 
+}
 void cframe::visibilidad()
 {
     if(ui->tabWidget->currentIndex()==0){
@@ -332,7 +347,7 @@ void cframe::SubirDatos()
     query.exec();
     actD = listaUsuarios.PrimPtr;
     int row = 0;
-    while (actD != nullptr && row < listaUsuarios.size()) {
+    while (actD != nullptr && row < listaUsuarios.listaTamano()) {
         Usuario usuario = actD->getDato();
         query.prepare("Insert into SilabosUsuarios (Cuenta, Contrasena, NombreCompleto, tipo) VALUES(:Cuenta,:Contrasena,:Nombre,:Tipo)");
         query.bindValue(":Cuenta", usuario.getCuenta());
@@ -382,27 +397,19 @@ void cframe::SubirDatos()
 void cframe::on_Mbtn_ingresar_clicked(){
     if(ui->Mle_cuenta->text().isEmpty()||ui->Mle_contra->text().isEmpty()||ui->Mle_name->text().isEmpty()||ui->Mcb_tipo->currentText() == "..."){
         QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!");
-
     }else{
-        //Conectar();
+        //Conectar;
         QString contraDeseada= listaUsuarios.login(ui->Mle_cuenta->text(), ui->Mle_name->text(),ui->Mle_contra->text() ,ui->Mcb_tipo->currentIndex());
-        if(contraDeseada!="no"){
-            //bool listaD<tipo>::verficarContraActualizada(QString cuenta, QString contradeseada, short type)
-            if(contraDeseada != "RECHAZADA" && contraDeseada != "" && contraDeseada.startsWith("°") && listaUsuarios.verficarContraActualizada(ui->Mle_cuenta->text(),  contraDeseada, ui->Mcb_tipo->currentIndex())){
-                contraDeseada = contraDeseada.mid(1);
+        if(contraDeseada!="no" ){
 
+            if(listaUsuarios.verficarContraAceptada(ui->Mle_cuenta->text(),  contraDeseada, ui->Mcb_tipo->currentIndex())){
                 QMessageBox::information(this, "Cambio de contraseña", "Su solicitud de contraseña fue aprobada\n"+contraDeseada);
-                Usuario* Temp = new Usuario(ui->Mle_cuenta->text(),ui->Mle_name->text(),contraDeseada,"",ui->Mcb_tipo->currentIndex());
                 listaUsuarios.cambioContra(ui->Mle_contra->text(), ui->Mle_cuenta->text(), listaUsuarios);
-                listaUsuarios.InsertarFin(*Temp);
-                delete Temp;
             }
             if(contraDeseada == "RECHAZADA"){
-                QMessageBox::information(this, "Cambio de contraseña", "Su solicitud de contraseña fue "+contraDeseada);
-                Usuario* Temp = new Usuario(ui->Mle_cuenta->text(),ui->Mle_name->text(),ui->Mle_contra->text(),"",ui->Mcb_tipo->currentIndex());
+                QMessageBox::information(this, "Cambio de contraseña", "Su solicitud de contraseña fue rechazada"+contraDeseada);
                 listaUsuarios.cambioContra(ui->Mle_contra->text(), ui->Mle_cuenta->text(), listaUsuarios);
-                listaUsuarios.InsertarFin(*Temp);
-                delete Temp;
+                //modificar que la contra anterior sea vacio
             }
 
             tipo=ui->Mcb_tipo->currentIndex();
@@ -414,7 +421,6 @@ void cframe::on_Mbtn_ingresar_clicked(){
             if(ui->Mcb_tipo->currentIndex()==1){
                 acciones << "..." << "FEED" << "ENTREGAR";
                 ui->Acb_acciones->addItems(acciones);
-
             }else if(ui->Mcb_tipo->currentIndex()==2||ui->Mcb_tipo->currentIndex()==3){
                 acciones << "..." << "BOARD" <<"USUARIOS";
                 ui->Acb_acciones->addItems(acciones);
@@ -449,6 +455,18 @@ void cframe::on_btn_sesion_clicked()
 {
     if(ui->tabWidget->currentIndex() ==0){
 
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this, "Guía",
+                                      "¿Desea ver el manual de uso?",
+                                      QMessageBox::Yes | QMessageBox::No);
+        if (reply == QMessageBox::Yes) {
+            QDesktopServices::openUrl(QUrl::fromLocalFile("https://acortar.link/P805nZ"));
+
+        }else{
+
+        }
+
+
     }else{
         if(ui->tabWidget->currentIndex() != 5){
             ui->tabWidget->setCurrentIndex(5);
@@ -456,7 +474,7 @@ void cframe::on_btn_sesion_clicked()
             ui->Acb_acciones->clear();
             ui->Mcb_tipo->setCurrentIndex(0);
             ui->tabWidget->setCurrentIndex(0);
-            ui->btn_sesion->setText("BIENVENIDO");
+            ui->btn_sesion->setText("Manual de uso");
         }
         visibilidad();
     }
@@ -515,8 +533,6 @@ void cframe::on_Acb_acciones_currentIndexChanged(const QString &arg1)
     }
     ui->Acb_acciones->setCurrentIndex(0);
     visibilidad();
-
-
 }
 
 void cframe::on_Ebtn_archivo_clicked()
@@ -597,7 +613,7 @@ void cframe::on_Ebtn_enviar_clicked()
 
 void cframe::MostrarSilabos() {
     std::vector<Silabos> silabos = arbol->obtenerTodos();
-
+    ui->Rtw_revision->clear();
     ui->Rtw_revision->setRowCount(0);
     ui->Rtw_revision->setColumnCount(15);
     QStringList headers;
@@ -755,7 +771,7 @@ void cframe::modificarDatosSilabo(int id, QString pathNuevo, bool silabo)
                 s->setObservacion("Reloaded");
                 s->setVisibilidad(s->getVisibilidad()+1);
                 mostrarSilabosFeed(ui->Albl_cuenta->text());
-
+                MostrarSilabos();
             }
         }
 
@@ -773,7 +789,7 @@ void cframe::modificarDatosSilabo(int id, QString pathNuevo, bool silabo)
             QMessageBox::StandardButton reply;
             reply = QMessageBox::question(this, "Revisión Excedida",
                                           "El silabo " + QString::fromStdString(s->getDatosClase()) +
-                                          "\nHa excedido el número de revisiones.\n¿Desea reiniciar el contador?",
+                                          "\nHa excedido el número de revisiones rechazadas permitidas.\n",
                                           QMessageBox::Yes | QMessageBox::No);
 
             if (reply == QMessageBox::Yes) {
@@ -823,29 +839,8 @@ QString cframe::cargarArchivo(QString nombre, bool fechas)
         QString filePath = QFileDialog::getOpenFileName(this, "Explorador de Archivos DOC", QDir::homePath(), "Document Files (*.doc *.docx)");
         if (!filePath.isEmpty())
         {
-            //            QFileInfo fileInfo(filePath);
-            //            QString baseName = fileInfo.baseName(); // Obtiene el nombre del archivo sin la extensión
 
-            //            QString expectedName;
-            //            if (fechas)
-            //            {
-            //                expectedName = nombre + "_FECHAS";
-            //            }
-            //            else
-            //            {
-            //                expectedName = nombre;
-            //            }
-
-            //            // Comparamos el nombre del archivo sin la extensión
-            //            if (baseName == expectedName)
-            //            {
             return filePath;
-            //            }
-            //            else
-            //            {
-            //                QMessageBox::critical(this, "Error", "El nombre del archivo no coincide con el parámetro esperado.");
-            //                return "...";
-            //            }
         }
     }
 }
@@ -875,17 +870,12 @@ void cframe::on_Abtn_cambioContra_clicked()
                         break;
                     }else{
                         usuario.setContraAnterior(newPassword);
-                        //    Usuario( QString cuenta, QString nombre,QString contraActual, QString contraAnterior,short tipo)
 
-                        Usuario* Temp = new Usuario(usuario.getCuenta(),usuario.getNombre(),usuario.getContraActual(),newPassword,usuario.getTipo());
-                        listaUsuarios.cambioContra(newPassword, ui->Albl_cuenta->text(), listaUsuarios);
-
-                        listaUsuarios.InsertarFin(*Temp);
-                        delete Temp;
-                        QMessageBox::information(this, "Contraseña ", "Cambio ha sido solicitado");
+                        //   Usuario( QString cuenta, QString nombre,QString contraActual, QString contraAnterior,short tipo)
+                        listaUsuarios.solicitarCambioContra(newPassword, ui->Albl_cuenta->text(), listaUsuarios);
+                        QMessageBox::information(this, "Contraseña ", "Cambio ha sido solicitado"+usuario.getContraAnterior());
                         return;
                     }
-
                     return;
                 }
                 actD = actD->SigPtr;
@@ -910,30 +900,35 @@ QList<Usuario> cframe::DescargarUsuarios()
         //QString cuenta, QString nombre,QString contraActual, QString contraAnterior,short tipo
         Usuario* Temp = new Usuario(Query->value(0).toString(),Query->value(3).toString(),Query->value(1).toString(),Query->value(2).toString(),Query->value(4).toInt());
         UsuariosDescargados.append(*Temp);
-        listaUsuarios.InsertarFin(*Temp);
+        listaUsuarios.listaInsertarFinal(*Temp);
         delete Temp;
         CurrentRow++;
     }
     return UsuariosDescargados;
 }
-void cframe::mostrarUsuarios()
+void cframe::mostrarUsuarios() // añadir opción de eliminar usuario
 {
     ui->Itw_usuarios->clearContents();
     QStringList headers = { "CUENTA", "NOMBRE", "CONTRASEÑA ACTUAL", "CONTRASEÑA SOLICITADA", "TIPO" };
     ui->Itw_usuarios->setColumnCount(headers.size());
     ui->Itw_usuarios->setHorizontalHeaderLabels(headers);
-    ui->Itw_usuarios->setRowCount(listaUsuarios.Cantidad);
+    ui->Itw_usuarios->setRowCount(listaUsuarios.cantidadUsuarios);
 
     actD = listaUsuarios.PrimPtr;
     int row = 0;
 
-    while (actD != nullptr && row < listaUsuarios.Cantidad) {
+    while (actD != nullptr && row < listaUsuarios.cantidadUsuarios) {
         Usuario usuario = actD->getDato();
 
         ui->Itw_usuarios->setItem(row, 0, new QTableWidgetItem(usuario.getCuenta()));
         ui->Itw_usuarios->setItem(row, 1, new QTableWidgetItem(usuario.getNombre()));
-        ui->Itw_usuarios->setItem(row, 2, new QTableWidgetItem(usuario.getContraActual()));
-        ui->Itw_usuarios->setItem(row, 3, new QTableWidgetItem(usuario.getContraAnterior()));
+
+        QString contraActualOculta(usuario.getContraActual().length(), '*');
+        ui->Itw_usuarios->setItem(row, 2, new QTableWidgetItem(contraActualOculta));
+
+        QString contraSolicitadaOculta(usuario.getContraAnterior().length(), '*');
+        ui->Itw_usuarios->setItem(row, 3, new QTableWidgetItem(contraSolicitadaOculta));
+
         ui->Itw_usuarios->setItem(row, 4, new QTableWidgetItem(listaUsuarios.tipoUsuario(usuario.getTipo())));
 
         actD = actD->SigPtr;
@@ -941,6 +936,7 @@ void cframe::mostrarUsuarios()
     }
     ui->Itw_usuarios->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
+
 void cframe::on_pushButton_clicked()
 {
     if(ui->Ile_contra->text().isEmpty() || ui->Ile_cuenta->text().isEmpty()|| ui->Ile_name->text().isEmpty() || ui->Icb_tipo->currentIndex()==0){
@@ -948,17 +944,20 @@ void cframe::on_pushButton_clicked()
 
     }else{
 
-        if(  cuentaNumero( ui->Ile_cuenta->text().toStdString())  && listaUsuarios.numCuentaDisponible(ui->Ile_cuenta->text())){
+        if( cuentaNumero( ui->Ile_cuenta->text().toStdString())  && listaUsuarios.numCuentaDisponible(ui->Ile_cuenta->text())){
             Usuario* Temp = new Usuario(ui->Ile_cuenta->text(),ui->Ile_name->text(),ui->Ile_contra->text(),"",ui->Icb_tipo->currentIndex());
-            listaUsuarios.InsertarFin(*Temp);
+            listaUsuarios.listaInsertarFinal(*Temp);
             delete Temp;
             mostrarUsuarios();
+            QMessageBox::information(this, "Éxito", "Usuario creado exitosamente");
+            ui->Ile_contra->clear();ui->Ile_cuenta->clear();  ui->Ile_name->clear();ui->Icb_tipo->setCurrentIndex(0);
         }else{
             QMessageBox::critical(this, "Error", "Numero de cuenta no disponible");
 
         }
     }
 }
+
 
 bool cframe::cuentaNumero(const std::string &tt)
 {
@@ -978,40 +977,59 @@ bool cframe::cuentaNumero(const std::string &tt)
 
 void cframe::on_Itw_usuarios_cellClicked(int row, int column)
 {
+    QTableWidgetItem *item = ui->Itw_usuarios->item(row, 0); // Obtener el item de la columna 0 (CUENTA)
+     QString cuenta = item->text();
     if (column == 3) { // Columna 3 es la columna de "CONTRASEÑA ANTERIOR"
-        QTableWidgetItem *item = ui->Itw_usuarios->item(row, 0); // Obtener el item de la columna 0 (CUENTA)
-        QString contraDeseada= ui->Itw_usuarios->item(row, 3)->text();
 
+        QString contraDeseada= listaUsuarios.obtenerContraAnterior(cuenta, listaUsuarios);
+        if(contraDeseada.startsWith("°")){
+            QMessageBox::warning(this,"Advertencia", "Ya ha aceptado esta propuesta.\nEn espera a que el usuario confirme el cambio.");
+            return;
+        }
         if (item && (contraDeseada != "RECHAZADA" && !contraDeseada.isEmpty())) {
-            QString cuenta = item->text();
-            QString nombre= ui->Itw_usuarios->item(row, 1)->text();
-            QString contraActual= ui->Itw_usuarios->item(row, 2)->text();
-            int tipo= listaUsuarios.numeroTipoUsuario(ui->Itw_usuarios->item(row, 4)->text());
 
-            // Mostrar un mensaje de confirmación
             QMessageBox::StandardButton reply;
             reply = QMessageBox::question(this, "Confirmación",
                                           "Contraseña propuesta:"+contraDeseada+"\n¿Estás seguro que desea cambiar contraseña de " + cuenta + "?",
                                           QMessageBox::Yes | QMessageBox::No);
             if (reply == QMessageBox::Yes) {
-                Usuario* Temp = new Usuario(cuenta,nombre,contraActual,contraDeseada="°"+contraDeseada,tipo);
-                listaUsuarios.cambioContra(contraActual, ui->Albl_cuenta->text(), listaUsuarios);
-                listaUsuarios.InsertarFin(*Temp);
+                listaUsuarios.aceptarCambioContra(true, cuenta, listaUsuarios);
                 mostrarUsuarios();
-                delete Temp;
+                return;
 
-
-            } else {
-                Usuario* Temp = new Usuario(cuenta,nombre,contraActual,"RECHAZADA",tipo);
-                listaUsuarios.cambioContra(contraActual, ui->Albl_cuenta->text(), listaUsuarios);
-                listaUsuarios.InsertarFin(*Temp);
+            } else if(reply == QMessageBox::No){
+                listaUsuarios.aceptarCambioContra(false, cuenta, listaUsuarios);
                 mostrarUsuarios();
-                delete Temp;
+                return;
 
-
+            }else{
+                return;
             }
-        } else {
+        } else if (contraDeseada == "RECHAZADA"){
+            QMessageBox::warning(this,"Advertencia", "Ya ha recchazado esta propuesta.");
+            return;
+        }else{
+
         }
+    }else if(column == 0 && cuenta != ui->Albl_cuenta->text()){
+         QTableWidgetItem *item = ui->Itw_usuarios->item(row, 0);
+         QString cuenta = item->text();
+         QString nombre= ui->Itw_usuarios->item(row, 1)->text();
+         QMessageBox::StandardButton reply;
+         reply = QMessageBox::question(this, "Confirmación",
+                                       "Desea borrar este usuario: "+nombre+"\nCuenta: "+cuenta+"\n¿Estás seguro?",
+                                       QMessageBox::Yes | QMessageBox::No);
+         if (reply == QMessageBox::Yes) {
+             listaUsuarios.DeleteUser(cuenta, listaUsuarios);
+             mostrarUsuarios();
+             return;
+
+         } else if(reply == QMessageBox::No){
+             return;
+
+         }else{
+             return;
+         }
     }
 }
 
@@ -1021,7 +1039,7 @@ void cframe::on_Itw_usuarios_cellClicked(int row, int column)
 void cframe::mostrarSilabosBoard(bool aprobado)
 {
     std::vector<Silabos> silabos = arbol->obtenerTodos();
-    ui->Btw_dashboard->clear();
+    ui->Btw_dashboard->clearContents();
     ui->Btw_dashboard->setRowCount(0);
     ui->Btw_dashboard->setColumnCount(13);
     bool mostrar=false;
@@ -1032,16 +1050,15 @@ void cframe::mostrarSilabosBoard(bool aprobado)
     ui->Btw_dashboard->setHorizontalHeaderLabels(headers);
 
     for (const Silabos& s : silabos) {
-
-        if (aprobado && s.getEstado() == "Aprobar"){
+        if (aprobado && s.getEstado() == "Aprobar" && ui->Brb_aprobados->isChecked()){
             mostrar=true;
-        }else if(s.getEstado() != "Aprobar"){
+        }else if(!aprobado && s.getEstado() != "Aprobar" && ui->Brb_proceso->isChecked()){
             mostrar =true;
+        }else{
+            mostrar=false;
         }
+
         if(mostrar){
-
-
-
             int row = ui->Btw_dashboard->rowCount();
             ui->Btw_dashboard->insertRow(row);
 
@@ -1126,13 +1143,17 @@ void cframe::mostrarSilabosFeed(QString cuenta)
 
 void cframe::on_Brb_proceso_clicked()
 {
+    ui->Btw_dashboard->clear();
     mostrarSilabosBoard(false);
+
 
 }
 
 void cframe::on_Brb_aprobados_clicked()
 {
+    ui->Btw_dashboard->clear();
     mostrarSilabosBoard(true);
+
 }
 
 void cframe::on_Rtw_revision_cellClicked(int row, int column)
@@ -1161,7 +1182,6 @@ void cframe::on_Rtw_revision_cellClicked(int row, int column)
                 //QMessageBox::warning(this, "No posible", Ruta);
                 QDesktopServices::openUrl(QUrl::fromLocalFile(Ruta));
         }else if(column==13 ){
-
             cambiarSilabo( id, ui->Rtw_revision->item(row, 6)->text(),13);
         }else if(column==14){
             cambiarSilabo( id, ui->Rtw_revision->item(row, 7)->text(),14);
@@ -1188,12 +1208,12 @@ void cframe::cambiarSilabo(int id, QString pathActual, short i)
         }else{
 
             modificarDatosSilabo(id,filePath, false);
-
         }
     }else{
         QMessageBox::warning(this, "No posible", "No ha seleccionado");
     }
 }
+
 
 
 void cframe::on_Ftw_feed_cellClicked(int row, int column)
@@ -1202,17 +1222,16 @@ void cframe::on_Ftw_feed_cellClicked(int row, int column)
     if(column==6 || column==7)
     {
         QString Ruta = ui->Ftw_feed->item(row, column)->text();
-        //QMessageBox::warning(this, "No posible", Ruta);
         QDesktopServices::openUrl(QUrl::fromLocalFile(Ruta));
     }else if(column==13 || column==14){
         cambiarPath=true;
         if(column==13 ){
 
-                    cambiarSilabo( id, ui->Ftw_feed->item(row, 6)->text(),13);
-                }else if(column==14){
-                    cambiarSilabo( id, ui->Ftw_feed->item(row, 7)->text(),14);
+            cambiarSilabo( id, ui->Ftw_feed->item(row, 6)->text(),13);
+        }else if(column==14){
+            cambiarSilabo( id, ui->Ftw_feed->item(row, 7)->text(),14);
 
-                }
+        }
     }
 }
 
@@ -1222,13 +1241,18 @@ void cframe::on_Btw_dashboard_cellClicked(int row, int column)
     if(column==6 || column==7)
       {
           QString Ruta = ui->Ftw_feed->item(row, column)->text();
-          //QMessageBox::warning(this, "No posible", Ruta);
           QDesktopServices::openUrl(QUrl::fromLocalFile(Ruta));
       }
 }
 
 
 void cframe::on_Ftw_feed_cellActivated(int row, int column)
+{
+
+}
+
+
+void cframe::on_Mcb_tipo_currentIndexChanged(int index)
 {
 
 }

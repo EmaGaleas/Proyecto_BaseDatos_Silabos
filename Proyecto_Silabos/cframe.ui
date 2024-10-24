@@ -36,14 +36,14 @@
        </font>
       </property>
       <property name="text">
-       <string>BIENVENIDO</string>
+       <string>Manual de uso</string>
       </property>
      </widget>
     </item>
     <item row="1" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>4</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tabMenu">
        <attribute name="title">
@@ -401,7 +401,7 @@
           <property name="font">
            <font>
             <family>Microsoft JhengHei</family>
-            <pointsize>12</pointsize>
+            <pointsize>8</pointsize>
            </font>
           </property>
           <property name="text">
@@ -473,7 +473,7 @@
           <property name="font">
            <font>
             <family>Microsoft JhengHei</family>
-            <pointsize>12</pointsize>
+            <pointsize>8</pointsize>
            </font>
           </property>
           <property name="text">
@@ -646,19 +646,6 @@
         <string>BOARD</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_7">
-        <item row="0" column="0">
-         <widget class="QRadioButton" name="Brb_proceso">
-          <property name="font">
-           <font>
-            <family>Microsoft JhengHei</family>
-            <pointsize>14</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Proceso</string>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="1">
          <widget class="QRadioButton" name="Brb_aprobados">
           <property name="font">
@@ -669,6 +656,19 @@
           </property>
           <property name="text">
            <string>Aprobados</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QRadioButton" name="Brb_proceso">
+          <property name="font">
+           <font>
+            <family>Microsoft JhengHei</family>
+            <pointsize>14</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Proceso</string>
           </property>
          </widget>
         </item>

@@ -19,35 +19,45 @@ class listaD{
 private:
     nodoD<tipo> *PrimPtr;
     nodoD<tipo> *UltPtr;
-    int Cantidad=0;
+    int cantidadUsuarios=0;
 
 public:
+
+    //funciones respecto a lista, insersion y otra info respecto a ella
     listaD();
     ~listaD();
 
-    void InsertarFin(const tipo &);
-    bool Vacia()const;
+    void listaInsertarFinal(const tipo &);
+    bool listaVacia()const;
+    int listaTamano();
 
+
+    //acciones con los datos de los nodos de dicha lista de usuarios
     QString tipoUsuario(short t);
     bool numCuentaDisponible(QString num);
-    QString login(QString cuenta, QString nombre,QString contraActual, short type);
-    void cambioContra(QString contraNueva, QString cuenta, listaD<Usuario>& listaUsuarios);
-    short numeroTipoUsuario(const QString &tipoStr);
-    bool verficarContraActualizada(QString cuenta, QString contradeseada, short type);
-    int size();
+    QString login(QString cuenta, QString nombre,QString contraActual, short type);          //revisar
 
+    short numeroTipoUsuario(const QString &tipoStr);
+
+    bool verficarContraAceptada(QString cuenta, QString contradeseada, short type);       //revisar
+
+    void cambioContra(QString contraNueva, QString cuenta, listaD<Usuario>& listaUsuarios); //cambia contraseña
+    void DeleteUser( QString cuenta, listaD<Usuario>& listaUsuarios); // elimina usario  //revisar
+    void solicitarCambioContra(QString solicitud, QString cuenta, listaD<Usuario>& listaUsuarios); //cambia contraseña
+    void aceptarCambioContra(bool aceptar, QString cuenta, listaD<Usuario>& listaUsuarios); //cambia contraseña
+    QString obtenerContraAnterior(QString cuenta,listaD<Usuario>& listaUsuarios);
 
 
 };
 
 template<typename tipo>
-listaD<tipo>::listaD() :PrimPtr(0),UltPtr(0), Cantidad(0)
+listaD<tipo>::listaD() :PrimPtr(0),UltPtr(0), cantidadUsuarios(0)
 {}
 
 template<typename tipo>
 listaD<tipo>::~listaD()
 {
-    if (!Vacia()) {
+    if (!listaVacia()) {
         cout << "Limpiando\n" << std::endl;
         nodoD<tipo> *ptrAct = PrimPtr;
         nodoD<tipo> *ptrTemp;
@@ -58,7 +68,7 @@ listaD<tipo>::~listaD()
             if (ptrAct != nullptr) {
                 ptrAct->AntPtr = nullptr;
             }
-            Cantidad--;
+            cantidadUsuarios--;
             delete ptrTemp;
         }
         cout << "Vacio\n";
@@ -66,14 +76,14 @@ listaD<tipo>::~listaD()
 }
 
 template<typename tipo>
-void listaD<tipo>::InsertarFin(const tipo &Dato)
+void listaD<tipo>::listaInsertarFinal(const tipo &Dato)
 {
     nodoD<tipo> *nuevo=new nodoD<tipo>(Dato);
-    if(Vacia()){
+    if(listaVacia()){
         PrimPtr=nuevo;
         UltPtr=nuevo;
     }else{
-        if(Cantidad==1){
+        if(cantidadUsuarios==1){
             nuevo->SigPtr=0;
             nuevo->AntPtr=PrimPtr;
             UltPtr=nuevo;
@@ -85,21 +95,26 @@ void listaD<tipo>::InsertarFin(const tipo &Dato)
             UltPtr=nuevo;
         }
     }
-    Cantidad++;
+    cantidadUsuarios++;
 
 }
 
 template<typename tipo>
-bool listaD<tipo>::Vacia() const
+bool listaD<tipo>::listaVacia() const
 {
     return PrimPtr==nullptr;
+}
+
+template<typename tipo>
+int listaD<tipo>::listaTamano()
+{
+    return cantidadUsuarios;
 }
 
 template<typename tipo>
 QString listaD<tipo>::tipoUsuario(short t)
 {
     QString tipoStr;
-
     switch (t) {
     case 1:
         tipoStr = "DOCENTE";
@@ -126,7 +141,6 @@ QString listaD<tipo>::tipoUsuario(short t)
         tipoStr = "ERROR"; // En caso de que el tipo no esté definido
         break;
     }
-
     return tipoStr;
 }
 template<typename tipo>
@@ -164,30 +178,41 @@ bool listaD<tipo>::numCuentaDisponible(QString num)
     return true;
 }
 
+
 template<typename tipo>
-QString listaD<tipo>::login(QString cuenta, QString nombre, QString contraActual, short type)
+void listaD<tipo>::DeleteUser(QString cuenta, listaD<Usuario>& listaUsuarios)
 {
-    nodoD<Usuario>* temp = PrimPtr;
+    nodoD<Usuario>* temp = listaUsuarios.PrimPtr;
     while (temp != nullptr) {
-        if (temp->getDato().getCuenta() == cuenta &&
-            temp->getDato().getNombre() == nombre &&
-            temp->getDato().getContraActual() == contraActual &&
-            temp->getDato().getTipo() == type) {
-            return temp->getDato().getContraAnterior();
+        if (temp->getDato().getCuenta() == cuenta) {
+            if (temp == listaUsuarios.PrimPtr && temp == listaUsuarios.UltPtr) {
+                listaUsuarios.PrimPtr = listaUsuarios.UltPtr = nullptr;
+            } else if (temp == listaUsuarios.PrimPtr) {
+                listaUsuarios.PrimPtr = temp->SigPtr;
+                listaUsuarios.PrimPtr->AntPtr = nullptr;
+            } else if (temp == listaUsuarios.UltPtr) {
+                listaUsuarios.UltPtr = temp->AntPtr;
+                listaUsuarios.UltPtr->SigPtr = nullptr;
+            } else {
+                temp->AntPtr->SigPtr = temp->SigPtr;
+                temp->SigPtr->AntPtr = temp->AntPtr;
+            }
+            delete temp;
+            listaUsuarios.cantidadUsuarios--;
+            return;
         }
         temp = temp->SigPtr;
     }
-
-   return "no";
+    return;
 }
 template<typename tipo>
-bool listaD<tipo>::verficarContraActualizada(QString cuenta, QString contradeseada, short type)
+bool listaD<tipo>::verficarContraAceptada(QString cuenta, QString contradeseada, short type)
 {
     nodoD<Usuario>* temp = PrimPtr;
     while (temp != nullptr) {
-        if (temp->getDato().getCuenta() == cuenta &&
-            (temp->getDato().getContraAnterior() == contradeseada)&&
-            temp->getDato().getTipo() == type) {
+        if (temp->Dato.getCuenta() == cuenta &&
+                temp->Dato.getContraAnterior().startsWith("°") &&
+                temp->Dato.getTipo() == type) {
             return true;
         }
         temp = temp->SigPtr;
@@ -195,37 +220,35 @@ bool listaD<tipo>::verficarContraActualizada(QString cuenta, QString contradesea
 
     return false;
 }
-
 template<typename tipo>
-int listaD<tipo>::size()
+QString listaD<tipo>::login(QString cuenta, QString nombre, QString contraActual, short type)
 {
-   return Cantidad;
+    nodoD<Usuario>* temp = PrimPtr;
+    while (temp != nullptr) {
+        if (temp->getDato().getCuenta() == cuenta &&
+                temp->getDato().getNombre() == nombre &&
+                temp->getDato().getContraActual() == contraActual &&
+                temp->getDato().getTipo() == type) {
+            return temp->getDato().getContraAnterior();
+        }
+        temp = temp->SigPtr;
+    }
+
+    return "no";
 }
 template<typename tipo>
-void listaD<tipo>::cambioContra(QString contraNueva, QString cuenta, listaD<Usuario>& listaUsuarios)
-{
+void listaD<tipo>::cambioContra(QString contraNueva, QString cuenta, listaD<Usuario>& listaUsuarios) {
     nodoD<Usuario>* temp = listaUsuarios.PrimPtr;
 
     while (temp != nullptr) {
         if (temp->getDato().getCuenta() == cuenta) {
-            if (true) {
-                if (temp == listaUsuarios.PrimPtr && temp == listaUsuarios.UltPtr) {
-                    listaUsuarios.PrimPtr = listaUsuarios.UltPtr = nullptr;
-                } else if (temp == listaUsuarios.PrimPtr) {
-                    listaUsuarios.PrimPtr = temp->SigPtr;
-                    listaUsuarios.PrimPtr->AntPtr = nullptr;
-                } else if (temp == listaUsuarios.UltPtr) {
-                    listaUsuarios.UltPtr = temp->AntPtr;
-                    listaUsuarios.UltPtr->SigPtr = nullptr;
-                } else {
-                    temp->AntPtr->SigPtr = temp->SigPtr;
-                    temp->SigPtr->AntPtr = temp->AntPtr;
-                }
-                delete temp;
-                listaUsuarios.Cantidad--;
+            if (temp->Dato.getContraAnterior().startsWith("°")) {
+                QString nuevaContra = temp->getDato().getContraAnterior().mid(1);
+                temp->Dato.setContraAnterior("");
+                temp->Dato.setContraActual(nuevaContra);
 
             } else {
-                temp->getDato().setContraActual(contraNueva);
+                temp->Dato.setContraAnterior("");
             }
             return;
         }
@@ -233,5 +256,48 @@ void listaD<tipo>::cambioContra(QString contraNueva, QString cuenta, listaD<Usua
     }
 }
 
+template<typename tipo>
+void listaD<tipo>::solicitarCambioContra(QString solicitud, QString cuenta, listaD<Usuario>& listaUsuarios) {
+    nodoD<Usuario> *temp = listaUsuarios.PrimPtr;
+    while (temp != nullptr) {
+        if (temp->getDato().getCuenta() == cuenta) {
+            temp->Dato.setContraAnterior(solicitud);
+            return;
+        }
+        temp = temp->SigPtr;
+    }
+}
+
+template<typename tipo>
+void listaD<tipo>::aceptarCambioContra(bool aceptar, QString cuenta, listaD<Usuario> &listaUsuarios)
+{
+    nodoD<Usuario>* temp = listaUsuarios.PrimPtr;
+
+    while (temp != nullptr) {
+        if (temp->getDato().getCuenta() == cuenta) {
+            if(aceptar){
+                QString contraSolicitada = "°" + temp->Dato.getContraAnterior();
+                temp->Dato.setContraAnterior(contraSolicitada);
+            }else{
+                temp->Dato.setContraAnterior("RECHAZADA");
+            }
+            return;
+        }
+        temp = temp->SigPtr;
+    }
+}
+
+template<typename tipo>
+QString listaD<tipo>::obtenerContraAnterior(QString cuenta,listaD<Usuario>& listaUsuarios)
+{
+    nodoD<Usuario> *temp = listaUsuarios.PrimPtr;
+    while (temp != nullptr) {
+        if (temp->getDato().getCuenta() == cuenta) {
+
+            return temp->Dato.getContraAnterior();
+        }
+        temp = temp->SigPtr;
+    }
+}
 
 #endif // LISTAD_H
