@@ -16,6 +16,7 @@ SOURCES += \
 
 HEADERS += \
     Clase.h \
+    Historial_Silabos.h \
     Silabos.h \
     Usuario.h \
     arbolb.h \

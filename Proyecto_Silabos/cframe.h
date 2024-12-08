@@ -109,8 +109,8 @@ private:
 
     void insertarUser();
 
-
-
+    void configurarFiltros();
+    void aplicarFiltro(int columna, const QString &filtro);
 
 };
 #endif // CFRAME_H

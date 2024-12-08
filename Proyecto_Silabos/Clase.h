@@ -7,11 +7,7 @@ class Clase{
     Clase();
     Clase(QString,QString,QString,QString,QString);
     ~Clase();
-    QString CodigoClase;
-    QString Nombre;
-    QString Carrera;
-    QString Facultad;
-    QString Sede;
+    QString CodigoClase, Nombre, Carrera, Facultad, Sede;
 };
 
 inline Clase::Clase(QString Codigo, QString Nombre, QString Carrera, QString Facultad, QString Sede)
@@ -23,9 +19,6 @@ inline Clase::Clase(QString Codigo, QString Nombre, QString Carrera, QString Fac
     this->Sede=Sede;
 }
 
-inline Clase::~Clase()
-{
-
-}
+inline Clase::~Clase()  {}
 
 #endif // CLASE_H

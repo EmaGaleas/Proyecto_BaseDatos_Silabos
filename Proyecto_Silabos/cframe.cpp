@@ -41,37 +41,38 @@ cframe::cframe(QWidget *parent)
     ui->lbl_png->setStyleSheet("background-color: #A61400;");
     QMessageBox::StandardButton reply;
 
-    reply = QMessageBox::information(this, "Bienvenido", "Cargar base de datos para iniciar.\nEsto puede tardar unos segundos.", QMessageBox::Ok);
-    if (reply == QMessageBox::Ok) {
-       Conectar();
-    }else{
+//    reply = QMessageBox::information(this, "Bienvenido", "Cargar base de datos para iniciar.\nEsto puede tardar unos segundos.", QMessageBox::Ok);
+//    if (reply == QMessageBox::Ok) {
+//       Conectar();
+//    }else{
 
-    }
+//    }
 insertarUser();
 }
 
 cframe::~cframe()
 {
-    SubirDatos();
+    //SubirDatos();
     delete ui;
     delete arbol;
 }
 void cframe::insertarUser()
 {
-    Usuario* Temp = new Usuario("11111111","1JUAN","111","",1);
+    Usuario* Temp = new Usuario("11111111","1JUAN","111","",1, 2);
     listaUsuarios.listaInsertarFinal(*Temp);
     delete Temp;
-    Usuario* Temp1 = new Usuario("22222222","2JUAN","222","",2);
+    Usuario* Temp1 = new Usuario("22222222","2JUAN","222","",2, 1);
     listaUsuarios.listaInsertarFinal(*Temp1);
     delete Temp1;
-    Usuario* Temp2 = new Usuario("33333333","3JUAN","333","",6);
+    Usuario* Temp2 = new Usuario("66666666","6JUAN","666","",6, 3);
     listaUsuarios.listaInsertarFinal(*Temp2);
     delete Temp2;
-    Usuario* Temp3 = new Usuario("44444444","4JUAN","444","",4);
+    Usuario* Temp3 = new Usuario("44444444","4JUAN","444","",4, 0);
     listaUsuarios.listaInsertarFinal(*Temp3);
     delete Temp3;
-    Usuario* Temp4= new Usuario("55555555","5JUAN","555","",5);
+    Usuario* Temp4= new Usuario("55555555","5JUAN","555","",5, 3);
     listaUsuarios.listaInsertarFinal(*Temp3);
+
     delete Temp4;
 
 }
@@ -112,111 +113,111 @@ void cframe::visibilidad()
     }
 }
 
-QList<Clase> cframe::DescargarClases()
-{
-    QList<Clase> ClasesDescargadas;
-    QSqlQuery *Query = new QSqlQuery();
-    Query->prepare("select * from SilabosClasesDisponibles");
-    Query->exec();
-    int CurrentRow=0;
-    while(Query->next())
-    {
-        //Codigo-Nombre-Carrera-Facultad-Sede
-        Clase* Temp = new Clase(Query->value(0).toString(),Query->value(1).toString(),Query->value(2).toString(),Query->value(3).toString(),Query->value(4).toString());
-        ClasesDescargadas.append(*Temp);
-        delete Temp;
-        CurrentRow++;
-    }
-    return ClasesDescargadas;
-}
+//QList<Clase> cframe::DescargarClases()
+//{
+//    QList<Clase> ClasesDescargadas;
+//    QSqlQuery *Query = new QSqlQuery();
+//    Query->prepare("select * from SilabosClasesDisponibles");
+//    Query->exec();
+//    int CurrentRow=0;
+//    while(Query->next())
+//    {
+//        //Codigo-Nombre-Carrera-Facultad-Sede
+//        Clase* Temp = new Clase(Query->value(0).toString(),Query->value(1).toString(),Query->value(2).toString(),Query->value(3).toString(),Query->value(4).toString());
+//        ClasesDescargadas.append(*Temp);
+//        delete Temp;
+//        CurrentRow++;
+//    }
+//    return ClasesDescargadas;
+//}
 
-QList<Silabos> cframe::DescargarListaSilabos()
-{
-    QList<Silabos> ClasesDescargadas;
-    QSqlQuery *Query = new QSqlQuery();
-    Query->prepare("select * from SilabosClases");
-    Query->exec();
-    int CurrentRow=0;
-    string Facultad;
-    QString Fechas;
-    while(Query->next())
-    {
-        if(Query->value(3).toString()=="UNITEC")
-        {
-            Facultad="-"+Query->value(2).toString().toStdString();
-            Fechas="";
-        }
-        else
-        {
-            Facultad=Query->value(2).toString().toStdString();
-            Fechas="";
-            Fechas.append("F");
-            Fechas.append(Query->value(4).toString().left(6));
-            Fechas.append(".docx");
-        //Codigo-Nombre-Carrera-Facultad-Sede
-        Silabos* Temp = new Silabos(Facultad,
-                                    Query->value(1).toString().toStdString(),
-                                    Query->value(5).toInt(),  // insertadoPor
-                                    Query->value(4).toString().toStdString(),
-                                    Query->value(4).toString().left(6)+".docx",
-                                    "Fechas""",
-                                    Query->value(6).toString().toStdString(),
-                                    Query->value(7).toString().toStdString(),
-                                    Query->value(8).toInt(),  // numRevisiones
-                                    Query->value(9).toInt(),  // numRechazado
-                                    Query->value(10).toInt()   // visibilidad para jefe (numero 4) y para coordinador(numero 5)
-                                    );
-        ClasesDescargadas.append(*Temp);
-        delete Temp;
-        CurrentRow++;
-        BA2docx(DescargarSilabo(Query->value(4).toString().left(6)),Query->value(4).toString().left(6)+".docx");
-        }
-        //QMessageBox::critical(this, "Lista", Query->value(4).toString());
-    }
-    for(int i=0;i<ClasesDescargadas.size();i++)
-    {
-        arbol->insertar(ClasesDescargadas[i]);
-        //QMessageBox::critical(this, "Arbol", QString::fromStdString(ClasesDescargadas[i].getDatosClase()));
-    }
-    return ClasesDescargadas;
+//QList<Silabos> cframe::DescargarListaSilabos()
+//{
+//    QList<Silabos> ClasesDescargadas;
+//    QSqlQuery *Query = new QSqlQuery();
+//    Query->prepare("select * from SilabosClases");
+//    Query->exec();
+//    int CurrentRow=0;
+//    string Facultad;
+//    QString Fechas;
+//    while(Query->next())
+//    {
+//        if(Query->value(3).toString()=="UNITEC")
+//        {
+//            Facultad="-"+Query->value(2).toString().toStdString();
+//            Fechas="";
+//        }
+//        else
+//        {
+//            Facultad=Query->value(2).toString().toStdString();
+//            Fechas="";
+//            Fechas.append("F");
+//            Fechas.append(Query->value(4).toString().left(6));
+//            Fechas.append(".docx");
+//        //Codigo-Nombre-Carrera-Facultad-Sede
+//        Silabos* Temp = new Silabos(Facultad,
+//                                    Query->value(1).toString().toStdString(),
+//                                    Query->value(5).toInt(),  // insertadoPor
+//                                    Query->value(4).toString().toStdString(),
+//                                    Query->value(4).toString().left(6)+".docx",
+//                                    "Fechas""",
+//                                    Query->value(6).toString().toStdString(),
+//                                    Query->value(7).toString().toStdString(),
+//                                    Query->value(8).toInt(),  // numRevisiones
+//                                    Query->value(9).toInt(),  // numRechazado
+//                                    Query->value(10).toInt()   // visibilidad para jefe (numero 4) y para coordinador(numero 5)
+//                                    );
+//        ClasesDescargadas.append(*Temp);
+//        delete Temp;
+//        CurrentRow++;
+//        BA2docx(DescargarSilabo(Query->value(4).toString().left(6)),Query->value(4).toString().left(6)+".docx");
+//        }
+//        //QMessageBox::critical(this, "Lista", Query->value(4).toString());
+//    }
+//    for(int i=0;i<ClasesDescargadas.size();i++)
+//    {
+//        arbol->insertar(ClasesDescargadas[i]);
+//        //QMessageBox::critical(this, "Arbol", QString::fromStdString(ClasesDescargadas[i].getDatosClase()));
+//    }
+//    return ClasesDescargadas;
 
-}
+//}
 
-void cframe::DescargarSilabos()
-{
-    QSqlQuery *Query = new QSqlQuery();
-    Query->prepare("select * from SilabosClases");
-    Query->exec();
-    string Facultad;
-    while(Query->next())
-    {
-        if(Query->value(3).toString()=="UNITEC")
-        {
-            Facultad="-"+Query->value(2).toString().toStdString();
-        }
-        else
-        {
-            Facultad=Query->value(2).toString().toStdString();
-        }
-        Silabos* s = new Silabos(Facultad,
-                                 Query->value(1).toString().toStdString(),
-                                 Query->value(5).toInt(),  // insertadoPor
-                                 Query->value(4).toString().toStdString(),
-                                 Query->value(4).toString().left(6)+".docx",
-                                 "",
-                                 Query->value(6).toString().toStdString(),
-                                 Query->value(7).toString().toStdString(),
-                                 Query->value(8).toInt(),  // numRevisiones
-                                 Query->value(9).toInt(),  // numRechazado
-                                 Query->value(10).toInt()   // visibilidad para jefe (numero 4) y para coordinador(numero 5)
-                                 );
-        //  QMessageBox::critical(this, "Arbol", Query->value(4).toString());
-        arbol->insertar(*s);
-        delete s;
-        BA2docx(DescargarSilabo(Query->value(4).toString().left(6)),Query->value(4).toString().left(6)+".docx");
-        //cout<<"Silabo Cargado "<<Query->value(4).toString().toStdString();
-    }
-}
+//void cframe::DescargarSilabos()
+//{
+//    QSqlQuery *Query = new QSqlQuery();
+//    Query->prepare("select * from SilabosClases");
+//    Query->exec();
+//    string Facultad;
+//    while(Query->next())
+//    {
+//        if(Query->value(3).toString()=="UNITEC")
+//        {
+//            Facultad="-"+Query->value(2).toString().toStdString();
+//        }
+//        else
+//        {
+//            Facultad=Query->value(2).toString().toStdString();
+//        }
+//        Silabos* s = new Silabos(Facultad,
+//                                 Query->value(1).toString().toStdString(),
+//                                 Query->value(5).toInt(),  // insertadoPor
+//                                 Query->value(4).toString().toStdString(),
+//                                 Query->value(4).toString().left(6)+".docx",
+//                                 "",
+//                                 Query->value(6).toString().toStdString(),
+//                                 Query->value(7).toString().toStdString(),
+//                                 Query->value(8).toInt(),  // numRevisiones
+//                                 Query->value(9).toInt(),  // numRechazado
+//                                 Query->value(10).toInt()   // visibilidad para jefe (numero 4) y para coordinador(numero 5)
+//                                 );
+//        //  QMessageBox::critical(this, "Arbol", Query->value(4).toString());
+//        arbol->insertar(*s);
+//        delete s;
+//        BA2docx(DescargarSilabo(Query->value(4).toString().left(6)),Query->value(4).toString().left(6)+".docx");
+//        //cout<<"Silabo Cargado "<<Query->value(4).toString().toStdString();
+//    }
+//}
 
 QString cframe::Encrypt(QString Message, int Key)
 {
@@ -247,10 +248,8 @@ QByteArray cframe::docx2BA(QString Path)
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
     QFile file(Path);
     if (!file.open(QIODevice::ReadOnly)) {
-        //QMessageBox::critical(this, "Error", "No se pudo abrir el archivo");
         return QByteArray();
     }
-
     QByteArray byteArray = file.readAll();
     file.close();
     QGuiApplication::restoreOverrideCursor();
@@ -261,142 +260,141 @@ void cframe::BA2docx(QByteArray ByteArray, QString NewFile)
 {
     QFile newFile(NewFile);
     if (!newFile.open(QIODevice::WriteOnly)) {
-        //QMessageBox::critical(this, "Error", "No se pudo abrir el archivo");
         return;
     }
     newFile.write(ByteArray);
     newFile.close();
 }
 
-void cframe::SubirSilabo(QString CodigoSilabo, QByteArray Archivo)
-{
-    QSqlQuery query(db);
-    query.prepare("INSERT INTO SilabosArchivos(Codigo,Archivo) VALUES(:Codigo,:docxData)");
-    query.bindValue(":Codigo", CodigoSilabo);
-    query.bindValue(":docxData", Archivo);
-    if (!query.exec())
-    {
-        QMessageBox::critical(this, "Error", "Error en la base de datos. Error: " + query.lastError().text());
-    }
-}
+//void cframe::SubirSilabo(QString CodigoSilabo, QByteArray Archivo)
+//{
+//    QSqlQuery query(db);
+//    query.prepare("INSERT INTO SilabosArchivos(Codigo,Archivo) VALUES(:Codigo,:docxData)");
+//    query.bindValue(":Codigo", CodigoSilabo);
+//    query.bindValue(":docxData", Archivo);
+//    if (!query.exec())
+//    {
+//        QMessageBox::critical(this, "Error", "Error en la base de datos. Error: " + query.lastError().text());
+//    }
+//}
 
-QByteArray cframe::DescargarSilabo(QString Codigo)
-{
-    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
-    //db.open();
-    QSqlQuery query(db);
-    query.prepare("SELECT Archivo FROM SilabosArchivos WHERE Codigo = :code");
-    query.bindValue(":code", Codigo);
-    if (!query.exec())
-    {
-        QMessageBox::critical(this, "Error", "Error en la base de datos. Error: " + query.lastError().text());
-        db.close();
-        return QByteArray();
-    }
-    QByteArray byteArray;
-    if (query.next())
-    {
-        byteArray = query.value(0).toByteArray();
-    } else
-    {
-        //QMessageBox::critical(this, "Error", "No existe un archivo con el codigo seleccionado");
-    }
-    //db.close();
-    QGuiApplication::restoreOverrideCursor();
-    return byteArray;
-}
+//QByteArray cframe::DescargarSilabo(QString Codigo)
+//{
+//    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
+//    //db.open();
+//    QSqlQuery query(db);
+//    query.prepare("SELECT Archivo FROM SilabosArchivos WHERE Codigo = :code");
+//    query.bindValue(":code", Codigo);
+//    if (!query.exec())
+//    {
+//        QMessageBox::critical(this, "Error", "Error en la base de datos. Error: " + query.lastError().text());
+//        db.close();
+//        return QByteArray();
+//    }
+//    QByteArray byteArray;
+//    if (query.next())
+//    {
+//        byteArray = query.value(0).toByteArray();
+//    } else
+//    {
+//        //QMessageBox::critical(this, "Error", "No existe un archivo con el codigo seleccionado");
+//    }
+//    //db.close();
+//    QGuiApplication::restoreOverrideCursor();
+//    return byteArray;
+//}
 
-void cframe::Conectar()
-{
-    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
-    db.setDatabaseName(connectionString);
-    if(db.open())
-    {
-        UsuariosRegistrados=DescargarUsuarios();
-        ClasesAgregadas=DescargarClases();
-        SilabosDescargados=DescargarListaSilabos();
-        Sedes.clear();
-        for(int i=0;i<ClasesAgregadas.size();i++)
-        {
-            Sedes.append(ClasesAgregadas[i].Sede);
-        }
-        QSet<QString> temp = QSet<QString>::fromList(Sedes);
-        Sedes = temp.toList();
-        ui->Ecb_sede->clear();
-        ui->Ecb_facultad->clear();
-        ui->Ecb_carrera->clear();
-        ui->Ecb_clases->clear();
-        ui->Ecb_sede->addItem("...");
-        ui->Ecb_sede->addItems(Sedes);
-        QGuiApplication::restoreOverrideCursor();
-        //DescargarSilabos();
-        //QMessageBox::information(this,"Exito!","Conectado a Azure SQL Database");
-    }
-    else
-    {
-        QGuiApplication::restoreOverrideCursor();
-        QMessageBox::critical(this,"Error en la conexion!","No ha sido posible conectar con el servidor. Intentelo de nuevo.");
-    }
-    db.close();
+//void cframe::Conectar()
+//{
+//    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
+//    db.setDatabaseName(connectionString);
+//    if(db.open())
+//    {
+//        UsuariosRegistrados=DescargarUsuarios();
+//        ClasesAgregadas=DescargarClases();
+//        SilabosDescargados=DescargarListaSilabos();
+//        Sedes.clear();
+//        for(int i=0;i<ClasesAgregadas.size();i++)
+//        {
+//            Sedes.append(ClasesAgregadas[i].Sede);
+//        }
+//        QSet<QString> temp = QSet<QString>::fromList(Sedes);
+//        Sedes = temp.toList();
+//        ui->Ecb_sede->clear();
+//        ui->Ecb_facultad->clear();
+//        ui->Ecb_carrera->clear();
+//        ui->Ecb_clases->clear();
+//        ui->Ecb_sede->addItem("...");
+//        ui->Ecb_sede->addItems(Sedes);
+//        QGuiApplication::restoreOverrideCursor();
+//        //DescargarSilabos();
+//        //QMessageBox::information(this,"Exito!","Conectado a Azure SQL Database");
+//    }
+//    else
+//    {
+//        QGuiApplication::restoreOverrideCursor();
+//        QMessageBox::critical(this,"Error en la conexion!","No ha sido posible conectar con el servidor. Intentelo de nuevo.");
+//    }
+//    db.close();
 
-}
+//}
 
-void cframe::SubirDatos()
-{
-    //subir Usuarios
-    db.open();
-    QSqlQuery query(db);
-    query.prepare("Delete FROM SilabosUsuarios");
-    query.exec();
-    actD = listaUsuarios.PrimPtr;
-    int row = 0;
-    while (actD != nullptr && row < listaUsuarios.listaTamano()) {
-        Usuario usuario = actD->getDato();
-        query.prepare("Insert into SilabosUsuarios (Cuenta, Contrasena,ContrasenaAnterior, NombreCompleto, tipo) VALUES(:Cuenta,:Contrasena,:ContrasenaAnterior,:Nombre,:Tipo)");
-        query.bindValue(":Cuenta", usuario.getCuenta());
-        query.bindValue(":Contrasena", usuario.getContraActual());
-        query.bindValue(":ContrasenaAnterior", usuario.getContraAnterior());
-        query.bindValue(":Nombre", usuario.getNombre());
-        query.bindValue(":Tipo", usuario.getTipo());
-        query.exec();
-        actD = actD->SigPtr;
-        ++row;
-    }
+//void cframe::SubirDatos()
+//{
+//    //subir Usuarios
+//    db.open();
+//    QSqlQuery query(db);
+//    query.prepare("Delete FROM SilabosUsuarios");
+//    query.exec();
+//    actD = listaUsuarios.PrimPtr;
+//    int row = 0;
+//    while (actD != nullptr && row < listaUsuarios.listaTamano()) {
+//        Usuario usuario = actD->getDato();
+//        query.prepare("Insert into SilabosUsuarios (Cuenta, Contrasena,ContrasenaAnterior, NombreCompleto, tipo) VALUES(:Cuenta,:Contrasena,:ContrasenaAnterior,:Nombre,:Tipo)");
+//        query.bindValue(":Cuenta", usuario.getCuenta());
+//        query.bindValue(":Contrasena", usuario.getContraActual());
+//        query.bindValue(":ContrasenaAnterior", usuario.getContraAnterior());
+//        query.bindValue(":Nombre", usuario.getNombre());
+//        query.bindValue(":Tipo", usuario.getTipo());
+//        query.exec();
+//        actD = actD->SigPtr;
+//        ++row;
+//    }
 
-    //SubirSilabos
-    query.prepare("Delete FROM SilabosClases");
-    query.exec();
-    query.prepare("Delete FROM SilabosArchivos");
-    query.exec();
-    QString Sede;
-    std::vector<Silabos> silabos = arbol->obtenerTodos();
-    for(int i=0;i<silabos.size();i++)
-    {
-        QString facultad = QString::fromStdString(silabos[i].getFacultad());
+//    //SubirSilabos
+//    query.prepare("Delete FROM SilabosClases");
+//    query.exec();
+//    query.prepare("Delete FROM SilabosArchivos");
+//    query.exec();
+//    QString Sede;
+//    std::vector<Silabos> silabos = arbol->obtenerTodos();
+//    for(int i=0;i<silabos.size();i++)
+//    {
+//        QString facultad = QString::fromStdString(silabos[i].getFacultad());
 
-        if (!facultad.isEmpty() && facultad.at(0) == '-') {
-            Sede="UNITEC";
-        } else {
-            Sede="CEUTEC";
-        }
-        query.prepare("Insert into SilabosClases (CodigoClase, Carrera, Facultad, Sede, Nombre, InsertadoPor, Estado, Observacion, NumRevisiones, NumRechazado, Visibilidad) VALUES(:Codigo,:Carrera,:Facultad,:Sede,:Nombre,:InsertadoPor,:Estado,:Observacion,:NumRevisiones,:NumRechazado,:Visibilidad)");
-        //:Codigo,:Carrera,:Facultad,:Sede,:Nombre,:InsertadoPor,:Estado,:Observacion,:NumRevisiones,:NumRechazado,:Visibilidad
-        query.bindValue(":Codigo", QString::fromStdString(silabos[i].getDatosClase()).left(6));
-        query.bindValue(":Carrera", QString::fromStdString(silabos[i].getCarreras()));
-        query.bindValue(":Facultad", QString::fromStdString(silabos[i].getFacultad()));
-        query.bindValue(":Sede", Sede);
-        query.bindValue(":Nombre", QString::fromStdString(silabos[i].getDatosClase()));
-        query.bindValue(":InsertadoPor", silabos[i].getInsertadoPor());
-        query.bindValue(":Estado", QString::fromStdString(silabos[i].getEstado()));
-        query.bindValue(":Observacion", QString::fromStdString(silabos[i].getObservacion()));
-        query.bindValue(":NumRevisiones", silabos[i].getNumRevisiones());
-        query.bindValue(":NumRechazado", silabos[i].getNumRechazados());
-        query.bindValue(":Visibilidad", silabos[i].getVisibilidad());
-        SubirSilabo(QString::fromStdString(silabos[i].getDatosClase()).left(6), docx2BA(silabos[i].getRutaSilabos()));
-        query.exec();
-    }
-    db.close();
-}
+//        if (!facultad.isEmpty() && facultad.at(0) == '-') {
+//            Sede="UNITEC";
+//        } else {
+//            Sede="CEUTEC";
+//        }
+//        query.prepare("Insert into SilabosClases (CodigoClase, Carrera, Facultad, Sede, Nombre, InsertadoPor, Estado, Observacion, NumRevisiones, NumRechazado, Visibilidad) VALUES(:Codigo,:Carrera,:Facultad,:Sede,:Nombre,:InsertadoPor,:Estado,:Observacion,:NumRevisiones,:NumRechazado,:Visibilidad)");
+//        //:Codigo,:Carrera,:Facultad,:Sede,:Nombre,:InsertadoPor,:Estado,:Observacion,:NumRevisiones,:NumRechazado,:Visibilidad
+//        query.bindValue(":Codigo", QString::fromStdString(silabos[i].getDatosClase()).left(6));
+//        query.bindValue(":Carrera", QString::fromStdString(silabos[i].getCarreras()));
+//        query.bindValue(":Facultad", QString::fromStdString(silabos[i].getFacultad()));
+//        query.bindValue(":Sede", Sede);
+//        query.bindValue(":Nombre", QString::fromStdString(silabos[i].getDatosClase()));
+//        query.bindValue(":InsertadoPor", silabos[i].getInsertadoPor());
+//        query.bindValue(":Estado", QString::fromStdString(silabos[i].getEstado()));
+//        query.bindValue(":Observacion", QString::fromStdString(silabos[i].getObservacion()));
+//        query.bindValue(":NumRevisiones", silabos[i].getNumRevisiones());
+//        query.bindValue(":NumRechazado", silabos[i].getNumRechazados());
+//        query.bindValue(":Visibilidad", silabos[i].getVisibilidad());
+//        SubirSilabo(QString::fromStdString(silabos[i].getDatosClase()).left(6), docx2BA(silabos[i].getRutaSilabos()));
+//        query.exec();
+//    }
+//    db.close();
+//}
 
 void cframe::on_Mbtn_ingresar_clicked(){
     if(ui->Mle_cuenta->text().isEmpty()||ui->Mle_contra->text().isEmpty()||ui->Mle_name->text().isEmpty()||ui->Mcb_tipo->currentText() == "..."){
@@ -565,12 +563,11 @@ void cframe::on_Ebtn_fechas_clicked()
         ui->Elbl_path_fechas->setText(filePath);
 
     }
-
-
 }
 
 void cframe::on_Ebtn_enviar_clicked()
 {
+    std::vector<Silabos> silabos = arbol->obtenerTodos();
     QString facultad = ui->Ecb_facultad->currentText();
     QString carrera = ui->Ecb_carrera->currentText();
     QString datosClase = ui->Ecb_clases->currentText();
@@ -582,12 +579,14 @@ void cframe::on_Ebtn_enviar_clicked()
     }else{
         //    Silabos(string facultad, string carrera, int insertadoPor, string datosClase, QString rutaSilabos, QString rutaFechas, string estado, string observacion, short numRevisiones, short numRechazado, short visibilidad)
 
-        if (ui->Ecb_facultad->currentIndex() == 1) {
+        if (ui->Ecb_sede->currentText().toStdString() == "UNITEC") {
             facultad = "-" + facultad;
         }
+         int indice = silabos.size() + 1;
 
         Silabos s(facultad.toStdString(),
                   carrera.toStdString(),
+                  indice,
                   ui->Albl_cuenta->text().toInt(),  // insertadoPor
                   datosClase.toStdString(),
                   path_silabo,
@@ -598,10 +597,8 @@ void cframe::on_Ebtn_enviar_clicked()
                   0,  // numRechazado
                   0   // veces revisado de forma general
                   );
-
         // Insertar el Silabos en el árbol
         arbol->insertar(s);
-        //volver a inicializar en 0 los indices para que se muestren ...
         ui->Ecb_carrera->setCurrentIndex(0);
         ui->Ecb_facultad->setCurrentIndex(0);
         ui->Ecb_sede->setCurrentIndex(0);
@@ -609,20 +606,16 @@ void cframe::on_Ebtn_enviar_clicked()
         ui->Elbl_path_fechas->setText("...");
         ui->Elbl_path_archivo->setText("...");
     }
-
-
-
-
 }
 
 void cframe::MostrarSilabos() {
     std::vector<Silabos> silabos = arbol->obtenerTodos();
     ui->Rtw_revision->clear();
     ui->Rtw_revision->setRowCount(0);
-    ui->Rtw_revision->setColumnCount(15);
+    ui->Rtw_revision->setColumnCount(16);
     QStringList headers;
     headers <<"SEDE"<< "ID" << "Facultad" << "Carrera" << "Insertado Por" << "Datos Clase"
-           << "Ruta Silabos" << "Ruta Fechas" << "Estado" << "Observación"
+           << "Cuadro de Silabos" << "Cuadro de Fechas" << "Estado" << "Ubicación"<< "Observación"
            << "# Revisiones Consultor" << "Número de Rechazados" << "# Revisiones General"
            << "Cambiar Silabo"<<"Cambiar Fechas";
     ui->Rtw_revision->setHorizontalHeaderLabels(headers);
@@ -638,9 +631,7 @@ void cframe::MostrarSilabos() {
         }else{
             mostrar=false;
         }
-
         if(mostrar){
-
             int row = ui->Rtw_revision->rowCount();
             ui->Rtw_revision->insertRow(row);
 
@@ -660,15 +651,16 @@ void cframe::MostrarSilabos() {
             ui->Rtw_revision->setItem(row, 6, new QTableWidgetItem(s.getRutaSilabos()));
             ui->Rtw_revision->setItem(row, 7, new QTableWidgetItem(s.getRutaFechas()));
             ui->Rtw_revision->setItem(row, 8, new QTableWidgetItem(QString::fromStdString(s.getEstado())));
-            ui->Rtw_revision->setItem(row, 9, new QTableWidgetItem(QString::fromStdString(s.getObservacion())));
-            ui->Rtw_revision->setItem(row, 10, new QTableWidgetItem(QString::number(s.getNumRevisiones())));
-            ui->Rtw_revision->setItem(row, 11, new QTableWidgetItem(QString::number(s.getNumRechazados())));
-            ui->Rtw_revision->setItem(row, 12, new QTableWidgetItem(QString::number(s.getVisibilidad())));
-            ui->Rtw_revision->setItem(row, 13, new QTableWidgetItem("RELOAD SILABO"));
-            ui->Rtw_revision->setItem(row, 14, new QTableWidgetItem("RELOAD CUADRO"));
 
+            ui->Rtw_revision->setItem(row, 9, new QTableWidgetItem(listaUsuarios.faseUsuario(QString::fromStdString(s.getEstado()))));
+
+            ui->Rtw_revision->setItem(row, 10, new QTableWidgetItem(QString::fromStdString(s.getObservacion())));
+            ui->Rtw_revision->setItem(row, 11, new QTableWidgetItem(QString::number(s.getNumRevisiones())));
+            ui->Rtw_revision->setItem(row, 12, new QTableWidgetItem(QString::number(s.getNumRechazados())));
+            ui->Rtw_revision->setItem(row, 13, new QTableWidgetItem(QString::number(s.getVisibilidad())));
+            ui->Rtw_revision->setItem(row, 14, new QTableWidgetItem("RELOAD SILABO"));
+            ui->Rtw_revision->setItem(row, 15, new QTableWidgetItem("RELOAD FECHAS"));
         }
-
     }
     ui->Rtw_revision->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
@@ -676,33 +668,64 @@ void cframe::MostrarSilabos() {
 void cframe::on_Ecb_sede_currentIndexChanged(const QString &arg1)
 {
     Facultades.clear();
-    for(int i=0;i<ClasesAgregadas.size();i++)
-    {
-        if(ClasesAgregadas[i].Sede==arg1)
-            Facultades.append(ClasesAgregadas[i].Facultad);
-    }
-    QSet<QString> temp = QSet<QString>::fromList(Facultades);
-    Facultades = temp.toList();
+    Carreras.clear();
     ui->Ecb_facultad->clear();
     ui->Ecb_carrera->clear();
     ui->Ecb_clases->clear();
+
+    if (ui->Ecb_sede->currentIndex() == 0) {
+        //Facultades = QStringList({"..."});
+    } else if (ui->Ecb_sede->currentIndex() == 1) {
+        Facultades = QStringList({"Ciencias Administrativas y Sociales", "Ingeniería",
+                                   "Ciencias de la Salud", "Arte y Diseño"});
+    } else if (ui->Ecb_sede->currentIndex() == 2) {
+        Facultades = QStringList({"Licenciaturas", "Ingenierías", "Técnicos",
+                                   "E. Ciencias de la Salud"});
+    } else { }
+    QSet<QString> temp = QSet<QString>::fromList(Facultades);
+    Facultades = temp.toList();
     ui->Ecb_facultad->addItem("...");
     ui->Ecb_facultad->addItems(Facultades);
-
 }
 
 void cframe::on_Ecb_facultad_currentIndexChanged(const QString &arg1)
 {
     Carreras.clear();
-    for(int i=0;i<ClasesAgregadas.size();i++)
-    {
-        if(ClasesAgregadas[i].Facultad==arg1 && ClasesAgregadas[i].Sede==ui->Ecb_sede->currentText())
-            Carreras.append(ClasesAgregadas[i].Carrera);
-    }
-    QSet<QString> temp = QSet<QString>::fromList(Carreras);
-    Carreras = temp.toList();
     ui->Ecb_carrera->clear();
     ui->Ecb_clases->clear();
+
+    if (ui->Ecb_sede->currentIndex() == 1) {
+        if (arg1 == "Ciencias Administrativas y Sociales") {
+            Carreras = QStringList({"Administración de la Hospitalidad y Turismo",
+                                     "Administración Industrial e Inteligencia de Negocios",
+                                     "Derecho", "Relaciones Internacionales"});
+        } else if (arg1 == "Ingeniería") {
+            Carreras = QStringList({"Ingeniería Biomédica", "Ciencia de Datos e Inteligencia Artificial",
+                                     "Ingeniería Civil", "Ingeniería en Energía"});
+        } else if (arg1 == "Ciencias de la Salud") {
+            Carreras = QStringList({"Cirugía Dental", "Medicina y Cirugía",
+                                     "Nutrición", "Psicología"});
+        } else if (arg1 == "Arte y Diseño") {
+            Carreras = QStringList({"Animación Digital y Diseño Interactivo",
+                                     "Diseño Gráfico", "Diseño de Modas",
+                                     "Arquitectura", "Gastronomía"});
+        }
+    } else if (ui->Ecb_sede->currentIndex() == 2) {
+        if (arg1 == "Licenciaturas") {
+            Carreras = QStringList({"Economía", "Periodismo"});
+        } else if (arg1 == "Ingenierías") {
+            Carreras = QStringList({"Informática", "Electrónica"});
+        } else if (arg1 == "Técnicos") {
+            Carreras = QStringList({"Desarrollo y Cuidado Infantil", "Diseño de Interiores"});
+        } else if (arg1 == "E. Ciencias de la Salud") {
+            Carreras = QStringList({"Enfermería", "Psicología"});
+        } else {
+            Carreras.clear();
+        }
+    }
+
+    QSet<QString> temp = QSet<QString>::fromList(Carreras);
+    Carreras = temp.toList();
     ui->Ecb_carrera->addItem("...");
     ui->Ecb_carrera->addItems(Carreras);
 }
@@ -710,14 +733,18 @@ void cframe::on_Ecb_facultad_currentIndexChanged(const QString &arg1)
 void cframe::on_Ecb_carrera_currentIndexChanged(const QString &arg1)
 {
     Clases.clear();
-    for(int i=0;i<ClasesAgregadas.size();i++)
-    {
-        if(ClasesAgregadas[i].Carrera==arg1 && ClasesAgregadas[i].Sede==ui->Ecb_sede->currentText() && ClasesAgregadas[i].Facultad==ui->Ecb_facultad->currentText())
-            Clases.append(ClasesAgregadas[i].Nombre);
+    ui->Ecb_clases->clear();
+    if (ui->Ecb_sede->currentIndex() == 1) {
+        if (arg1 == "Ciencia de Datos e Inteligencia Artificial") {
+            Clases = QStringList({"IAR101", "CDD301", "IAR401"});
+        }
+    } else if (ui->Ecb_sede->currentIndex() == 2) {
+        if (arg1 == "Economía") {
+            Clases = QStringList({"ECO402", "ECO403"});
+        }
     }
     QSet<QString> temp = QSet<QString>::fromList(Clases);
     Clases = temp.toList();
-    ui->Ecb_clases->clear();
     ui->Ecb_clases->addItem("...");
     ui->Ecb_clases->addItems(Clases);
 }
@@ -729,6 +756,8 @@ void cframe::on_Rbtn_cambiar_clicked()
         QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!");
     }else{
         cambiarEstado=true;
+        QMessageBox::information(this,"Datos congruetes","Datos han sido actualizados" +QString::number(id));
+
         modificarDatosSilabo(id,"QString pathNuevo",false);
         QMessageBox::information(this,"Datos congruetes","Datos han sido actualizados");
         ui->Rle_seleccion->setText("");
@@ -740,7 +769,9 @@ void cframe::on_Rbtn_cambiar_clicked()
 }
 void cframe::modificarDatosSilabo(int id, QString pathNuevo, bool silabo)
 {
+    std::vector<Silabos> silabos = arbol->obtenerTodos();
     Silabos* s = arbol->buscar(id);
+     QMessageBox::warning(this, "No posible", "Ya ha sido aprobado"+QString::number(id));
     if (s == nullptr) {
         return;
     }
@@ -767,7 +798,10 @@ void cframe::modificarDatosSilabo(int id, QString pathNuevo, bool silabo)
                 if(silabo){
                     s->setRutaSilabos(pathNuevo);
                 }else{
-                    s->setRutaFechas(pathNuevo);
+                    if(pathNuevo!="QString pathNuevo"){
+                        s->setRutaFechas(pathNuevo);
+                    }
+
                 }
                 cambiarPath=false;
                 s->setEstado("Prerevision");
@@ -829,8 +863,6 @@ void cframe::modificarDatosSilabo(int id, QString pathNuevo, bool silabo)
         return;
 
     }
-
-
 }
 QString cframe::cargarArchivo(QString nombre, bool fechas)
 {
@@ -843,12 +875,10 @@ QString cframe::cargarArchivo(QString nombre, bool fechas)
         QString filePath = QFileDialog::getOpenFileName(this, "Explorador de Archivos DOC", QDir::homePath(), "Document Files (*.doc *.docx)");
         if (!filePath.isEmpty())
         {
-
             return filePath;
         }
     }
 }
-
 
 void cframe::on_Abtn_cambioContra_clicked()
 {
@@ -874,7 +904,6 @@ void cframe::on_Abtn_cambioContra_clicked()
                         break;
                     }else{
                         usuario.setContraAnterior(newPassword);
-
                         //   Usuario( QString cuenta, QString nombre,QString contraActual, QString contraAnterior,short tipo)
                         listaUsuarios.solicitarCambioContra(newPassword, ui->Albl_cuenta->text(), listaUsuarios);
                         QMessageBox::information(this, "Contraseña ", "Cambio ha sido solicitado"+usuario.getContraAnterior());
@@ -901,8 +930,8 @@ QList<Usuario> cframe::DescargarUsuarios()
     int CurrentRow=0;
     while(Query->next())
     {
-        //QString cuenta, QString nombre,QString contraActual, QString contraAnterior,short tipo
-        Usuario* Temp = new Usuario(Query->value(0).toString(),Query->value(3).toString(),Query->value(1).toString(),Query->value(2).toString(),Query->value(4).toInt());
+        //QString cuenta, QString nombre,QString contraActual, QString contraAnterior,short tipo,short sede
+        Usuario* Temp = new Usuario(Query->value(0).toString(),Query->value(3).toString(),Query->value(1).toString(),Query->value(2).toString(),Query->value(4).toInt(),2);
         UsuariosDescargados.append(*Temp);
         listaUsuarios.listaInsertarFinal(*Temp);
         delete Temp;
@@ -910,30 +939,25 @@ QList<Usuario> cframe::DescargarUsuarios()
     }
     return UsuariosDescargados;
 }
-void cframe::mostrarUsuarios() // añadir opción de eliminar usuario
+void cframe::mostrarUsuarios()
 {
     ui->Itw_usuarios->clearContents();
-    QStringList headers = { "CUENTA", "NOMBRE", "CONTRASEÑA ACTUAL", "CONTRASEÑA SOLICITADA", "TIPO" };
+    QStringList headers = { "CUENTA", "NOMBRE", "CONTRASEÑA ACTUAL", "CONTRASEÑA SOLICITADA", "TIPO", "SEDE" };
     ui->Itw_usuarios->setColumnCount(headers.size());
     ui->Itw_usuarios->setHorizontalHeaderLabels(headers);
     ui->Itw_usuarios->setRowCount(listaUsuarios.cantidadUsuarios);
-
     actD = listaUsuarios.PrimPtr;
     int row = 0;
-
     while (actD != nullptr && row < listaUsuarios.cantidadUsuarios) {
         Usuario usuario = actD->getDato();
-
         ui->Itw_usuarios->setItem(row, 0, new QTableWidgetItem(usuario.getCuenta()));
         ui->Itw_usuarios->setItem(row, 1, new QTableWidgetItem(usuario.getNombre()));
-
         QString contraActualOculta(usuario.getContraActual().length(), '*');
         ui->Itw_usuarios->setItem(row, 2, new QTableWidgetItem(contraActualOculta));
-
         QString contraSolicitadaOculta(usuario.getContraAnterior().length(), '*');
         ui->Itw_usuarios->setItem(row, 3, new QTableWidgetItem(contraSolicitadaOculta));
-
         ui->Itw_usuarios->setItem(row, 4, new QTableWidgetItem(listaUsuarios.tipoUsuario(usuario.getTipo())));
+        ui->Itw_usuarios->setItem(row, 5, new QTableWidgetItem(listaUsuarios.sede(usuario.getSede())));
 
         actD = actD->SigPtr;
         ++row;
@@ -944,12 +968,11 @@ void cframe::mostrarUsuarios() // añadir opción de eliminar usuario
 void cframe::on_pushButton_clicked()
 {
     if(ui->Ile_contra->text().isEmpty() || ui->Ile_cuenta->text().isEmpty()|| ui->Ile_name->text().isEmpty() || ui->Icb_tipo->currentIndex()==0){
-        QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!");
+        QMessageBox::critical(this, "Error", "¡Porfavor llenar todos los Espacios!");
 
     }else{
-
         if( cuentaNumero( ui->Ile_cuenta->text().toStdString())  && listaUsuarios.numCuentaDisponible(ui->Ile_cuenta->text())){
-            Usuario* Temp = new Usuario(ui->Ile_cuenta->text(),ui->Ile_name->text(),ui->Ile_contra->text(),"",ui->Icb_tipo->currentIndex());
+            Usuario* Temp = new Usuario(ui->Ile_cuenta->text(),ui->Ile_name->text(),ui->Ile_contra->text(),"",ui->Icb_tipo->currentIndex(), ui->Icb_sede->currentIndex());
             listaUsuarios.listaInsertarFinal(*Temp);
             delete Temp;
             mostrarUsuarios();
@@ -1036,20 +1059,16 @@ void cframe::on_Itw_usuarios_cellClicked(int row, int column)
          }
     }
 }
-
-
-
-
 void cframe::mostrarSilabosBoard(bool aprobado)
 {
     std::vector<Silabos> silabos = arbol->obtenerTodos();
     ui->Btw_dashboard->clearContents();
     ui->Btw_dashboard->setRowCount(0);
-    ui->Btw_dashboard->setColumnCount(13);
+    ui->Btw_dashboard->setColumnCount(14);
     bool mostrar=false;
     QStringList headers;
     headers << "SEDE" << "ID" << "Facultad" << "Carrera" << "Insertado Por" << "Datos Clase"
-            << "Ruta Silabos" << "Ruta Fechas" << "Estado" << "Observación"
+            << "Cuadro de Silabos" << "Cuadro de Fechas" << "Estado" << "Ubicación"<< "Observación"
             << "# revisiones consultor" << "# veces Rechazado" << "# Revisiones general";
     ui->Btw_dashboard->setHorizontalHeaderLabels(headers);
 
@@ -1082,18 +1101,19 @@ void cframe::mostrarSilabosBoard(bool aprobado)
             ui->Btw_dashboard->setItem(row, 6, new QTableWidgetItem(s.getRutaSilabos()));
             ui->Btw_dashboard->setItem(row, 7, new QTableWidgetItem(s.getRutaFechas()));
             ui->Btw_dashboard->setItem(row, 8, new QTableWidgetItem(QString::fromStdString(s.getEstado())));
-            ui->Btw_dashboard->setItem(row, 9, new QTableWidgetItem(QString::fromStdString(s.getObservacion())));
-            ui->Btw_dashboard->setItem(row, 10, new QTableWidgetItem(QString::number(s.getNumRevisiones())));
-            ui->Btw_dashboard->setItem(row, 11, new QTableWidgetItem(QString::number(s.getNumRechazados())));
-            ui->Btw_dashboard->setItem(row, 12, new QTableWidgetItem(QString::number(s.getVisibilidad())));
+
+            ui->Btw_dashboard->setItem(row, 9, new QTableWidgetItem(listaUsuarios.faseUsuario(QString::fromStdString(s.getEstado()))));
+
+            ui->Btw_dashboard->setItem(row, 10, new QTableWidgetItem(QString::fromStdString(s.getObservacion())));
+            ui->Btw_dashboard->setItem(row, 11, new QTableWidgetItem(QString::number(s.getNumRevisiones())));
+            ui->Btw_dashboard->setItem(row, 12, new QTableWidgetItem(QString::number(s.getNumRechazados())));
+            ui->Btw_dashboard->setItem(row, 13, new QTableWidgetItem(QString::number(s.getVisibilidad())));
         }
         mostrar=false;
     }
 
     ui->Btw_dashboard->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
-
-
 void cframe::mostrarSilabosFeed(QString cuenta)
 {
     //            ui->DRTW_revision->setHorizontalHeaderLabels(QStringList() <<"VER DOCX"<<"ORDEN DE INGRESO"<<"INGRESADO POR"<<"# CUENTA"<<"FACULTAD"<<"CARRERA"<<"CODIGO CLASE"<<"OBSERVACION"<<"PATH"<<"RELOAD");
@@ -1101,10 +1121,10 @@ void cframe::mostrarSilabosFeed(QString cuenta)
     std::vector<Silabos> silabos = arbol->obtenerTodos();
 
     ui->Ftw_feed->setRowCount(0);
-    ui->Ftw_feed->setColumnCount(15);
+    ui->Ftw_feed->setColumnCount(16);
     QStringList headers;
     headers <<"SEDE"<< "ID" << "Facultad" << "Carrera" << "Insertado Por" << "Datos Clase"
-           << "Ruta Silabos" << "Ruta Fechas" << "Estado" << "Observación"
+           << "Cuadro de Silabos" << "Cuadro de Fechas" << "Estado" << "Ubicación"<< "Observación"
            << "# revisiones consultor" << "# veces Rechazado" << "# Revisiones general"
            << "Cambiar Silabo"<<"Cambiar Fechas";
     ui->Ftw_feed->setHorizontalHeaderLabels(headers);
@@ -1130,48 +1150,41 @@ void cframe::mostrarSilabosFeed(QString cuenta)
             ui->Ftw_feed->setItem(row, 6, new QTableWidgetItem(s.getRutaSilabos()));
             ui->Ftw_feed->setItem(row, 7, new QTableWidgetItem(s.getRutaFechas()));
             ui->Ftw_feed->setItem(row, 8, new QTableWidgetItem(QString::fromStdString(s.getEstado())));
-            ui->Ftw_feed->setItem(row, 9, new QTableWidgetItem(QString::fromStdString(s.getObservacion())));
-            ui->Ftw_feed->setItem(row, 10, new QTableWidgetItem(QString::number(s.getNumRevisiones())));
-            ui->Ftw_feed->setItem(row, 11, new QTableWidgetItem(QString::number(s.getNumRechazados())));
-            ui->Ftw_feed->setItem(row, 12, new QTableWidgetItem(QString::number(s.getVisibilidad())));
-            ui->Ftw_feed->setItem(row, 13, new QTableWidgetItem("RELOAD SILABO"));
-            ui->Ftw_feed->setItem(row, 14, new QTableWidgetItem("RELOAD CUADRO"));
 
+            ui->Ftw_feed->setItem(row,9, new QTableWidgetItem(listaUsuarios.faseUsuario(QString::fromStdString(s.getEstado()))));
+
+            ui->Ftw_feed->setItem(row, 10, new QTableWidgetItem(QString::fromStdString(s.getObservacion())));
+            ui->Ftw_feed->setItem(row, 11, new QTableWidgetItem(QString::number(s.getNumRevisiones())));
+            ui->Ftw_feed->setItem(row, 12, new QTableWidgetItem(QString::number(s.getNumRechazados())));
+            ui->Ftw_feed->setItem(row, 13, new QTableWidgetItem(QString::number(s.getVisibilidad())));
+            ui->Ftw_feed->setItem(row, 14, new QTableWidgetItem("RELOAD SILABO"));
+            ui->Ftw_feed->setItem(row, 15, new QTableWidgetItem("RELOAD FECHAS"));
         }
-
     }
     ui->Btw_dashboard->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-
-
 }
 
 void cframe::on_Brb_proceso_clicked()
 {
     ui->Btw_dashboard->clear();
     mostrarSilabosBoard(false);
-
-
 }
-
 void cframe::on_Brb_aprobados_clicked()
 {
     ui->Btw_dashboard->clear();
     mostrarSilabosBoard(true);
-
 }
 
-void cframe::on_Rtw_revision_cellClicked(int row, int column)
+void cframe::
+on_Rtw_revision_cellClicked(int row, int column)
 {
-    // Obtener el ID del Silabo desde la primera columna de la fila seleccionada
     id = ui->Rtw_revision->item(row, 1)->text().toInt();
 
-    // Buscar el Silabo por ID en el árbol
-    Silabos* s = arbol->buscar(id);
+    QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!  " + QString::number(id));
 
-    if (s != nullptr) {
         ui->Rle_seleccion->setText(ui->Rtw_revision->item(row, column)->text());
-        ui->Rle_estadoActual->setText(QString::fromStdString(s->getEstado()));
-        if(tipo ==7 && column!=14 && column !=13){
+        ui->Rle_estadoActual->setText(ui->Rtw_revision->item(row, 8)->text());
+        if(tipo ==7 && column!=15 && column !=14){
             QStringList items;
             ui->Rcb_estadoCambiar->clear();
             if( ui->Rtw_revision->item(row, 8)->text().toStdString()=="Aprobado"){
@@ -1183,22 +1196,16 @@ void cframe::on_Rtw_revision_cellClicked(int row, int column)
             ui->Rcb_estadoCambiar->addItems(items);
         }else if(column ==6 || column==7){
                 QString Ruta = ui->Ftw_feed->item(row, column)->text();
-                //QMessageBox::warning(this, "No posible", Ruta);
                 QDesktopServices::openUrl(QUrl::fromLocalFile(Ruta));
-        }else if(column==13 ){
-            cambiarSilabo( id, ui->Rtw_revision->item(row, 6)->text(),13);
-        }else if(column==14){
-            cambiarSilabo( id, ui->Rtw_revision->item(row, 7)->text(),14);
+        }else if(column==14 ){
+            cambiarSilabo( id, ui->Rtw_revision->item(row, 6)->text(),14);
+        }else if(column==15){
+            cambiarSilabo( id, ui->Rtw_revision->item(row, 7)->text(),15);
 
         }else{
 
 
-
-        }
-
-
     }
-
 }
 void cframe::cambiarSilabo(int id, QString pathActual, short i)
 {
@@ -1207,7 +1214,7 @@ void cframe::cambiarSilabo(int id, QString pathActual, short i)
         QMessageBox::warning(this, "No posible", "Ha seleccionado el mismo silabo");
     }else if(!filePath.isEmpty()){
         cambiarPath=true;
-        if(i==13){
+        if(i==14){
             modificarDatosSilabo(id,filePath, true);
         }else{
 
@@ -1218,8 +1225,6 @@ void cframe::cambiarSilabo(int id, QString pathActual, short i)
     }
 }
 
-
-
 void cframe::on_Ftw_feed_cellClicked(int row, int column)
 {
     id = ui->Ftw_feed->item(row, 1)->text().toInt();
@@ -1227,18 +1232,16 @@ void cframe::on_Ftw_feed_cellClicked(int row, int column)
     {
         QString Ruta = ui->Ftw_feed->item(row, column)->text();
         QDesktopServices::openUrl(QUrl::fromLocalFile(Ruta));
-    }else if(column==13 || column==14){
+    }else if(column==14 || column==15){
         cambiarPath=true;
-        if(column==13 ){
-
-            cambiarSilabo( id, ui->Ftw_feed->item(row, 6)->text(),13);
-        }else if(column==14){
-            cambiarSilabo( id, ui->Ftw_feed->item(row, 7)->text(),14);
+        if(column==14 ){
+            cambiarSilabo( id, ui->Ftw_feed->item(row, 6)->text(),14);
+        }else if(column==15){
+            cambiarSilabo( id, ui->Ftw_feed->item(row, 7)->text(),15);
 
         }
     }
 }
-
 
 void cframe::on_Btw_dashboard_cellClicked(int row, int column)
 {
@@ -1248,16 +1251,6 @@ void cframe::on_Btw_dashboard_cellClicked(int row, int column)
           QDesktopServices::openUrl(QUrl::fromLocalFile(Ruta));
       }
 }
-
-
-void cframe::on_Ftw_feed_cellActivated(int row, int column)
-{
-
-}
-
-
-void cframe::on_Mcb_tipo_currentIndexChanged(int index)
-{
-
-}
+void cframe::on_Ftw_feed_cellActivated      (int row, int column)   {}
+void cframe::on_Mcb_tipo_currentIndexChanged(int index)             {}
 

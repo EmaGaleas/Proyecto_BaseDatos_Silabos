@@ -11,7 +11,6 @@ using std::cout;
 using std::string;
 using std::cerr;
 
-
 template<typename tipo>
 class listaD{
     friend class cframe;
@@ -20,32 +19,31 @@ private:
     nodoD<tipo> *PrimPtr;
     nodoD<tipo> *UltPtr;
     int cantidadUsuarios=0;
-
 public:
-
     //funciones respecto a lista, insersion y otra info respecto a ella
     listaD();
     ~listaD();
 
-    void listaInsertarFinal(const tipo &);
-    bool listaVacia()const;
-    int listaTamano();
+    void listaInsertarFinal         (const tipo &);
+    bool listaVacia                 ()const;
+    int listaTamano                 ();
 
+    //acciones con los datos
+    QString tipoUsuario             (short t);
+    QString sede                    (short t);
+    QString faseUsuario             (QString estado);
+    bool numCuentaDisponible        (QString num);
+    QString login                   (QString cuenta, QString nombre,QString contraActual, short type);
 
-    //acciones con los datos de los nodos de dicha lista de usuarios
-    QString tipoUsuario(short t);
-    bool numCuentaDisponible(QString num);
-    QString login(QString cuenta, QString nombre,QString contraActual, short type);          //revisar
+    short numeroTipoUsuario         (const QString &tipoStr);
 
-    short numeroTipoUsuario(const QString &tipoStr);
+    bool verficarContraAceptada     (QString cuenta, QString contradeseada, short type);
 
-    bool verficarContraAceptada(QString cuenta, QString contradeseada, short type);       //revisar
-
-    void cambioContra(QString contraNueva, QString cuenta, listaD<Usuario>& listaUsuarios); //cambia contraseña
-    void DeleteUser( QString cuenta, listaD<Usuario>& listaUsuarios); // elimina usario  //revisar
-    void solicitarCambioContra(QString solicitud, QString cuenta, listaD<Usuario>& listaUsuarios); //cambia contraseña
-    void aceptarCambioContra(bool aceptar, QString cuenta, listaD<Usuario>& listaUsuarios); //cambia contraseña
-    QString obtenerContraAnterior(QString cuenta,listaD<Usuario>& listaUsuarios);
+    void DeleteUser                 (QString cuenta, listaD<Usuario>& listaUsuarios);                       // elimina usario
+    void cambioContra               (QString contraNueva, QString cuenta, listaD<Usuario>& listaUsuarios);  //cambia contraseña
+    void solicitarCambioContra      (QString solicitud, QString cuenta, listaD<Usuario>& listaUsuarios);    //cambia contraseña
+    void aceptarCambioContra        (bool aceptar, QString cuenta, listaD<Usuario>& listaUsuarios);         //cambia contraseña
+    QString obtenerContraAnterior   (QString cuenta,listaD<Usuario>& listaUsuarios);
 
 
 };
@@ -138,7 +136,7 @@ QString listaD<tipo>::tipoUsuario(short t)
         tipoStr = "CONSULTOR";
         break;
     default:
-        tipoStr = "ERROR"; // En caso de que el tipo no esté definido
+        tipoStr = "ERROR";
         break;
     }
     return tipoStr;
@@ -161,10 +159,45 @@ short listaD<tipo>::numeroTipoUsuario(const QString &tipoStr)
     } else if (tipoStr == "CONSULTOR") {
         return 7;
     } else {
-        return -1; // En caso de que el tipo no sea reconocido
+        return -1;
     }
 }
+template<typename tipo>
+QString listaD<tipo>::faseUsuario(const QString estado)
+{
+    if (estado == "Prerevision" || estado == "Devolver a Academia" ) {
+        return "JEFE ACADEMICO/ COORDINADOR DE CARRERA";
+    } else if (estado == "Rechazado" || estado == "Rechazar") {
+        return "DOCENTE";
+    } else if (estado == "Cargar silabo (Enviar a IEDD)" || estado == "Correcion Mayor" || estado == "Correcion Menor" || estado == "Aprobado con condicion") {
+        return "IEDD";
+    } else if (estado == "Listo para revision 1" || estado == "Aprobado" || estado == "Aprobado con condicion"  ) { //"Correcion Mayor"
+        return "CONSULTOR";
+    } else {
+        return "N/A";
+    }
+}
+template<typename tipo>
+QString listaD<tipo>::sede(short t)
+{
+    QString tipoStr;
+    switch (t) {
+    case 1:
+        tipoStr = "UNITEC";
+        break;
+    case 2:
+        tipoStr = "CEUTEC";
+        break;
+    case 3:
+        tipoStr = "UNITEC-CEUTEC";
+        break;
 
+    default:
+        tipoStr = "N/A";
+        break;
+    }
+    return tipoStr;
+}
 template<typename tipo>
 bool listaD<tipo>::numCuentaDisponible(QString num)
 {
