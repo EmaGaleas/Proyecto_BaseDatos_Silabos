@@ -43,7 +43,7 @@
     <item row="1" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tabMenu">
        <attribute name="title">
@@ -305,7 +305,7 @@
            </font>
           </property>
           <property name="text">
-           <string>SELECCIONAR CUADRO DE PLANIFICACIONES</string>
+           <string>SELECCIONAR SÍLABO</string>
           </property>
          </widget>
         </item>
@@ -346,7 +346,7 @@
            </font>
           </property>
           <property name="text">
-           <string>CUADRO DE FECHAS</string>
+           <string>SELECCIONAR CPEA</string>
           </property>
          </widget>
         </item>
