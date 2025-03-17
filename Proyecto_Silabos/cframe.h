@@ -50,11 +50,12 @@ private slots:
 private:
     Ui::cframe *ui;
 
-    void visibilidad();
-    //variables para actualizar el cframe admin
+  //variables para actualizar el cframe admin
     QString nombre,numero_cuenta,tipo_usuario;
     QString password;
-    //relacionado con DB
+    void visibilidad();
+
+  //relacionado con DB
     QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
     QString connectionString = QString("Driver={ODBC Driver 18 for SQL Server};Server=tcp:estrudatosii.database.windows.net,1433;Database=ProyectoTest;Uid=rajuria;Pwd={TobiichiOrigami11!};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;");
     QList<Usuario> DescargarUsuarios();
@@ -77,39 +78,29 @@ private:
     QByteArray DescargarSilabo(QString);
     void Conectar();
     void Su();
+    void SubirDatos(); //DB
 
-    //HASTA AQUI+
-    arbolB *arbol;
-
+  //relacionado con SILABOS
     void MostrarSilabos();
+    arbolB *arbol;
+    void mostrarSilabosBoard(bool aprobado);
+    void mostrarSilabosFeed(QString cuenta);
+    bool cambiarPath=false, cambiarEstado=false;
+    void modificarDatosSilabo(int id,QString pathNuevo, bool silabo);
+    int id=0;
+    QString cargarArchivo(QString nombre,bool);
+    void cambiarSilabo(int id, QString pathActual,short i);
+
+  //relacionado con USUARIOS
     void mostrarUsuarios();
     listaD<Usuario> listaUsuarios;
     nodoD<Usuario> *actD;
     nodoD<Usuario> *ultD;
     bool cuentaNumero(const std::string &tt);
-
-    void SubirDatos(); //DB
-    void mostrarSilabosBoard(bool aprobado);
-    void mostrarSilabosFeed(QString cuenta);
     short tipo;
-
-    bool cambiarPath=false, cambiarEstado=false;
-    void modificarDatosSilabo(int id,QString pathNuevo, bool silabo);
-    int id=0;
-
-    QString cargarArchivo(QString nombre,bool);
-
-    void cambiarSilabo(int id, QString pathActual,short i);
-
-    //relacionado con SILABOS
-
-    //relacionado con DB
-
-    //relacionado con USUARIOS
-
     void insertarUser();
 
-    void configurarFiltros();
+    voidconsultors();
     void aplicarFiltro(int columna, const QString &filtro);
 
 };

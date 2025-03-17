@@ -39,8 +39,7 @@ cframe::cframe(QWidget *parent)
     QImage menu(":/new/prefix1/menu.png");
     ui->lbl_png->setPixmap(QPixmap::fromImage(menu));
     ui->lbl_png->setStyleSheet("background-color: #A61400;");
-    QMessageBox::StandardButton reply;
-
+//    QMessageBox::StandardButton reply;
 //    reply = QMessageBox::information(this, "Bienvenido", "Cargar base de datos para iniciar.\nEsto puede tardar unos segundos.", QMessageBox::Ok);
 //    if (reply == QMessageBox::Ok) {
 //       Conectar();
@@ -72,9 +71,7 @@ void cframe::insertarUser()
     delete Temp3;
     Usuario* Temp4= new Usuario("55555555","5JUAN","555","",5, 3);
     listaUsuarios.listaInsertarFinal(*Temp4);
-
     delete Temp4;
-
 }
 void cframe::visibilidad()
 {
@@ -91,46 +88,40 @@ void cframe::visibilidad()
         ui->btn_sesion->setVisible(true);
         QImage menu(":/new/prefix1/revision.png");
         ui->lbl_png->setPixmap(QPixmap::fromImage(menu));
-
     }else if(ui->tabWidget->currentIndex()==3){
         ui->btn_sesion->setText("VOLVER A MENU");
         ui->btn_sesion->setVisible(true);
         QImage menu(":/new/prefix1/dashboard.png");
         ui->lbl_png->setPixmap(QPixmap::fromImage(menu));
-
     }else if(ui->tabWidget->currentIndex()==4 || ui->tabWidget->currentIndex()==6){
         ui->btn_sesion->setText("VOLVER A MENU");
         ui->btn_sesion->setVisible(true);
         QImage menu(":/new/prefix1/actividad.png");
         ui->lbl_png->setPixmap(QPixmap::fromImage(menu));
-
     }else if(ui->tabWidget->currentIndex()==5){
         ui->btn_sesion->setText("CERRAR SESION");
         ui->btn_sesion->setVisible(true);
         QImage menu(":/new/prefix1/ingresado.png");
         ui->lbl_png->setPixmap(QPixmap::fromImage(menu));
-
     }
 }
 
 void cframe::on_Mbtn_ingresar_clicked(){
     if(ui->Mle_cuenta->text().isEmpty()||ui->Mle_contra->text().isEmpty()||ui->Mle_name->text().isEmpty()||ui->Mcb_tipo->currentText() == "..."){
-        QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!");
+        QMessageBox::critical(this, "Error", "Porfavor, llena todos los Espacios");
     }else{
         //Conectar;
         QString contraDeseada= listaUsuarios.login(ui->Mle_cuenta->text(), ui->Mle_name->text(),ui->Mle_contra->text() ,ui->Mcb_tipo->currentIndex());
         if(contraDeseada!="no" ){
 
             if(listaUsuarios.verficarContraAceptada(ui->Mle_cuenta->text(),  contraDeseada, ui->Mcb_tipo->currentIndex())){
-                QMessageBox::information(this, "Cambio de contraseña", "Su solicitud de contraseña fue aprobada\n"+contraDeseada);
+                QMessageBox::information(this, "Cambio de contraseña", "Su solicitud de contraseña fue aprobada:\n"+contraDeseada);
                 listaUsuarios.cambioContra(ui->Mle_contra->text(), ui->Mle_cuenta->text(), listaUsuarios);
             }
             if(contraDeseada == "RECHAZADA"){
-                QMessageBox::information(this, "Cambio de contraseña", "Su solicitud de contraseña fue rechazada"+contraDeseada);
+                QMessageBox::information(this, "Cambio de contraseña", "Su solicitud de contraseña fue rechazada:\n"+contraDeseada);
                 listaUsuarios.cambioContra(ui->Mle_contra->text(), ui->Mle_cuenta->text(), listaUsuarios);
-                //modificar que la contra anterior sea vacio
             }
-
             tipo=ui->Mcb_tipo->currentIndex();
             ui->Albl_cuenta->setText(ui->Mle_cuenta->text());
             ui->Albl_tipo->setText(ui->Mcb_tipo->currentText());
@@ -173,19 +164,13 @@ void cframe::on_Acb_acciones_currentIndexChanged(int index)
 void cframe::on_btn_sesion_clicked()
 {
     if(ui->tabWidget->currentIndex() ==0){
-
         QMessageBox::StandardButton reply;
         reply = QMessageBox::question(this, "Guía",
                                       "¿Desea ver el manual de uso?",
                                       QMessageBox::Yes | QMessageBox::No);
         if (reply == QMessageBox::Yes) {
             QDesktopServices::openUrl(QUrl::fromLocalFile("https://acortar.link/P805nZ"));
-
-        }else{
-
-        }
-
-
+        }else{}
     }else{
         if(ui->tabWidget->currentIndex() != 5){
             ui->tabWidget->setCurrentIndex(5);
@@ -214,7 +199,6 @@ void cframe::on_Ecb_sede_currentIndexChanged(int index)
 
 void cframe::on_Acb_acciones_currentIndexChanged(const QString &arg1)
 {
-
     if(arg1=="ENTREGAR"){
         QStringList item;
         ui->Ecb_sede->clear();
@@ -222,8 +206,6 @@ void cframe::on_Acb_acciones_currentIndexChanged(const QString &arg1)
         ui->Ecb_sede->addItems(item);
         ui->tabWidget->setCurrentIndex(1);
     }else if(arg1=="REVISION"){
-
-        //añadi de aqui
         QStringList items;
         ui->Rcb_estadoCambiar->clear();
         if(tipo==4 || tipo==5){//jefe o coordinador
@@ -235,16 +217,14 @@ void cframe::on_Acb_acciones_currentIndexChanged(const QString &arg1)
             ui->RC->setVisible(true);
             ui->Rcb_consultor->setVisible(true);
             items<<"..."<<"Listo para revision 1"<<"Devolver a Academia";
+            ui->Rcb_consultor->clear();
             ui->Rcb_estadoCambiar->addItems(items);
             actD = listaUsuarios.PrimPtr;
-
             while (actD != nullptr) {
                 Usuario usuario = actD->getDato();
-
                 if (usuario.getTipo() == 7) {
                     ui->Rcb_consultor->addItem(usuario.getNombre()); // Agregar solo los consultores
                 }
-
                 actD = actD->SigPtr;
             }
         }else if(tipo==7){//consultor
@@ -252,9 +232,7 @@ void cframe::on_Acb_acciones_currentIndexChanged(const QString &arg1)
             ui->Rcb_consultor->setVisible(false);
             items<<"...";
             ui->Rcb_estadoCambiar->addItems(items);
-
         }
-        //hasta aqui
         ui->tabWidget->setCurrentIndex(2);
         MostrarSilabos();
     }else if(arg1=="BOARD"){
@@ -266,7 +244,6 @@ void cframe::on_Acb_acciones_currentIndexChanged(const QString &arg1)
         mostrarUsuarios();
         ui->tabWidget->setCurrentIndex(6);
     }else if(arg1=="..."){
-
     }
     ui->Acb_acciones->setCurrentIndex(0);
     visibilidad();
@@ -275,29 +252,22 @@ void cframe::on_Acb_acciones_currentIndexChanged(const QString &arg1)
 
 void cframe::on_Ebtn_archivo_clicked()
 {
-
     QString filePath = cargarArchivo(ui->Ecb_carrera->currentText(),false);
     if (filePath=="...") {
-        QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!\n");
+        QMessageBox::critical(this, "Error", "Porfavor, llene todos los espacios");
 
     }else{
         ui->Elbl_path_archivo->setText(filePath);
-
     }
-
-
-
 }
 
 void cframe::on_Ebtn_fechas_clicked()
 {
     QString filePath = cargarArchivo(ui->Ecb_carrera->currentText(),true);
     if (filePath=="...") {
-        QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!\n");
-
+        QMessageBox::critical(this, "Error", "Porfavor, llene todos los espacios");
     }else{
         ui->Elbl_path_fechas->setText(filePath);
-
     }
 }
 
@@ -313,13 +283,10 @@ void cframe::on_Ebtn_enviar_clicked()
     if(path_silabo=="..." || (ui->Ecb_sede->currentIndex()==2 && path_fecha=="...")){
         QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!");
     }else{
-        //    Silabos(string facultad, string carrera, int insertadoPor, string datosClase, QString rutaSilabos, QString rutaFechas, string estado, string observacion, short numRevisiones, short numRechazado, short visibilidad)
-
         if (ui->Ecb_sede->currentText().toStdString() == "UNITEC") {
             facultad = "-" + facultad;
         }
-         int indice = silabos.size() + 1;
-
+        int indice = silabos.size() + 1;
         Silabos s(facultad.toStdString(),
                   carrera.toStdString(),
                   indice,
@@ -333,7 +300,6 @@ void cframe::on_Ebtn_enviar_clicked()
                   0,  // numRechazado
                   0   // veces revisado de forma general
                   );
-        // Insertar el Silabos en el árbol
         arbol->insertar(s);
         ui->Ecb_carrera->setCurrentIndex(0);
         ui->Ecb_facultad->setCurrentIndex(0);
@@ -343,7 +309,6 @@ void cframe::on_Ebtn_enviar_clicked()
         ui->Elbl_path_archivo->setText("...");
     }
 }
-
 void cframe::MostrarSilabos() {
     std::vector<Silabos> silabos = arbol->obtenerTodos();
     ui->Rtw_revision->clear();
@@ -351,12 +316,11 @@ void cframe::MostrarSilabos() {
     ui->Rtw_revision->setColumnCount(16);
     QStringList headers;
     headers <<"SEDE"<< "ID" << "Facultad" << "Carrera" << "Insertado Por" << "Datos Clase"
-           << "Cuadro de Silabos" << "Cuadro de Fechas" << "Estado" << "Ubicación"<< "Observación"
+           << "Cuadro de Planificaciones" << "Cuadro de Fechas" << "Estado" << "Ubicación"<< "Observación"
            << "# Revisiones Consultor" << "Número de Rechazados" << "# Revisiones General"
-           << "Cambiar Silabo"<<"Cambiar Fechas";
+           << "Cambiar CP"<<"Cambiar Fechas";
     ui->Rtw_revision->setHorizontalHeaderLabels(headers);
     bool mostrar=false;
-
     for (const Silabos& s : silabos) {
         if((tipo==4 || tipo==5)&& (s.getEstado()=="Prerevision" || s.getEstado()=="Devolver a Academia")){//jefe o coordnaor
             mostrar=true;
@@ -370,7 +334,6 @@ void cframe::MostrarSilabos() {
         if(mostrar){
             int row = ui->Rtw_revision->rowCount();
             ui->Rtw_revision->insertRow(row);
-
             QTableWidgetItem *itemSede = new QTableWidgetItem();
             QString facultad = QString::fromStdString(s.getFacultad());
             if (!facultad.isEmpty() && facultad.at(0) == '-') {
@@ -385,7 +348,7 @@ void cframe::MostrarSilabos() {
             ui->Rtw_revision->setItem(row, 4, new QTableWidgetItem(QString::number(s.getInsertadoPor())));
             ui->Rtw_revision->setItem(row, 5, new QTableWidgetItem(QString::fromStdString(s.getDatosClase())));
 
-            ui->Rtw_revision->setItem(row, 6, new QTableWidgetItem(QString::fromStdString(s.getDatosClase())+".docx"));
+            ui->Rtw_revision->setItem(row, 6, new QTableWidgetItem("CP_"+QString::fromStdString(s.getDatosClase())+".docx"));
             QString Ruta =s.getRutaFechas();
             if (!Ruta.isEmpty()) {
                     ui->Rtw_revision->setItem(row, 7, new QTableWidgetItem("F_"+QString::fromStdString(s.getDatosClase())+".docx"));
@@ -396,7 +359,7 @@ void cframe::MostrarSilabos() {
             ui->Rtw_revision->setItem(row, 11, new QTableWidgetItem(QString::number(s.getNumRevisiones())));
             ui->Rtw_revision->setItem(row, 12, new QTableWidgetItem(QString::number(s.getNumRechazados())));
             ui->Rtw_revision->setItem(row, 13, new QTableWidgetItem(QString::number(s.getVisibilidad())));
-            ui->Rtw_revision->setItem(row, 14, new QTableWidgetItem("RELOAD SILABO"));
+            ui->Rtw_revision->setItem(row, 14, new QTableWidgetItem("RELOAD CP"));
             ui->Rtw_revision->setItem(row, 15, new QTableWidgetItem("RELOAD FECHAS"));
         }
     }
@@ -410,9 +373,7 @@ void cframe::on_Ecb_sede_currentIndexChanged(const QString &arg1)
     ui->Ecb_facultad->clear();
     ui->Ecb_carrera->clear();
     ui->Ecb_clases->clear();
-
     if (ui->Ecb_sede->currentIndex() == 0) {
-        //Facultades = QStringList({"..."});
     } else if (ui->Ecb_sede->currentIndex() == 1) {
         Facultades = QStringList({"Ciencias Administrativas y Sociales", "Ingeniería",
                                    "Ciencias de la Salud", "Arte y Diseño"});
@@ -461,7 +422,6 @@ void cframe::on_Ecb_facultad_currentIndexChanged(const QString &arg1)
             Carreras.clear();
         }
     }
-
     QSet<QString> temp = QSet<QString>::fromList(Carreras);
     Carreras = temp.toList();
     ui->Ecb_carrera->addItem("...");
@@ -491,11 +451,11 @@ void cframe::on_Rbtn_cambiar_clicked()
 {
 
     if(ui->Rle_seleccion->text().isEmpty()||ui->Rle_comentarios->text().isEmpty()||ui->Rle_estadoActual->text().isEmpty() || ui->Rcb_estadoCambiar->currentText() == "..."){
-        QMessageBox::critical(this, "Error", "Porfavor llenar todos los Espacios!");
+        QMessageBox::critical(this, "Error", "Porfavor, llene todos los espacios.");
     }else{
         cambiarEstado=true;
         modificarDatosSilabo(id,"QString pathNuevo",false);
-        QMessageBox::information(this,"Datos congruetes","Datos han sido actualizados");
+        QMessageBox::information(this,"Datos congruetes","Datos han sido actualizados.");
         ui->Rle_seleccion->setText("");
         ui->Rle_comentarios->setText("");
         ui->Rle_estadoActual->setText("");
@@ -523,7 +483,6 @@ void cframe::modificarDatosSilabo(int id, QString pathNuevo, bool silabo)
                 }
                 cambiarPath=false;
                 MostrarSilabos();
-
             }else{
 //                if(s->getNumRevisiones()>=2){
 //                    QMessageBox::warning(this,"RECHAZADO","El silabo "+QString::fromStdString(s->getDatosClase()+"\nHa excedido el numero de revisiones\nRealice el proceso de ENTREGA de nuevo"));
@@ -536,7 +495,6 @@ void cframe::modificarDatosSilabo(int id, QString pathNuevo, bool silabo)
                     if(pathNuevo!="QString pathNuevo"){
                         s->setRutaFechas(pathNuevo);
                     }
-
                 }
                 cambiarPath=false;
                 s->setEstado("Prerevision");
@@ -547,13 +505,11 @@ void cframe::modificarDatosSilabo(int id, QString pathNuevo, bool silabo)
                 MostrarSilabos();
             }
         }
-
         return;
     }else if(s->getId()==id && cambiarEstado){
         string nuevaObservacion=ui->Rle_comentarios->text().toStdString();
         string nuevoEstado=ui->Rcb_estadoCambiar->currentText().toStdString();
         int nuevoNumRevisiones=s->getNumRevisiones();
-
         if(tipo==6 && nuevoEstado=="Listo para revision 1"){
             s->setVisibilidad(s->getVisibilidad()+1);
             nuevoNumRevisiones++;
@@ -568,17 +524,13 @@ void cframe::modificarDatosSilabo(int id, QString pathNuevo, bool silabo)
             if (reply == QMessageBox::Yes) {
                 s->setNumRevisiones(0);
                 s->setEstado("Prerevision");
-
-
             } else {
                 s->setEstado("Rechazar");
-
             }
             s->setNumRechazado(s->getNumRechazados()+1);
             cambiarEstado=false;
             s->setVisibilidad(s->getVisibilidad()+1);
             MostrarSilabos();
-
             return;
         }
 //        if(nuevoNumRevisiones>2){
@@ -588,7 +540,6 @@ void cframe::modificarDatosSilabo(int id, QString pathNuevo, bool silabo)
 //            cambiarEstado=false;
 //            return;
 //        }
-
         s->setEstado(nuevoEstado);
         s->setObservacion(nuevaObservacion);
         s->setNumRevisiones(nuevoNumRevisiones);
@@ -596,14 +547,13 @@ void cframe::modificarDatosSilabo(int id, QString pathNuevo, bool silabo)
         cambiarEstado=false;
         MostrarSilabos();
         return;
-
     }
 }
 QString cframe::cargarArchivo(QString nombre, bool fechas)
 {
     if( ui->Ecb_clases->currentText() == "...")
     {
-        QMessageBox::critical(this, "Error", "Por favor llenar todos los Espacios!");
+        QMessageBox::critical(this, "Error", "Por favor, llene todos los espacios.");
     }
     else
     {
@@ -619,18 +569,18 @@ void cframe::on_Abtn_cambioContra_clicked()
 {
     bool ok;
     while (true) {
-        QString newPassword = QInputDialog::getText(this, "Nueva Contraseña", "Ingrese la Nueva Contraseña:", QLineEdit::Password, "", &ok);
+        QString newPassword = QInputDialog::getText(this, "Nueva Contraseña", "Ingrese la Nueva Contraseña: ", QLineEdit::Password, "", &ok);
         if (!ok) {
             return;
         }
         if (newPassword.isEmpty()) {
-            QMessageBox::critical(this, "Error", "Por favor ingrese una contraseña válida.");
+            QMessageBox::critical(this, "Error", "Por favor, ingrese una contraseña válida.");
         } else {
             actD = listaUsuarios.PrimPtr;
             while (actD != nullptr) {
                 Usuario usuario = actD->getDato();
                 if (usuario.getCuenta() == ui->Albl_cuenta->text()) {
-                    QString oldPassword = QInputDialog::getText(this, "Contraseña Anterior", "Ingrese la Contraseña Anterior\npara confirmar su identidad:", QLineEdit::Password, "", &ok);
+                    QString oldPassword = QInputDialog::getText(this, "Contraseña Anterior", "Ingrese la Contraseña Anterior\npara confirmar su identidad: ", QLineEdit::Password, "", &ok);
                     if (!ok) {
                         return;
                     }
@@ -639,16 +589,14 @@ void cframe::on_Abtn_cambioContra_clicked()
                         break;
                     }else{
                         usuario.setContraAnterior(newPassword);
-                        //   Usuario( QString cuenta, QString nombre,QString contraActual, QString contraAnterior,short tipo)
                         listaUsuarios.solicitarCambioContra(newPassword, ui->Albl_cuenta->text(), listaUsuarios);
-                        QMessageBox::information(this, "Contraseña ", "Cambio ha sido solicitado"+usuario.getContraAnterior());
+                        QMessageBox::information(this, "Contraseña ", "Cambio ha sido solicitado: "+usuario.getContraAnterior());
                         return;
                     }
                     return;
                 }
                 actD = actD->SigPtr;
             }
-
             if (actD == nullptr) {
                 QMessageBox::critical(this, "Error", "No se encontró el usuario correspondiente para cambiar la contraseña.");
             }
@@ -677,7 +625,7 @@ QList<Usuario> cframe::DescargarUsuarios()
 void cframe::mostrarUsuarios()
 {
     ui->Itw_usuarios->clearContents();
-    QStringList headers = { "CUENTA", "NOMBRE", "CONTRASEÑA ACTUAL", "CONTRASEÑA SOLICITADA", "TIPO", "SEDE" };
+    QStringList headers = { "CUENTA", "NOMBRE", "CONTRASEÑA ACTUAL", "CONTRASEÑA SOLICITADA", "CARGO", "SEDE" };
     ui->Itw_usuarios->setColumnCount(headers.size());
     ui->Itw_usuarios->setHorizontalHeaderLabels(headers);
     ui->Itw_usuarios->setRowCount(listaUsuarios.cantidadUsuarios);
@@ -693,7 +641,6 @@ void cframe::mostrarUsuarios()
         ui->Itw_usuarios->setItem(row, 3, new QTableWidgetItem(contraSolicitadaOculta));
         ui->Itw_usuarios->setItem(row, 4, new QTableWidgetItem(listaUsuarios.tipoUsuario(usuario.getTipo())));
         ui->Itw_usuarios->setItem(row, 5, new QTableWidgetItem(listaUsuarios.sede(usuario.getSede())));
-
         actD = actD->SigPtr;
         ++row;
     }
@@ -703,7 +650,7 @@ void cframe::mostrarUsuarios()
 void cframe::on_pushButton_clicked()
 {
     if(ui->Ile_contra->text().isEmpty() || ui->Ile_cuenta->text().isEmpty()|| ui->Ile_name->text().isEmpty() || ui->Icb_tipo->currentIndex()==0){
-        QMessageBox::critical(this, "Error", "¡Porfavor llenar todos los Espacios!");
+        QMessageBox::critical(this, "Error", "¡Por favor, llene todos los espacios!");
 
     }else{
         if( cuentaNumero( ui->Ile_cuenta->text().toStdString())  && listaUsuarios.numCuentaDisponible(ui->Ile_cuenta->text())){
@@ -711,10 +658,10 @@ void cframe::on_pushButton_clicked()
             listaUsuarios.listaInsertarFinal(*Temp);
             delete Temp;
             mostrarUsuarios();
-            QMessageBox::information(this, "Éxito", "Usuario creado exitosamente");
+            QMessageBox::information(this, "Éxito", "Usuario creado exitosamente.");
             ui->Ile_contra->clear();ui->Ile_cuenta->clear();  ui->Ile_name->clear();ui->Icb_tipo->setCurrentIndex(0);
         }else{
-            QMessageBox::critical(this, "Error", "Numero de cuenta no disponible");
+            QMessageBox::critical(this, "Error", "Numero de cuenta no disponible.");
 
         }
     }
@@ -725,12 +672,12 @@ bool cframe::cuentaNumero(const std::string &tt)
 {
     for (char car : tt) {
         if (!std::isdigit(car)) {
-            QMessageBox::warning(this,  "Datos incongruentes","Favor, asegurese de que el numero de cuenta solo contenga digitos");
+            QMessageBox::warning(this,  "Datos incongruentes","Favor, asegurese de que el numero de cuenta solo contenga digitos.");
             return false;
         }
     }
     if(ui->Ile_cuenta->text().length() !=8){
-        QMessageBox::warning(this,  "Datos incongruentes","Favor, asegurese de que la cuenta sea de 8 digitos");
+        QMessageBox::warning(this,  "Datos incongruentes","Favor, asegurese de que la cuenta sea de 8 digitos.");
         return false;
     }
     return true;
@@ -742,7 +689,6 @@ void cframe::on_Itw_usuarios_cellClicked(int row, int column)
     QTableWidgetItem *item = ui->Itw_usuarios->item(row, 0); // Obtener el item de la columna 0 (CUENTA)
      QString cuenta = item->text();
     if (column == 3) { // Columna 3 es la columna de "CONTRASEÑA ANTERIOR"
-
         QString contraDeseada= listaUsuarios.obtenerContraAnterior(cuenta, listaUsuarios);
         if(contraDeseada.startsWith("°")){
             QMessageBox::warning(this,"Advertencia", "Ya ha aceptado esta propuesta.\nEn espera a que el usuario confirme el cambio.");
@@ -758,12 +704,10 @@ void cframe::on_Itw_usuarios_cellClicked(int row, int column)
                 listaUsuarios.aceptarCambioContra(true, cuenta, listaUsuarios);
                 mostrarUsuarios();
                 return;
-
             } else if(reply == QMessageBox::No){
                 listaUsuarios.aceptarCambioContra(false, cuenta, listaUsuarios);
                 mostrarUsuarios();
                 return;
-
             }else{
                 return;
             }
@@ -771,7 +715,6 @@ void cframe::on_Itw_usuarios_cellClicked(int row, int column)
             QMessageBox::warning(this,"Advertencia", "Ya ha recchazado esta propuesta.");
             return;
         }else{
-
         }
     }else if(column == 0 && cuenta != ui->Albl_cuenta->text()){
          QTableWidgetItem *item = ui->Itw_usuarios->item(row, 0);
@@ -785,10 +728,8 @@ void cframe::on_Itw_usuarios_cellClicked(int row, int column)
              listaUsuarios.DeleteUser(cuenta, listaUsuarios);
              mostrarUsuarios();
              return;
-
          } else if(reply == QMessageBox::No){
              return;
-
          }else{
              return;
          }
@@ -803,7 +744,7 @@ void cframe::mostrarSilabosBoard(bool aprobado)
     bool mostrar=false;
     QStringList headers;
     headers << "SEDE" << "ID" << "Facultad" << "Carrera" << "Insertado Por" << "Datos Clase"
-            << "Cuadro de Silabos" << "Cuadro de Fechas" << "Estado" << "Ubicación"<< "Observación"
+            << "Cuadro de Planificaciones" << "Cuadro de Fechas" << "Estado" << "Ubicación"<< "Observación"
             << "# revisiones consultor" << "# veces Rechazado" << "# Revisiones general";
     ui->Btw_dashboard->setHorizontalHeaderLabels(headers);
 
@@ -833,10 +774,10 @@ void cframe::mostrarSilabosBoard(bool aprobado)
             ui->Btw_dashboard->setItem(row, 3, new QTableWidgetItem(QString::fromStdString(s.getCarreras())));
             ui->Btw_dashboard->setItem(row, 4, new QTableWidgetItem(QString::number(s.getInsertadoPor())));
             ui->Btw_dashboard->setItem(row, 5, new QTableWidgetItem(QString::fromStdString(s.getDatosClase())));
-            ui->Btw_dashboard->setItem(row, 6, new QTableWidgetItem(QString::fromStdString(s.getDatosClase())+".docx"));
+            ui->Btw_dashboard->setItem(row, 6, new QTableWidgetItem("Cuadro de Planificaciones_"+QString::fromStdString(s.getDatosClase())+".docx"));
             QString Ruta =s.getRutaFechas();
             if (!Ruta.isEmpty()) {
-                    ui->Btw_dashboard->setItem(row, 7, new QTableWidgetItem("F_"+QString::fromStdString(s.getDatosClase())+".docx"));
+                    ui->Btw_dashboard->setItem(row, 7, new QTableWidgetItem("Cuadro de fechas_"+QString::fromStdString(s.getDatosClase())+".docx"));
             }else{}
             ui->Btw_dashboard->setItem(row, 8, new QTableWidgetItem(QString::fromStdString(s.getEstado())));
             ui->Btw_dashboard->setItem(row, 9, new QTableWidgetItem(listaUsuarios.faseUsuario(QString::fromStdString(s.getEstado()))));
@@ -847,7 +788,6 @@ void cframe::mostrarSilabosBoard(bool aprobado)
         }
         mostrar=false;
     }
-
    // ui->Btw_dashboard->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 void cframe::mostrarSilabosFeed(QString cuenta)
@@ -860,7 +800,7 @@ void cframe::mostrarSilabosFeed(QString cuenta)
     ui->Ftw_feed->setColumnCount(16);
     QStringList headers;
     headers <<"SEDE"<< "ID" << "Facultad" << "Carrera" << "Insertado Por" << "Datos Clase"
-           << "Cuadro de Silabos" << "Cuadro de Fechas" << "Estado" << "Ubicación"<< "Observación"
+           << "Cuadro de Planificaciones" << "Cuadro de Fechas" << "Estado" << "Ubicación"<< "Observación"
            << "# revisiones consultor" << "# veces Rechazado" << "# Revisiones general"
            << "Cambiar Silabo"<<"Cambiar Fechas";
     ui->Ftw_feed->setHorizontalHeaderLabels(headers);
@@ -887,10 +827,10 @@ void cframe::mostrarSilabosFeed(QString cuenta)
             ui->Ftw_feed->setItem(row, 3, new QTableWidgetItem(QString::fromStdString(s.getCarreras())));
             ui->Ftw_feed->setItem(row, 4, new QTableWidgetItem(QString::number(s.getInsertadoPor())));
             ui->Ftw_feed->setItem(row, 5, new QTableWidgetItem(QString::fromStdString(s.getDatosClase())));
-            ui->Ftw_feed->setItem(row, 6, new QTableWidgetItem(QString::fromStdString(s.getDatosClase())+".docx"));
+            ui->Ftw_feed->setItem(row, 6, new QTableWidgetItem("Cuadro de planficaciones_"+QString::fromStdString(s.getDatosClase())+".docx"));
             QString Ruta =s.getRutaFechas();
             if (!Ruta.isEmpty()) {
-                    ui->Ftw_feed->setItem(row, 7, new QTableWidgetItem("F_"+QString::fromStdString(s.getDatosClase())+".docx"));
+                    ui->Ftw_feed->setItem(row, 7, new QTableWidgetItem("Cuadro de fechas_"+QString::fromStdString(s.getDatosClase())+".docx"));
             }else{}
             ui->Ftw_feed->setItem(row, 8, new QTableWidgetItem(QString::fromStdString(s.getEstado())));
             ui->Ftw_feed->setItem(row, 9, new QTableWidgetItem(listaUsuarios.faseUsuario(QString::fromStdString(s.getEstado()))));
@@ -898,7 +838,7 @@ void cframe::mostrarSilabosFeed(QString cuenta)
             ui->Ftw_feed->setItem(row, 11, new QTableWidgetItem(QString::number(s.getNumRevisiones())));
             ui->Ftw_feed->setItem(row, 12, new QTableWidgetItem(QString::number(s.getNumRechazados())));
             ui->Ftw_feed->setItem(row, 13, new QTableWidgetItem(QString::number(s.getVisibilidad())));
-            ui->Ftw_feed->setItem(row, 14, new QTableWidgetItem("RELOAD SILABO"));
+            ui->Ftw_feed->setItem(row, 14, new QTableWidgetItem("RELOAD CP"));
             ui->Ftw_feed->setItem(row, 15, new QTableWidgetItem("RELOAD FECHAS"));
         }
     }
@@ -953,7 +893,7 @@ on_Rtw_revision_cellClicked(int row, int column)
     }else {
     }
     if ((column==14 ||column==15 )&&(log == "CONSULTOR" || log=="DECANO" ||log== "DIRECTOR")){
-        QMessageBox::warning(this, "Aviso", "El " + QString::fromStdString(log)+" no tiene permisos para RELOAD");
+        QMessageBox::warning(this, "Aviso", "El " + QString::fromStdString(log)+" no tiene permisos para RELOAD.");
 
     }
 }
@@ -961,7 +901,7 @@ void cframe::cambiarSilabo(int id, QString pathActual, short i)
 {
     QString filePath = QFileDialog::getOpenFileName(this, "Explorador de Archivos DOC", QDir::homePath(), "Document Files (*.doc *.docx)");
     if (pathActual==filePath) {
-        QMessageBox::warning(this, "No posible", "Ha seleccionado el mismo silabo");
+        QMessageBox::warning(this, "No posible", "Ha seleccionado el mismo documento.");
     }else if(!filePath.isEmpty()){
         cambiarPath=true;
         if(i==14){
@@ -971,7 +911,7 @@ void cframe::cambiarSilabo(int id, QString pathActual, short i)
             modificarDatosSilabo(id,filePath, false);
         }
     }else{
-        QMessageBox::warning(this, "No posible", "No ha seleccionado");
+        QMessageBox::warning(this, "No posible", "No ha seleccionado.");
     }
 }
 
@@ -1000,11 +940,11 @@ void cframe::on_Ftw_feed_cellClicked(int row, int column)
             QDesktopServices::openUrl(QUrl::fromLocalFile(Ruta));
         }
         else{
-            QMessageBox::warning(this, "Aviso", "El " + QString::fromStdString(log)+" no tiene permisos para RELOAD. \n Actualmente en el FEED solo puede observar");
+            QMessageBox::warning(this, "Aviso", "El " + QString::fromStdString(log)+" no tiene permisos para RELOAD. \n Actualmente en el FEED solo puede observar.");
 
         }
     }else if ((column==14 || column ==15) && estado != "DOCENTE") {
-        QMessageBox::warning(this, "Aviso", "El " + QString::fromStdString(log)+" no tiene permisos para RELOAD. \n Actualmente en el FEED solo puede observar");
+        QMessageBox::warning(this, "Aviso", "El " + QString::fromStdString(log)+" no tiene permisos para RELOAD. \n Actualmente en el FEED solo puede observar.");
 
     }
 
